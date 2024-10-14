@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // Importar PropTypes
+import './Products.css'
 import { AddToCartIcon } from './Icons';
 
 const Products = ({ products }) => {
@@ -9,10 +10,15 @@ const Products = ({ products }) => {
       <ul>
         {products.map(product => (
           <li key={product.id} className='product-item'>
-            <img src={product.image} alt={product.name} className='product-image' />
-            <h2>{product.name}</h2>
-            <p>Precio: ${product.price}</p>
-            <p>Stock: {product.stock > 0 ? product.stock : 'Agotado'}</p>
+            <img src={product.thumbnail} alt={product.title} className='product-image' />
+             <div>
+                <strong> {product.title}</strong> -&{product.price}
+             </div>
+            <div>
+                <button>
+                 <AddToCartIcon/>
+                </button>
+            </div>
           </li>
         ))}
       </ul>
