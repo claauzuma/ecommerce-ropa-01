@@ -1,32 +1,50 @@
-import React, { useState } from 'react';  // Importa React y useState en la misma línea
-import { AddToCartIcon } from './components/Icons'; 
+import React, { useState } from 'react';  
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Products from './components/Products';
-import initialProducts from './mocks/Products.json'; // Importas todo el archivo sin desestructuración
+import initialProducts from './mocks/Products.json'; 
 import Header from './components/Header';
+import NavBar from './pages/NavBar';
+import FormAddProduct from './components/FormAddProduct';
+import IndexProd from './pages/IndexProd';
+import FormProduct from './pages/Admin/FormProduct';
+import Index from './pages/Admin/Index';
+import LoginForm from './pages/LoginForm';
+import Carrito from './components/Cart';
+import { CartProvider } from './context/CartContext';
+
 
 const App = () => {
-  const [products] = useState(initialProducts); // initialProducts ya es el array de productos
-  const [filters, setFilters] = useState({
-    category: 'all',
-    minPrice: 0,
-  });
-
-  const filterProducts = (products) => {
-    return products.filter(product => {
-      return (product.price >= filters.minPrice) && (
-        filters.category === "all" || product.category === filters.category
-      );
-    });
-  };
-
-  const filteredProducts = filterProducts(products);
-
   return (
-    <>
-      <div>Productos</div>
-      <Header/>
-      <Products products={filteredProducts} />
-    </>
+
+
+  <CartProvider>
+
+    <Router>
+      {/* El NavBar se mostrará en todas las rutas */}
+      <NavBar /> 
+
+      <Routes>
+        {/* Renderiza IndexProd cuando estés en la ruta principal "/" */}
+        <Route path="/" element={<IndexProd />} />
+
+        {/* Renderiza FormAddProduct cuando estés en la ruta "/addproduct" */}
+        <Route path="/addproduct" element={<FormAddProduct />} />
+
+        <Route path="/loginpage" element={<LoginForm/>} />
+        <Route path="/admin/form-product" element={<FormProduct />} />
+        <Route path="/admin/form-product/:id" element={<FormProduct />} />
+        <Route path="/admin/index-product" element={<Index />} />
+        <Route path="/cart" element={<Carrito />} />
+     
+        
+       
+
+
+      </Routes>
+      <Carrito /> {/* Componente del carrito siempre accesible */}
+    </Router>
+  </CartProvider>
+  
   );
 };
 
