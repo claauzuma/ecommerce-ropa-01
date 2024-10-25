@@ -4,23 +4,24 @@ import { useId } from 'react';
 import './Cart.css';
 import { useCart } from '../context/CartContext';
 import Cantidades from './Cantidades';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 const Cart = () => {
   const cartCheckboxId = useId();
   const { clearCart, cart, isCartVisible, setIsCartVisible, updateQuantity } = useCart();
-  const navigate = useNavigate(); // Usar useNavigate
+  const navigate = useNavigate(); 
 
   const closeCart = () => setIsCartVisible(false);
 
-  // Función para manejar la acción de iniciar compra
+
   const handleCheckout = () => {
     const totalPrice = cart.reduce((acc, product) => acc + product.price * product.cantidad, 0);
     const purchaseData = {
       products: cart,
       total: totalPrice,
     };
-    // Redirigir a la página de GenerarCompra y pasar los datos de compra
+  
+    setIsCartVisible(false)
     navigate('/generar-compra', { state: { purchaseData } });
   };
 

@@ -13,12 +13,12 @@ export function CartProvider({ children }) {
     const productInCartIndex = cart.findIndex(item => item.descripcion === product.descripcion);
 
     if (productInCartIndex >= 0) {
-      // Producto ya está en el carrito, solo incrementamos la cantidad
+
       const newCart = structuredClone(cart);
       newCart[productInCartIndex].cantidad += 1;
       setCart(newCart);
     } else {
-      // Producto no está en el carrito, lo agregamos con cantidad 1
+
       setCart(prevState => ([
         ...prevState,
         {
@@ -46,6 +46,7 @@ export function CartProvider({ children }) {
   };
 
   const clearCart = () => {
+    console.log("Limpiamos el carrito")
     setCart([]);
   };
 

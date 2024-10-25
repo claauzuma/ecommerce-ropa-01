@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const GenerarCompra = () => {
   const { state } = useLocation(); // Obtener datos del estado
   const { products, total } = state?.purchaseData || { products: [], total: 0 }; // Desestructurar datos
+  const {clearCart} = useCart();
+
+  // Navegación
+  const navigate = useNavigate();
 
   // Estado para el formulario
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
-    celular: '',
+    dni: '',
     email: '',
     direccion: '',
+    celular: '', // Asegúrate de tener este campo
   });
 
   // Manejar cambios en el formulario
@@ -20,30 +26,65 @@ const GenerarCompra = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const esperarYEjecutar = (callback, delay) => {
+    setTimeout(callback, delay);
+  };
+
+  const mandarWhatsapp = () => {
+    const numeroWhatsApp = '1162344665';
+    const mensaje = encodeURIComponent(`Hola! He realizado un pedido con los siguientes detalles:\nNombre: ${formData.nombre} ${formData.apellido}\nDNI: ${formData.dni}\nEmail: ${formData.email}\nDirección: ${formData.direccion}\nCelular: ${formData.celular}\nTotal: $${total}\nProductos: ${products.map(p => `${p.descripcion} (x${p.cantidad})`).join(', ')}`);
+    window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`, '_blank');
+  }
+
   // Manejar envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Construir el mensaje que quieres enviar
-    const message = `Detalles de la compra:\n\n` +
-                    `Nombre: ${formData.nombre}\n` +
-                    `Apellido: ${formData.apellido}\n` +
-                    `Celular: ${formData.celular}\n` +
-                    `Email: ${formData.email}\n` +
-                    `Dirección: ${formData.direccion}\n\n` +
-                    `Productos:\n` +
-                    products.map(product => `${product.descripcion} - $${product.price} x ${product.cantidad}`).join('\n') + 
-                    `\nTotal: $${total}`;
+    // Construir el objeto que quieres enviar
+    const dataToSend = {
+      cliente: {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        dni: formData.dni,
+        email: formData.email,
+        direccion: formData.direccion,
+      },
+      productos: products.map((product) => ({
+        id: product._id,
+        descripcion: product.descripcion,
+        cantidad: product.cantidad,
+      })),
+      total: total,
+      estado: 'pendiente',
+    };
 
-    // Codificar el mensaje para la URL
-    const encodedMessage = encodeURIComponent(message);
+    try {
+      const response = await fetch('http://localhost:8080/api/pedidos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Pedido enviado con éxito:', responseData);
+        alert("Compra realizada con éxito")
+         mandarWhatsapp();
+         clearCart();
     
-    // Tu número de WhatsApp (incluye el código de país, pero sin el signo + ni espacios)
-    const phoneNumber = '5491158641032'; // Tu número actualizado
-    const whatsappLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+ 
 
-    // Abrir WhatsApp Web en una nueva pestaña
-    window.open(whatsappLink, '_blank');
+        // Redirigir al usuario a la página de inicio
+        navigate('/');
+      } else {
+        const errorData = await response.json();
+        console.error('Error al enviar el pedido:', errorData);
+      }
+    } catch (error) {
+      console.error('Error al enviar el pedido:', error);
+    }
   };
 
   return (
@@ -82,6 +123,18 @@ const GenerarCompra = () => {
                 name="apellido"
                 id="apellido"
                 value={formData.apellido}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded p-2"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1" htmlFor="dni">DNI</label>
+              <input
+                type="text"
+                name="dni"
+                id="dni"
+                value={formData.dni}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded p-2"
                 required
