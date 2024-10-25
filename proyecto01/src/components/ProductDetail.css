@@ -1,0 +1,37 @@
+/* Estilos generales para móviles */
+.product-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .product-detail img {
+    width: 100%; /* En móviles, la imagen ocupa todo el ancho */
+    height: auto; /* Mantiene la proporción de la imagen */
+    max-height: 80vh; /* Evita que ocupe más del 80% de la altura visible */
+  }
+  
+  /* Ajustes para pantallas más grandes */
+  @media (min-width: 768px) {
+    .product-detail img {
+      width: 66%; /* Imagen ocupa el 66% del contenedor, dejando espacio en los lados */
+      margin-left: auto;
+      margin-right: auto; /* Centra la imagen horizontalmente */
+      max-height: 80vh; /* Mantiene la proporción de la imagen y evita que sea demasiado alta */
+    }
+  }
+  
+  .product-detail h2 {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .product-detail p {
+    font-size: 1.25rem;
+  }
+  
+  .product-detail button {
+    margin-top: 1rem;
+  }
+  

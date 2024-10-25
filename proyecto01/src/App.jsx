@@ -11,6 +11,9 @@ import Index from './pages/Admin/Index';
 import LoginForm from './pages/LoginForm';
 import Carrito from './components/Cart';
 import { CartProvider } from './context/CartContext';
+import ProductDetail from './components/ProductDetails';
+import GenerarCompra from './pages/GenerarCompra';
+import Pedidos from './pages/Admin/Pedidos';
 
 
 const App = () => {
@@ -31,13 +34,19 @@ const App = () => {
         <Route path="/addproduct" element={<FormAddProduct />} />
 
         <Route path="/loginpage" element={<LoginForm/>} />
+        <Route path="/admin/pedidos" element={<Pedidos />} /> {/* Asegúrate de que el nombre sea consistente */}
         <Route path="/admin/form-product" element={<FormProduct />} />
         <Route path="/admin/form-product/:id" element={<FormProduct />} />
         <Route path="/admin/index-product" element={<Index />} />
         <Route path="/cart" element={<Carrito />} />
+        <Route path="/product/:productId" element={<ProductDetail/>} /> {/* Detalle del producto */}
+        <Route path="/generar-compra" element={<GenerarCompra />} /> {/* Asegúrate de que el nombre sea consistente */}
+
+
+        
      
         
-       
+      
 
 
       </Routes>

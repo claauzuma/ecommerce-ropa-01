@@ -3,12 +3,26 @@ import { CartIcon, ClearCartIcon, RemoveFromCartIcon } from './Icons';
 import { useId } from 'react';
 import './Cart.css';
 import { useCart } from '../context/CartContext';
+import Cantidades from './Cantidades';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 
 const Cart = () => {
   const cartCheckboxId = useId();
-  const { clearCart, cart, isCartVisible, setIsCartVisible } = useCart(); // Usa el hook para acceder al carrito
+  const { clearCart, cart, isCartVisible, setIsCartVisible, updateQuantity } = useCart();
+  const navigate = useNavigate(); // Usar useNavigate
 
-  const closeCart = () => setIsCartVisible(false); // Función para cerrar el carrito
+  const closeCart = () => setIsCartVisible(false);
+
+  // Función para manejar la acción de iniciar compra
+  const handleCheckout = () => {
+    const totalPrice = cart.reduce((acc, product) => acc + product.price * product.cantidad, 0);
+    const purchaseData = {
+      products: cart,
+      total: totalPrice,
+    };
+    // Redirigir a la página de GenerarCompra y pasar los datos de compra
+    navigate('/generar-compra', { state: { purchaseData } });
+  };
 
   return (
     <>
@@ -20,7 +34,7 @@ const Cart = () => {
 
       <aside
         className={`fixed top-0 right-0 w-80 bg-white shadow-lg p-5 mt-16 rounded-lg transition-transform duration-300 transform ${
-          isCartVisible ? 'translate-x-0' : 'translate-x-full' // Mostrar u ocultar el carrito
+          isCartVisible ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <h2 className="text-xl font-bold mb-4">Carrito de Compras</h2>
@@ -46,25 +60,34 @@ const Cart = () => {
                   <p className="text-gray-600">Stock: {product.stock}</p>
                 </div>
                 <footer className="flex flex-col items-end">
-                  <small className="text-gray-500">Cantidad: {product.cantidad}</small>
-                  <small className="text-gray-500">Total: ${product.price * product.cantidad}</small>
-                  <div className="flex items-center mt-1">
-                    <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
-                      +
-                    </button>
-                    <button className="text-red-500 hover:text-red-700 ml-2">
-                      <RemoveFromCartIcon />
-                    </button>
-                  </div>
+                  <Cantidades
+                    stock={product.stock}
+                    cant={product.cantidad}
+                    onChange={(newCantidad) => updateQuantity(product._id, newCantidad)}
+                    productId={product._id}
+                  />
+                  <small className="text-gray-500 mt-1">Total: ${product.price * product.cantidad}</small>
+                  <button className="text-red-500 hover:text-red-700 ml-2">
+                    <RemoveFromCartIcon />
+                  </button>
                 </footer>
               </li>
             ))
           )}
         </ul>
 
-        <button 
-          onClick={clearCart} 
-          className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 flex items-center justify-center"
+        {/* Botón de Iniciar Compra */}
+        <button
+          onClick={handleCheckout}
+          className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 flex items-center justify-center"
+        >
+          Iniciar Compra
+        </button>
+
+        {/* Botón para limpiar el carrito */}
+        <button
+          onClick={clearCart}
+          className="mt-2 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 flex items-center justify-center"
         >
           <ClearCartIcon className="mr-2" />
           Limpiar Carrito

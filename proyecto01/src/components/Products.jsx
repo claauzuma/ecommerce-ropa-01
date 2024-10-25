@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types'; 
+import { Link } from 'react-router-dom'; // Importar Link para navegación
 import './Products.css';
-import { AddToCartIcon } from './Icons';
 import { useCart } from '../context/CartContext'; // Asegúrate de que la ruta sea correcta
 
 const Products = ({ products }) => {
-  const { addToCart } = useCart(); // Usa el hook para acceder a addToCart
+  const { addToCart } = useCart();
 
   return (
     <main className='products'>
@@ -18,19 +18,18 @@ const Products = ({ products }) => {
               className='product-image w-full h-48 object-cover' 
             />
             <div className="p-4">
-              <h2 className="font-bold text-xl">{product.descripcion}</h2>
-              <p className="text-gold font-semibold">Categoría: {product.categoria}</p>
+              <h2 className="product-title">{product.descripcion}</h2>
               <p className="text-gold font-semibold">Precio: ${product.price}</p>
-              <p className="text-gold font-semibold">Stock: {product.stock}</p>
             </div>
-           
-            <div className="p-4">
-              <button 
-                className="flex items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg"
-                onClick={() => addToCart(product)} // Llama a addToCart con el producto
-              >
-                <AddToCartIcon />
-              </button>
+
+            <div className="p-2">
+              <Link to={`/product/${product._id}`} className="w-full mx-2">
+                <button 
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded-lg"
+                >
+                  Detalle
+                </button>
+              </Link>
             </div>
           </li>
         ))}
@@ -39,7 +38,6 @@ const Products = ({ products }) => {
   );
 };
 
-// Validación de props usando PropTypes
 Products.propTypes = {
   products: PropTypes.arrayOf(
     PropTypes.shape({

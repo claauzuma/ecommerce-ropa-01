@@ -34,10 +34,16 @@ const NavBarAdmin = () => {
             </a>
           </li>
           <li>
-            <a href="/pedidos" className="block text-white hover:text-gray-200 transition-colors duration-300 p-2">
+            <a href="/admin/pedidos" className="block text-white hover:text-gray-200 transition-colors duration-300 p-2">
               Pedidos
             </a>
           </li>
+          <li>
+            <a href="/admin/configuracion" className="block text-white hover:text-gray-200 transition-colors duration-300 p-2">
+              Configuración
+            </a>
+          </li>
+   
           <li>
             <a href="/logout" className="block text-white hover:text-red-400 transition-colors duration-300 p-2">
               Cerrar sesión
