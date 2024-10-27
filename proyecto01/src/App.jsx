@@ -14,6 +14,11 @@ import { CartProvider } from './context/CartContext';
 import ProductDetail from './components/ProductDetails';
 import GenerarCompra from './pages/GenerarCompra';
 import Pedidos from './pages/Admin/Pedidos';
+import PedidoDetail from './components/PedidoDetail';
+import Estadisticas from './pages/Admin/EstadisticasVisionGral';
+import EstadisticasVentas from './pages/Admin/EstadisticasVentas';
+import EstadisticasProductos from './pages/Admin/EstadisticasProductos';
+
 
 
 const App = () => {
@@ -21,36 +26,30 @@ const App = () => {
 
 
   <CartProvider>
-
     <Router>
-      {/* El NavBar se mostrará en todas las rutas */}
+  
       <NavBar /> 
 
       <Routes>
-        {/* Renderiza IndexProd cuando estés en la ruta principal "/" */}
+
         <Route path="/" element={<IndexProd />} />
-
-        {/* Renderiza FormAddProduct cuando estés en la ruta "/addproduct" */}
         <Route path="/addproduct" element={<FormAddProduct />} />
-
         <Route path="/loginpage" element={<LoginForm/>} />
-        <Route path="/admin/pedidos" element={<Pedidos />} /> {/* Asegúrate de que el nombre sea consistente */}
+        <Route path="/admin/pedidos" element={<Pedidos />} /> 
         <Route path="/admin/form-product" element={<FormProduct />} />
         <Route path="/admin/form-product/:id" element={<FormProduct />} />
         <Route path="/admin/index-product" element={<Index />} />
         <Route path="/cart" element={<Carrito />} />
-        <Route path="/product/:productId" element={<ProductDetail/>} /> {/* Detalle del producto */}
-        <Route path="/generar-compra" element={<GenerarCompra />} /> {/* Asegúrate de que el nombre sea consistente */}
-
-
-        
-     
-        
-      
+        <Route path="/product/:productId" element={<ProductDetail/>} /> 
+        <Route path="/generar-compra" element={<GenerarCompra />} /> 
+        <Route path="/pedido/detail/:id" element={<PedidoDetail />} /> 
+        <Route path="/admin/estadisticas/vision-general" element={<Estadisticas />} /> 
+        <Route path="/admin/estadisticas/ventas" element={<EstadisticasVentas />} /> 
+        <Route path="/admin/estadisticas/productos" element={<EstadisticasProductos />} /> 
 
 
       </Routes>
-      <Carrito /> {/* Componente del carrito siempre accesible */}
+      <Carrito /> 
     </Router>
   </CartProvider>
   

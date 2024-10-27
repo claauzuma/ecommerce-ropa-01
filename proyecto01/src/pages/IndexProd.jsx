@@ -15,21 +15,34 @@ const IndexProd = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el buscador
   const [loading, setLoading] = useState(true); // Estado de carga
   const navigate = useNavigate();
+  const [visitRecorded, setVisitRecorded] = useState(false); 
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/productos'); // Cambia esta URL a tu API
-        setProducts(response.data); // Establece los productos obtenidos en el estado
-      } catch (error) {
-        console.error('Error fetching products:', error); // Manejo de errores
-      } finally {
-        setLoading(false); // Cambia el estado de carga
-      }
+        setLoading(true); // Cambia el estado de carga antes de iniciar la carga de productos
+        try {
+            const response = await axios.get('http://localhost:8080/api/productos'); // Cambia esta URL a tu API
+            setProducts(response.data); // Establece los productos obtenidos en el estado
+        } catch (error) {
+            console.error('Error fetching products:', error); // Manejo de errores
+        } finally {
+            setLoading(false); // Cambia el estado de carga
+        }
     };
 
-    fetchProducts(); // Llama a la función para obtener productos
-  }, []); // El array vacío [] significa que se ejecutará una vez al montar el componente
+    const sumarVisitaWeb = async () => {
+      console.log("Visit recorder es " + visitRecorded);
+
+  };
+  
+
+    const initialize = async () => {
+        await sumarVisitaWeb(); 
+        await fetchProducts(); 
+    };
+
+    initialize(); 
+}, [visitRecorded]);
 
 
   const filterProducts = (products) => {

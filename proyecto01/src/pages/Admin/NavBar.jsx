@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NavBarAdmin = () => {
   const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
+  const [isStatsOpen, setIsStatsOpen] = useState(false); // Estado para la sublista de estadísticas
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleStats = () => {
+    setIsStatsOpen(!isStatsOpen);
   };
 
   return (
@@ -18,7 +24,6 @@ const NavBarAdmin = () => {
           className="md:hidden text-white focus:outline-none"
           onClick={toggleMenu}
         >
-          {/* Icono del menú (puedes usar cualquier icono o texto) */}
           {isOpen ? '✖' : '☰'}
         </button>
 
@@ -29,23 +34,71 @@ const NavBarAdmin = () => {
           }`}
         >
           <li>
-            <a href="/admin/index-product" className="block text-white hover:text-gray-200 transition-colors duration-300 p-2">
+            <a
+              href="/admin/index-product"
+              className="block text-white hover:text-gray-200 transition-colors duration-300 p-2"
+            >
               Mis Productos
             </a>
           </li>
           <li>
-            <a href="/admin/pedidos" className="block text-white hover:text-gray-200 transition-colors duration-300 p-2">
+            <a
+              href="/admin/pedidos"
+              className="block text-white hover:text-gray-200 transition-colors duration-300 p-2"
+            >
               Pedidos
             </a>
           </li>
+          <li className="nav-item dropdown">
+            <button
+              onClick={toggleStats}
+              className="block text-white hover:text-gray-200 transition-colors duration-300 p-2 dropdown-toggle"
+              id="navbarDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded={isStatsOpen}
+            >
+              Estadísticas
+            </button>
+            <ul className={`dropdown-menu ${isStatsOpen ? 'show' : ''}`} aria-labelledby="navbarDropdown">
+              <li>
+                <a
+                  href="/admin/estadisticas/vision-general"
+                  className="dropdown-item text-dark hover:text-gray-200 transition-colors duration-300" // Cambia 'text-white' a 'text-dark'
+                >
+                  Visión General
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/admin/estadisticas/productos"
+                  className="dropdown-item text-dark hover:text-gray-200 transition-colors duration-300" // Cambia 'text-white' a 'text-dark'
+                >
+                  Productos
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/admin/estadisticas/ventas"
+                  className="dropdown-item text-dark hover:text-gray-200 transition-colors duration-300" // Cambia 'text-white' a 'text-dark'
+                >
+                  Ingresos
+                </a>
+              </li>
+            </ul>
+          </li>
           <li>
-            <a href="/admin/configuracion" className="block text-white hover:text-gray-200 transition-colors duration-300 p-2">
+            <a
+              href="/admin/configuracion"
+              className="block text-white hover:text-gray-200 transition-colors duration-300 p-2"
+            >
               Configuración
             </a>
           </li>
-   
           <li>
-            <a href="/logout" className="block text-white hover:text-red-400 transition-colors duration-300 p-2">
+            <a
+              href="/logout"
+              className="block text-white hover:text-red-400 transition-colors duration-300 p-2"
+            >
               Cerrar sesión
             </a>
           </li>

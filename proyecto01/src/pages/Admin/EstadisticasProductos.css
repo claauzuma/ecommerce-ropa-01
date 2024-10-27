@@ -1,0 +1,41 @@
+/* Establece un fondo gris oscuro para toda la página */
+body {
+    background-color: #343a40 !important; /* Color gris oscuro con !important */
+}
+
+/* Estilo de la tarjeta */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid gold; /* Agrega un borde dorado */
+    min-height: 350px; /* Aumenta la altura mínima */
+}
+
+/* Estilo del encabezado de la tarjeta */
+.card-header h5 {
+    font-size: 1.7rem; /* Aumenta el tamaño del título */
+    font-weight: bold;
+    color: black; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+/* Contenedor de la tabla */
+.table-container {
+    max-height: 220px; /* Aumenta un poco más el área de la tabla antes del scroll */
+    overflow-y: auto;
+}
+
+/* Estilo de la tabla */
+.table {
+    font-size: 1rem; /* Aumenta el tamaño del texto de los productos */
+    margin-bottom: 0;
+    color: #fff; /* Cambia el color del texto a blanco */
+}
+
+/* Estilo de las celdas de la tabla */
+.table th, .table td {
+    padding: 0.75rem; /* Aumenta el espacio alrededor del texto */
+}
+
+/* Alterna el color de fondo de las filas de la tabla */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #495057; /* Color gris oscuro para las filas impares */
+}

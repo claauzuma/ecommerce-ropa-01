@@ -74,7 +74,7 @@ const FormProduct = () => {
         });
         alert('Producto modificado exitosamente');
       } else {
-
+        // Agregar un nuevo producto
         await axios.post('http://localhost:8080/api/productos', formDataToSend, {
           headers: {
             'Content-Type': 'multipart/form-data',

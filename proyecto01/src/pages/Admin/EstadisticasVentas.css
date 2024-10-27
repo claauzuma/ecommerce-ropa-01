@@ -1,0 +1,63 @@
+.btn {
+    font-size: 1rem; /* Tamaño de fuente */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s; /* Efecto de transición */
+}
+  
+.btn:hover {
+    background-color: rgba(0, 123, 255, 0.8); /* Color de fondo al pasar el ratón */
+}
+  
+.btn-secondary:hover {
+    background-color: rgba(108, 117, 125, 0.8); /* Color de fondo para el botón secundario al pasar el ratón */
+}
+
+.info-box {
+    background-color: #f8f9fa; /* Color de fondo claro */
+    border: 1px solid #ced4da; /* Borde gris */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    text-align: center; /* Centrar texto */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+  
+.info-title {
+    font-weight: bold; /* Negrita para el título */
+    color: #343a40; /* Color oscuro */
+    margin-bottom: 5px; /* Espacio entre título y valor */
+}
+  
+.info-value {
+    font-size: 1.5rem; /* Tamaño de fuente más grande para el valor */
+    color: #007bff; /* Color azul para el valor */
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Asegúrate de que el ancho sea completo */
+}
+
+.chart-container {
+    overflow-x: auto; /* Permitir desplazamiento horizontal */
+    height: 70vh; /* Asegúrate de que el contenedor tenga la misma altura que la tarjeta */
+}
+
+h1 {
+    color: #343a40;
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 576px) {
+    .card {
+        height: 50vh; /* Ajustar la altura del gráfico en dispositivos móviles */
+    }
+    
+    .chart-container {
+        height: 50vh; /* Asegúrate de que el contenedor tenga la misma altura que la tarjeta */
+    }
+
+    .info-box {
+        flex-basis: 45%; /* Ajustar el tamaño de las cajas de información */
+    }
+}

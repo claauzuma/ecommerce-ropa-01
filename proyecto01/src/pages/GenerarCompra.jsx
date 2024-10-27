@@ -3,44 +3,60 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const GenerarCompra = () => {
-  const { state } = useLocation(); // Obtener datos del estado
-  const { products, total } = state?.purchaseData || { products: [], total: 0 }; // Desestructurar datos
-  const {clearCart} = useCart();
+  const { state } = useLocation();
+  const { products, total } = state?.purchaseData || { products: [], total: 0 };
+  const { clearCart } = useCart();
 
-  // Navegación
   const navigate = useNavigate();
 
-  // Estado para el formulario
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     dni: '',
     email: '',
     direccion: '',
-    celular: '', // Asegúrate de tener este campo
+    celular: '',
   });
 
-  // Manejar cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const esperarYEjecutar = (callback, delay) => {
-    setTimeout(callback, delay);
+  const mandarWhatsapp = () => {
+    const numeroWhatsApp = '1158641032';
+    const mensaje = encodeURIComponent(`Hola Miralla Burger! Quiero hacer un pedido, este es el detalle:
+
+Orden Nº PED-00002586
+${new Date().toLocaleTimeString()} ${new Date().toLocaleDateString()}
+
+${products.map(p => `✅ ${p.cantidad} x ${p.descripcion} | $${p.price * p.cantidad}`).join('\n')}
+
+Forma de Entrega
+• Método de Entrega: Envío a Domicilio
+• Recibe: ${formData.nombre} ${formData.apellido}
+• Dirección: ${formData.direccion}
+• Google Maps: https://www.google.com/maps/place/-34.6737824,-58.4705525
+• Hora de Envío: Lo Antes Posible
+• Entre calles para mejor ubicación: ${formData.direccion}
+
+Forma de Pago
+• Método de Pago: Efectivo
+• Abona con: $${total}
+
+* Subtotal del Pedido: $${total}
+* Total del Pedido: $${total}`);
+
+    window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`, '_blank');
   };
 
-  const mandarWhatsapp = () => {
-    const numeroWhatsApp = '1162344665';
-    const mensaje = encodeURIComponent(`Hola! He realizado un pedido con los siguientes detalles:\nNombre: ${formData.nombre} ${formData.apellido}\nDNI: ${formData.dni}\nEmail: ${formData.email}\nDirección: ${formData.direccion}\nCelular: ${formData.celular}\nTotal: $${total}\nProductos: ${products.map(p => `${p.descripcion} (x${p.cantidad})`).join(', ')}`);
-    window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`, '_blank');
-  }
-
-  // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Construir el objeto que quieres enviar
+    const now = new Date();
+    const fechaCreacion = now.toISOString().split('T')[0]; // Obtener solo la fecha (YYYY-MM-DD)
+    const horaCreacion = now.toTimeString().split(' ')[0]; // Obtener solo la hora (HH:MM:SS)
+    
     const dataToSend = {
       cliente: {
         nombre: formData.nombre,
@@ -56,6 +72,8 @@ const GenerarCompra = () => {
       })),
       total: total,
       estado: 'pendiente',
+      fechaCreacion: fechaCreacion, // Solo la fecha
+      horaCreacion: horaCreacion, // Solo la hora
     };
 
     try {
@@ -70,13 +88,10 @@ const GenerarCompra = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log('Pedido enviado con éxito:', responseData);
-        alert("Compra realizada con éxito")
-         mandarWhatsapp();
-         clearCart();
-    
- 
+        alert("Compra realizada con éxito");
+        mandarWhatsapp();
+        clearCart();
 
-        // Redirigir al usuario a la página de inicio
         navigate('/');
       } else {
         const errorData = await response.json();
