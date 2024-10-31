@@ -1,11 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types'; 
-import { Link } from 'react-router-dom'; // Importar Link para navegación
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate para la navegación
 import './Products.css';
 import { useCart } from '../context/CartContext'; // Asegúrate de que la ruta sea correcta
+import axios from 'axios';
 
 const Products = ({ products }) => {
   const { addToCart } = useCart();
+  const navigate = useNavigate(); // Inicializa useNavigate
+
+  const handleClick = async (id) => {
+    const hoy = new Date();
+    const fechaHoy = hoy.toISOString().split('T')[0];
+
+    const datosVisitaDetail = {
+      fecha: fechaHoy,
+      id: id,
+    };
+
+    console.log("Sumamos una visita al PRODUCTOOOOOOOOOOOOOOOOOOOOOOOOO DE ID" + id);
+    await axios.post('http://localhost:8080/api/estadisticas/', datosVisitaDetail);
+
+
+    navigate(`/product/${id}`);
+  };
 
   return (
     <main className='products'>
@@ -23,13 +41,12 @@ const Products = ({ products }) => {
             </div>
 
             <div className="p-2">
-              <Link to={`/product/${product._id}`} className="w-full mx-2">
-                <button 
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded-lg"
-                >
-                  Detalle
-                </button>
-              </Link>
+              <button 
+                onClick={() => handleClick(product._id)} // Llama a handleClick al hacer clic
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded-lg"
+              >
+                Detalle
+              </button>
             </div>
           </li>
         ))}

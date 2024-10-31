@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; // Hook para agregar al carrito
 import './ProductDetail.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ProductDetail = () => {
   const { addToCart } = useCart();
@@ -29,6 +30,34 @@ const ProductDetail = () => {
       }
     };
 
+    const cargarVisitaProducto = async () => {
+        try {
+      
+            const hoy = new Date();
+            const fechaHoy = hoy.toISOString().split('T')[0];
+    
+            const datosVisita = {
+                fecha: fechaHoy, 
+                visitasProductos: 1,
+            };
+
+    
+            console.log("Sumamos una visita al producto");
+            const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosVisita);
+          
+    
+            console.log('Respuesta de la API:', respuesta.data);
+      
+            return respuesta.data;
+        } catch (error) {
+            console.error('Error al sumar la visita:', error);
+            throw error; 
+        }
+    };
+
+
+
+    cargarVisitaProducto()
     fetchProduct();
   }, [productId]);
 

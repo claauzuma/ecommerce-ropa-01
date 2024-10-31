@@ -18,9 +18,9 @@ const EstadisticasVentas = () => {
       {
         label: 'Total Ventas ($)',
         data: [120, 150, 170, 200, 90, 220, 300, 250, 130, 190, 80, 400, 300, 220, 150, 100, 160, 180, 200, 210, 180, 150, 170, 230, 240, 200, 300, 320, 400, 450],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
+        backgroundColor: 'rgba(212, 175, 55, 0.6)', // Fondo dorado suave
+        borderColor: 'rgba(212, 175, 55, 1)', // Borde dorado
+        borderWidth: 2,
       },
     ],
   };
@@ -37,9 +37,9 @@ const EstadisticasVentas = () => {
       {
         label: 'Total Ingresos ($)',
         data: [100, 120, 130, 180, 80, 200, 250, 230, 110, 160, 70, 350, 250, 180, 130, 90, 140, 160, 180, 190, 160, 130, 150, 200, 210, 180, 250, 270, 350, 400],
-        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
+        backgroundColor: 'rgba(255, 215, 0, 0.6)', // Fondo dorado suave para ingresos
+        borderColor: 'rgba(255, 215, 0, 1)', // Borde dorado
+        borderWidth: 2,
       },
     ],
   };
@@ -53,15 +53,55 @@ const EstadisticasVentas = () => {
         title: {
           display: true,
           text: 'Total ($)',
+          color: 'rgba(212, 175, 55, 1)', // Color dorado
+        },
+        ticks: {
+          color: 'rgba(212, 175, 55, 1)', // Eje Y dorado
+        },
+        grid: {
+          color: 'rgba(212, 175, 55, 0.2)', // Color de la cuadrícula dorada
         },
       },
       x: {
         title: {
           display: true,
           text: 'Días del Mes',
+          color: 'rgba(212, 175, 55, 1)', // Color dorado
+        },
+        ticks: {
+          color: 'rgba(212, 175, 55, 1)', // Eje X dorado
+        },
+        grid: {
+          color: 'rgba(212, 175, 55, 0.2)', // Color de la cuadrícula dorada
         },
       },
     },
+    plugins: {
+      legend: {
+        labels: {
+          color: 'rgba(212, 175, 55, 1)', // Color dorado para la leyenda
+        },
+      },
+      tooltip: {
+        bodyColor: 'rgba(212, 175, 55, 1)', // Color dorado para el texto del tooltip
+        titleColor: 'rgba(212, 175, 55, 1)', // Color dorado para el título del tooltip
+      },
+    },
+    elements: {
+      bar: {
+        backgroundColor: 'rgba(212, 175, 55, 0.6)', // Fondo dorado de las barras
+      },
+    },
+    layout: {
+      padding: {
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10,
+      },
+    },
+    // Aquí se establece el fondo negro del gráfico
+    backgroundColor: 'rgba(0, 0, 0, 1)', // Fondo negro
   };
 
   // Ejemplo de datos informativos
@@ -75,7 +115,7 @@ const EstadisticasVentas = () => {
     <>
       <NavBar />
       <div className="container mt-0">
-        <h1 className="text-center mb-4">Ventas Diarias en el Mes</h1>
+        <h1 className="text-center mb-4" style={{ color: 'rgba(212, 175, 55, 1)' }}>Ventas Diarias en el Mes</h1>
         <div className="mb-4 d-flex justify-content-between">
           <div className="info-box flex-fill mr-2">
             <div className="info-title">Cantidad de Ventas</div>

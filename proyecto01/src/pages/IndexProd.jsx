@@ -29,19 +29,36 @@ const IndexProd = () => {
             setLoading(false); // Cambia el estado de carga
         }
     };
-
     const sumarVisitaWeb = async () => {
-      console.log("Visit recorder es " + visitRecorded);
-
+      try {
+    
+          const hoy = new Date();
+          const fechaHoy = hoy.toISOString().split('T')[0];
+  
+          const datosVisita = {
+              fecha: fechaHoy, 
+              visitas: 1,
+          };
+  
+          console.log("Sumamos una visita");
+          const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosVisita);
+  
+          console.log('Respuesta de la API:', respuesta.data);
+          return respuesta.data;
+      } catch (error) {
+          console.error('Error al sumar la visita:', error);
+          throw error; 
+      }
   };
   
-
+  
     const initialize = async () => {
         await sumarVisitaWeb(); 
         await fetchProducts(); 
     };
 
     initialize(); 
+
 }, [visitRecorded]);
 
 

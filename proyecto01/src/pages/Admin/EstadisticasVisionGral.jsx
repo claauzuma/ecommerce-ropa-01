@@ -1,3 +1,4 @@
+// Estadisticas.js
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -21,14 +22,16 @@ const Estadisticas = () => {
       {
         label: 'Visitas y Acciones',
         data: [1200, 300, 450, 600, 400, 250],
-        backgroundColor: 'rgba(75, 192, 192, 0.4)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(212, 175, 55, 0.8)',  // Color dorado
+        borderColor: 'rgba(212, 175, 55, 1)',
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(75, 192, 192, 0.6)',
-        hoverBorderColor: 'rgba(75, 192, 192, 1)',
+        hoverBackgroundColor: 'rgba(255, 215, 0, 1)',  // Dorado más intenso en hover
+        hoverBorderColor: 'rgba(255, 215, 0, 1)',
+        borderRadius: 10, // Esquinas redondeadas
       },
     ],
   };
+  
 
   const options = {
     responsive: true,
@@ -37,6 +40,7 @@ const Estadisticas = () => {
       legend: {
         position: 'top',
         labels: {
+          color: 'gold',  // Letras doradas
           font: {
             size: 16,
           },
@@ -45,6 +49,7 @@ const Estadisticas = () => {
       title: {
         display: true,
         text: 'Estadísticas de Visitas y Acciones',
+        color: 'gold',  // Título dorado
         font: {
           size: 20,
           weight: 'bold',
@@ -55,6 +60,7 @@ const Estadisticas = () => {
       y: {
         beginAtZero: true,
         ticks: {
+          color: 'gold',  // Letras doradas en el eje Y
           font: {
             size: 14,
           },
@@ -62,6 +68,7 @@ const Estadisticas = () => {
       },
       x: {
         ticks: {
+          color: 'gold',  // Letras doradas en el eje X
           font: {
             size: 14,
           },
@@ -82,7 +89,6 @@ const Estadisticas = () => {
             <option value="enero">Enero</option>
             <option value="febrero">Febrero</option>
             <option value="marzo">Marzo</option>
-            {/* Agrega más opciones de meses según sea necesario */}
           </select>
         </div>
         <div className="estadisticas-chart">

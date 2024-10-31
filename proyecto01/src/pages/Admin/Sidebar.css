@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #000; /* Cambiado a negro */
+    color: gold; /* Color de texto dorado */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.navbar.open {
+    transform: translateX(0);
+}
+
+.navbar-header {
+    padding: 20px;
+    text-align: center;
+}
+
+.logo {
+    font-size: 24px;
+    color: gold; /* Cambiado a dorado */
+}
+
+.navbar-nav {
+    margin-top: 20px;
+}
+
+.navbar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: gold; /* Cambiado a dorado */
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.navbar-link:hover {
+    background: rgba(255, 215, 0, 0.2); /* Color dorado más claro al pasar el mouse */
+}
+
+.link-title {
+    margin-left: 10px;
+}
+
+.toggle-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #000; /* Cambiado a negro */
+    color: gold; /* Color de texto dorado */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.toggle-button.active {
+    background-color: #222; /* Un tono más oscuro cuando está activo */
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        width: 200px; /* Opcional, puedes ajustar el tamaño */
+    }
+
+    .toggle-button {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

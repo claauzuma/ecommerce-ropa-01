@@ -1,3 +1,11 @@
+.chart-container {
+    background-color: rgba(0, 0, 0, 1); /* Fondo negro para el contenedor */
+    padding: 20px; /* Espaciado para que no esté pegado a los bordes */
+    border-radius: 5px; /* Opcional: para bordes redondeados */
+  }
+  
+
+
 .btn {
     font-size: 1rem; /* Tamaño de fuente */
     padding: 10px; /* Espaciado interno */
@@ -6,7 +14,7 @@
 }
   
 .btn:hover {
-    background-color: rgba(0, 123, 255, 0.8); /* Color de fondo al pasar el ratón */
+    background-color: rgba(212, 175, 55, 0.8); /* Color de fondo dorado al pasar el ratón */
 }
   
 .btn-secondary:hover {
@@ -14,23 +22,23 @@
 }
 
 .info-box {
-    background-color: #f8f9fa; /* Color de fondo claro */
-    border: 1px solid #ced4da; /* Borde gris */
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    border: 1px solid rgba(212, 175, 55, 0.5); /* Borde dorado suave */
     border-radius: 5px; /* Bordes redondeados */
     padding: 10px; /* Espaciado interno */
     text-align: center; /* Centrar texto */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
 }
   
 .info-title {
     font-weight: bold; /* Negrita para el título */
-    color: #343a40; /* Color oscuro */
+    color: rgba(212, 175, 55, 1); /* Color dorado */
     margin-bottom: 5px; /* Espacio entre título y valor */
 }
   
 .info-value {
     font-size: 1.5rem; /* Tamaño de fuente más grande para el valor */
-    color: #007bff; /* Color azul para el valor */
+    color: rgba(212, 175, 55, 1); /* Color dorado para el valor */
 }
 
 .card {
@@ -44,7 +52,7 @@
 }
 
 h1 {
-    color: #343a40;
+    color: rgba(212, 175, 55, 1); /* Color dorado para el título */
 }
 
 /* Ajustes para dispositivos móviles */

@@ -1,0 +1,65 @@
+
+body {
+    font-family: 'Red Hat Display', sans-serif;
+  }
+
+.background {
+    font-family: 'Red Hat Display', sans-serif;
+    background-color: #f5f5f5;
+  }
+  
+  .menu__wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #007acc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .menu__bar .logo svg {
+    fill: white;
+  }
+  
+  .navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .navigation.hide {
+    display: none;
+  }
+  
+  .menu-toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dropdown.show {
+    display: block;
+  }
+  
+  .list-items-with-description {
+    padding: 1rem;
+  }
+  
+  .list-items-with-description .item-title h3 {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .list-items-with-description .item-title p {
+    font-size: 0.875rem;
+    color: #555;
+  }
+  

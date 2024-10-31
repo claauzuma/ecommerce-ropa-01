@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import axios from 'axios';
 
 const GenerarCompra = () => {
   const { state } = useLocation();
@@ -8,6 +9,30 @@ const GenerarCompra = () => {
   const { clearCart } = useCart();
 
   const navigate = useNavigate();
+
+  
+  const añadirPedido = async () => {
+    try {
+  
+        const hoy = new Date();
+        const fechaHoy = hoy.toISOString().split('T')[0];
+
+        const datosAñadidos = {
+            fecha: fechaHoy, 
+            pedidosRealizados: 1,
+        };
+
+        console.log("SUMAMOS UN PEEEEEEEDIDO PARA PENDIENTEEEEEEEEEEEES");
+        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadidos);
+
+        console.log('Respuesta de la API:', respuesta.data);
+        return respuesta.data;
+    } catch (error) {
+        console.error('Error al añadir cantidad pre pedido:', error);
+        throw error; 
+    }
+};
+
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -89,6 +114,7 @@ Forma de Pago
         const responseData = await response.json();
         console.log('Pedido enviado con éxito:', responseData);
         alert("Compra realizada con éxito");
+        añadirPedido()
         mandarWhatsapp();
         clearCart();
 
@@ -192,6 +218,7 @@ Forma de Pago
               />
             </div>
             <button
+
               type="submit"
               className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300"
             >

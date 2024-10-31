@@ -1,0 +1,40 @@
+/* Notification.css */
+.notification {
+    display: flex;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
+}
+
+.notification__body {
+    display: flex;
+    align-items: center;
+}
+
+.icon__wrapper {
+    margin-right: 8px;
+}
+
+.notification__button {
+    margin-left: auto;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.notification__progress {
+    height: 4px;
+    background: #007BFF;
+    border-radius: 4px;
+    transition: width 3s linear;
+}

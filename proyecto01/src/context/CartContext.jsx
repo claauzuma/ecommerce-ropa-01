@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 // Crea el contexto
 export const CartContext = createContext();
@@ -9,7 +10,30 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [isCartVisible, setIsCartVisible] = useState(false);
 
+  const agregarVisitaCarrito = async () => {
+    try {
+  
+        const hoy = new Date();
+        const fechaHoy = hoy.toISOString().split('T')[0];
+
+        const datosAñadido = {
+            fecha: fechaHoy, 
+            anadidosAlCarrito: 1,
+        };
+
+        console.log("Sumamos una visita al carrito");
+        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadido);
+
+        console.log('Respuesta de la API:', respuesta.data);
+        return respuesta.data;
+    } catch (error) {
+        console.error('Error al añadir al carrito:', error);
+        throw error; 
+    }
+};
+
   const addToCart = (product) => {
+    agregarVisitaCarrito();
     const productInCartIndex = cart.findIndex(item => item.descripcion === product.descripcion);
 
     if (productInCartIndex >= 0) {

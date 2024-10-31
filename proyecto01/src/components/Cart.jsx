@@ -5,6 +5,7 @@ import './Cart.css';
 import { useCart } from '../context/CartContext';
 import Cantidades from './Cantidades';
 import { useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 
 const Cart = () => {
   const cartCheckboxId = useId();
@@ -13,6 +14,28 @@ const Cart = () => {
 
   const closeCart = () => setIsCartVisible(false);
 
+  const añadirPrepedido = async () => {
+    try {
+  
+        const hoy = new Date();
+        const fechaHoy = hoy.toISOString().split('T')[0];
+
+        const datosAñadidos = {
+            fecha: fechaHoy, 
+            prepedidos: 1,
+        };
+
+        console.log("Sumamos un pedido realizado");
+        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadidos);
+
+        console.log('Respuesta de la API:', respuesta.data);
+        return respuesta.data;
+    } catch (error) {
+        console.error('Error al añadir cantidad pre pedido:', error);
+        throw error; 
+    }
+};
+
 
   const handleCheckout = () => {
     const totalPrice = cart.reduce((acc, product) => acc + product.price * product.cantidad, 0);
@@ -20,6 +43,8 @@ const Cart = () => {
       products: cart,
       total: totalPrice,
     };
+
+    añadirPrepedido();
   
     setIsCartVisible(false)
     navigate('/generar-compra', { state: { purchaseData } });

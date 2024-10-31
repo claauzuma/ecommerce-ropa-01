@@ -14,11 +14,14 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el buscador
   const navigate = useNavigate();
 
+ 
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/productos'); // Cambia esta URL a tu API
         setProducts(response.data); // Establece los productos obtenidos en el estado
+
       } catch (error) {
         console.error('Error fetching products:', error); // Manejo de errores
       }

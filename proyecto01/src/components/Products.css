@@ -65,6 +65,29 @@
 
 }
 
+.products {
+  display: flex; /* Usar flexbox para un diseño flexible */
+  justify-content: center; /* Centrar el contenido horizontalmente */
+  padding: 16px; /* Espaciado alrededor del contenedor principal */
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en la siguiente línea */
+}
+
+.product-item {
+  flex: 1 1 250px; /* Permite que los elementos crezcan y se encojan, estableciendo un tamaño base */
+  margin: 8px; /* Espaciado entre los elementos */
+  max-width: calc(33.33% - 16px); /* Limitar el ancho máximo para 3 productos por fila en pantallas medianas y más grandes */
+}
+
+.product-image {
+  width: 100%; /* Las imágenes ocupan todo el ancho del contenedor */
+  height: 200px; /* Altura fija para las imágenes */
+  object-fit: cover; /* Mantener la proporción de aspecto de la imagen */
+}
+
+.text-gold {
+  color: gold; /* Cambiar el color del texto a dorado */
+}
+
 .product-title {
   font-size: 1.25rem; /* Tamaño del texto */
   font-weight: 400; /* Peso normal */

@@ -24,18 +24,18 @@ const Productos = () => {
   // Componente para renderizar una tabla
   const ProductTable = ({ title, products }) => (
     <div className="col-md-6 mb-4">
-      <div className="card h-100">
-        <div className="card-header text-center">
-          <h5>{title}</h5>
+      <div className="card h-100" style={{ borderColor: 'rgba(212, 175, 55, 1)' }}>
+        <div className="card-header text-center" style={{ backgroundColor: '#000000' }}> {/* Cambiado a negro */}
+          <h5 style={{ color: 'rgba(212, 175, 55, 1)' }}>{title}</h5>
         </div>
         <div className="card-body table-container">
           <table className="table table-striped table-hover">
             <thead className="thead-light">
               <tr>
-                <th>Nombre</th>
-                <th>Cantidad</th>
-                <th>Visitas</th>
-                <th>Vendidos</th>
+                <th style={{ color: 'rgba(212, 175, 55, 1)' }}>Nombre</th>
+                <th style={{ color: 'rgba(212,175,55,1)' }}>Cantidad</th>
+                <th style={{ color: 'rgba(212,175,55,1)' }}>Visitas</th>
+                <th style={{ color: 'rgba(212,175,55,1)' }}>Vendidos</th>
               </tr>
             </thead>
             <tbody>
@@ -66,7 +66,7 @@ const Productos = () => {
       })
     ).isRequired,
   };
-  
+
   return (
     <>
       <NavBar />

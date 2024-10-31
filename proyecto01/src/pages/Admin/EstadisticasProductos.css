@@ -6,7 +6,7 @@ body {
 /* Estilo de la tarjeta */
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid gold; /* Agrega un borde dorado */
+    border: 2px solid rgba(212, 175, 55, 1); /* Borde dorado */
     min-height: 350px; /* Aumenta la altura mínima */
 }
 
@@ -14,7 +14,7 @@ body {
 .card-header h5 {
     font-size: 1.7rem; /* Aumenta el tamaño del título */
     font-weight: bold;
-    color: black; /* Cambia el color del texto a blanco para mayor contraste */
+    color: rgba(212, 175, 55, 1); /* Cambia el color del texto a dorado */
 }
 
 /* Contenedor de la tabla */

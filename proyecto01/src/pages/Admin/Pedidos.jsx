@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Pedidos.css'
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -19,16 +20,14 @@ const Pedidos = () => {
       }
     };
 
-
     obtenerPedidos();
 
     const interval = setInterval(() => {
       obtenerPedidos();
     }, 20000);
 
-
     return () => clearInterval(interval);
-  }, []); 
+  }, []);
 
   const sumarIngreso = async (id) => {
     try {
@@ -78,6 +77,62 @@ const Pedidos = () => {
     }
   };
 
+
+  const acumularCantidadVenta = async () => {
+    try {
+  
+        const hoy = new Date();
+        const fechaHoy = hoy.toISOString().split('T')[0];
+
+        const datosVenta = {
+            fecha: fechaHoy, 
+            cantVentas: 1,
+        };
+
+        console.log("Sumamos una venta");
+        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosVenta);
+
+        console.log('Respuesta de la API:', respuesta.data);
+        return respuesta.data;
+    } catch (error) {
+        console.error('Error al sumar la venta:', error);
+        throw error; 
+    }
+};
+
+const sumarTotalVenta = async (id) => {
+  try {
+      const respuesta = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+
+      if (typeof respuesta.data.total === 'undefined') {
+          throw new Error('El campo "total" no está disponible en la respuesta');
+      }
+
+      const totalVenta = respuesta.data.total;
+      console.log(`Total de la venta para el pedido ${id}:`, totalVenta);
+      
+      const hoy = new Date();
+      const fechaHoy = hoy.toISOString().split('T')[0];
+
+      const datosVenta = {
+        fecha: fechaHoy, 
+        totalVendido: totalVenta,
+      };
+
+      console.log("Sumamos una venta");
+      const response = await axios.post('http://localhost:8080/api/estadisticas/', datosVenta);
+      console.log('Respuesta de la API:', response.data);
+
+      return response.data; 
+
+  } catch (error) {
+      console.error('Error al sumar el total de la venta:', error);
+      throw error; 
+  }
+};
+
+
+
   const despacharPedido = async (id) => {
     try {
       const response = await fetch(`http://localhost:8080/api/pedidos/${id}`, {
@@ -96,6 +151,8 @@ const Pedidos = () => {
         pedido._id === id ? { ...pedido, despachado: true } : pedido
       );
       setPedidos(updatedPedidos);
+      acumularCantidadVenta();
+      sumarTotalVenta(id);
 
       console.log('Pedido despachado:', id);
     } catch (error) {
@@ -113,7 +170,6 @@ const Pedidos = () => {
         throw new Error('Error al eliminar el pedido');
       }
 
-      // Filtra el pedido eliminado del estado actual
       const updatedPedidos = pedidos.filter((pedido) => pedido._id !== id);
       setPedidos(updatedPedidos);
 
@@ -135,39 +191,45 @@ const Pedidos = () => {
     <>
       <NavBar />
       <div className="max-w-7xl mx-auto p-4 bg-white shadow-md rounded-lg mt-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Lista de Pedidos</h2>
+        <h2 className="text-2xl font-bold mb-4 text-black">Lista de Pedidos</h2>
         <div className="mb-4 flex space-x-2">
           <button
             onClick={() => setTipo('confirmado')}
-            className={`px-4 py-2 rounded-lg transition duration-300 ${tipo === 'confirmado' ? 'bg-blue-600 text-white' : 'bg-blue-200 text-gray-800 hover:bg-blue-300'}`}
+            className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
+              tipo === 'confirmado' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
+            }`}
           >
             Pedidos Confirmados
           </button>
           <button
             onClick={() => setTipo('pendiente')}
-            className={`px-4 py-2 rounded-lg transition duration-300 ${tipo === 'pendiente' ? 'bg-blue-600 text-white' : 'bg-blue-200 text-gray-800 hover:bg-blue-300'}`}
+            className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
+              tipo === 'pendiente' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
+            }`}
           >
             Pedidos Pendientes
           </button>
           <button
             onClick={() => setTipo('todos')}
-            className={`px-4 py-2 rounded-lg transition duration-300 ${tipo === 'todos' ? 'bg-blue-600 text-white' : 'bg-blue-200 text-gray-800 hover:bg-blue-300'}`}
+            className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
+              tipo === 'todos' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
+            }`}
           >
             Todos los Pedidos
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-300 rounded-lg bg-gray-50 w-full">
+          <table className="min-w-full border-4 border-black rounded-lg bg-gray-50 w-full">
             <thead>
-              <tr className="bg-blue-600 text-white">
-                <th className="border-b px-4 py-2">ID</th>
-                <th className="border-b px-4 py-2">Cliente</th>
-                <th className="border-b px-4 py-2">Total</th>
-                <th className="border-b px-4 py-2">Estado</th>
-                <th className="border-b px-4 py-2">Fecha de Creación</th>
-                <th className="border-b px-4 py-2">Hora de Creación</th>
-                <th className="border-b px-4 py-2">Acciones</th>
+              <tr className="bg-black text-gold">
+                <th className="border-b border-black px-4 py-2">ID</th>
+                <th className="border-b border-black px-4 py-2">Cliente</th>
+                <th className="border-b border-black px-4 py-2">Total</th>
+                <th className="border-b border-black px-4 py-2">Estado</th>
+                <th className="border-b border-black px-4 py-2">Fecha de Creación</th>
+                <th className="border-b border-black px-4 py-2">Hora de Creación</th>
+                <th className="border-b border-black px-4 py-2">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -178,24 +240,24 @@ const Pedidos = () => {
               ) : (
                 pedidosFiltrados.map((pedido) => (
                   <tr key={pedido._id} className="hover:bg-gray-100 transition duration-200">
-                    <td className="border-b px-4 py-2 text-gray-800">{pedido._id}</td>
-                    <td className="border-b px-4 py-2 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
-                    <td className="border-b px-4 py-2 text-gray-800">${pedido.total}</td>
-                    <td className="border-b px-4 py-2 text-gray-800">{pedido.estado}</td>
-                    <td className="border-b px-4 py-2 text-gray-800">{pedido.fechaCreacion}</td>
-                    <td className="border-b px-4 py-2 text-gray-800">{pedido.horaCreacion}</td>
-                    <td className="border-b px-4 py-2 flex space-x-2">
+                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido._id}</td>
+                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
+                    <td className="border-b border-black px-4 py-2 text-gray-800">${pedido.total}</td>
+                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.estado}</td>
+                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.fechaCreacion}</td>
+                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.horaCreacion}</td>
+                    <td className="border-b border-black px-4 py-2 flex space-x-2">
                       {pedido.estado !== 'confirmado' && (
                         <button
                           onClick={() => confirmarPedido(pedido._id)}
-                          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300"
+                          className="px-4 py-2 bg-gold text-black rounded-lg hover:bg-yellow-600 transition duration-300"
                         >
                           Confirmar
                         </button>
                       )}
                       <button
                         onClick={() => handlePedidoDetail(pedido._id)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                        className="px-4 py-2 bg-black text-gold rounded-lg hover:bg-gray-800 transition duration-300"
                       >
                         Detalle
                       </button>

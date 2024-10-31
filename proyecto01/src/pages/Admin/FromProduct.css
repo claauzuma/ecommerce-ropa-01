@@ -1,0 +1,25 @@
+:root {
+    --gold: #FFD700; /* Color dorado */
+  }
+  
+  .bg-gray-900 {
+    background-color: #1F1F1F; /* Fondo gris oscuro */
+  }
+  
+  .bg-gray-800 {
+    background-color: #2A2A2A; /* Fondo gris medio */
+  }
+  
+  .text-gold {
+    color: var(--gold); /* Texto dorado */
+  }
+  
+  input {
+    transition: border-color 0.3s;
+  }
+  
+  input:focus {
+    border-color: var(--gold); /* Cambiar el borde a dorado en foco */
+    outline: none; /* Sin borde de enfoque */
+  }
+  
