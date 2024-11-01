@@ -8,182 +8,157 @@ import axios from 'axios';
 const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [pedidos, setPedidos] = useState([]);
+    const [estadisticas, setEstadisticas] = useState([]);
     const [productosConVentas, setProductosConVentas] = useState([]);
     const [productosMasVendidos, setProductosMasVendidos] = useState([]);
     const [productosMenosVendidos, setProductosMenosVendidos] = useState([]);
-    const [productosOrdenados, setProductosOrdenados] = useState([]);
+    const [productosClickeados, setProductosClickeados] = useState([]);
+    const [productosOrdenadosMasClickeados, setProductosOrdenadosMasClickeados] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     const topProductsCount = 50;
 
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const [productosResponse, pedidosResponse, estadisticasResponse] = await Promise.all([
+                axios.get('http://localhost:8080/api/productos'),
+                axios.get('http://localhost:8080/api/pedidos'),
+                axios.get('http://localhost:8080/api/estadisticas'),
+            ]);
+            setProductos(productosResponse.data.sort((a, b) => a.stock - b.stock));
+            setPedidos(pedidosResponse.data);
+            setEstadisticas(estadisticasResponse.data.data);
+        } catch (error) {
+            console.error('Error al obtener datos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-      const fetchProducts = async () => {
-          try {
-              const response = await axios.get('http://localhost:8080/api/productos');
-              const data = response.data;
-              const productosOrdenados = data.sort((a, b) => a.stock - b.stock);
-              setProductos(productosOrdenados);
-              setProductosOrdenados(productosOrdenados); 
-              console.log(productosOrdenados);
-          } catch (error) {
-              console.error('Error al obtener los productos:', error);
-          }
-      };
+        fetchData();
+    }, []); 
 
-      const fetchPedidos = async () => {
-          try {
-              const response = await axios.get('http://localhost:8080/api/pedidos');
-              const data = response.data;
-              setPedidos(data);
-              console.log(data);
-          } catch (error) {
-              console.error('Error al obtener los pedidos:', error);
-          }
-      };
+    useEffect(() => {
+        if (pedidos.length > 0) {
+            fetchProductosVenta();
+        }
+    }, [pedidos]); 
 
-      fetchProducts();
-      fetchPedidos();
-  }, []); 
+    const fetchProductosVenta = () => {
+        let productosVentas = [];
 
-  useEffect(() => {
-      if (pedidos.length > 0) {
-          console.log("HAY PEDIDOSSSSSSS MUCHACHOSSS");
-          console.log(pedidos)
-          fetchProductosVenta();
-      }
-  }, [pedidos]); 
+        pedidos.forEach(pedido => {
+            if (pedido.despachado) {
+                pedido.productos.forEach(producto => {
+                    const indice = dameIndice(productosVentas, producto.descripcion);
+                    if (indice >= 0) {
+                        productosVentas[indice].cantidad += producto.cantidad;
+                    } else {
+                        productosVentas.push({ nombre: producto.descripcion, cantidad: producto.cantidad });
+                    }
+                });
+            }
+        });
 
-  const fetchProductosVenta = () => {
-    console.log("Ahora fetcheamos los productos ventas")
-      let productosVentas = [];
+        setProductosConVentas(productosVentas);
 
-      pedidos.forEach(pedido => {
-          if (pedido.despachado) {
-            console.log("Pasamos por el pedido de id " + pedido._id)
-              pedido.productos.forEach(producto => {
-                  const indice = dameIndice(productosVentas,producto.descripcion);
-                  
-                  if (indice >= 0) {
-                    console.log("Producto" + producto.descripcion + "Hay un producto ya con este nombre, le sumamos la cantidad de " +producto.cantidad)
-                      productosVentas[indice].cantidad += producto.cantidad;
-                  } else {
-                    console.log("Producto" + producto.descripcion + "No hay un producto con este nombre, asi que creamos un nuevo producto " + producto.descripcion)
-                      let nuevoProducto = { nombre: producto.descripcion, cantidad: producto.cantidad };
-                      productosVentas.push(nuevoProducto);
-                  }
-              });
-          }
-      });
+        const sortedProductos = [...productosVentas].sort((a, b) => b.cantidad - a.cantidad);
+        setProductosMasVendidos(sortedProductos.slice(0, topProductsCount));
+        setProductosMenosVendidos(sortedProductos.slice(-topProductsCount));
+    };
 
+    const dameIndice = (productosVentas, descripcion) => {
+        return productosVentas.findIndex(producto => producto.nombre === descripcion);
+    };
 
+    useEffect(() => {
+        const productosClickeadosCopia = productos.map(producto => ({
+            ...producto,
+            click: 0,
+        }));
 
-      setProductosConVentas(productosVentas);
+        if (estadisticas && Array.isArray(estadisticas) && estadisticas.length > 0) {
+            estadisticas.forEach(estadistica => {
+                estadistica.idProductosBuscados.forEach(objeto => {
+                    const producto = productosClickeadosCopia.find(p => p._id === objeto.id);
+                    if (producto) {
+                        producto.click += objeto.cantidad;
+                    }
+                });
+            });
 
-      
-      if (productosVentas.length === 0) {
-          setProductosMasVendidos([]);
-          setProductosMenosVendidos([]);
-          return; 
-      }
+            const productosOrdenados = [...productosClickeadosCopia].sort((a, b) => b.click - a.click);
+            setProductosClickeados(productosClickeadosCopia);
+            setProductosOrdenadosMasClickeados(productosOrdenados);
+        }
+    }, [estadisticas, productos]);
 
-      const sortedProductos = [...productosVentas].sort((a, b) => b.cantidad - a.cantidad);
-     
+    const ProductTable = ({ title, products, columns }) => (
+        <div className="col-md-6 mb-4">
+            <div className="card h-100" style={{ borderColor: 'rgba(212, 175, 55, 1)' }}>
+                <div className="card-header text-center" style={{ backgroundColor: '#000000' }}>
+                    <h5 className="table-header">{title}</h5>
+                </div>
+                <div className="card-body table-container">
+                    <table className="table table-striped table-hover">
+                        <thead className="thead-light">
+                            <tr>
+                                {columns.map((col) => (
+                                    <th key={col} className="table-header">{col}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {products.map((product) => (
+                                <tr key={product._id}>
+                                    {columns.includes('Descripcion') && <td className="table-data">{product.descripcion || product.nombre}</td>}
+                                    {columns.includes('Stock') && <td className="table-data">{product.stock}</td>}
+                                    {columns.includes('Precio') && <td className="table-data">{product.price}</td>}
+                                    {columns.includes('Vendidos') && <td className="table-data">{product.cantidad}</td>}
+                                    {columns.includes('Visitas') && <td className="table-data">{product.click}</td>}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
 
-      const masVendidos = sortedProductos.slice(0, topProductsCount);
-      const menosVendidos = sortedProductos.slice(-topProductsCount);
+    ProductTable.propTypes = {
+        title: PropTypes.string.isRequired,
+        products: PropTypes.arrayOf(
+            PropTypes.shape({
+                _id: PropTypes.string.isRequired,
+                descripcion: PropTypes.string,
+                stock: PropTypes.number,
+                price: PropTypes.number,
+                visitas: PropTypes.number,
+                vendidos: PropTypes.number,
+            })
+        ).isRequired,
+        columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    };
 
-      setProductosMasVendidos(masVendidos);
-      setProductosMenosVendidos(menosVendidos);
-  };
+    if (loading) {
+        return <div>Cargando...</div>; 
+    }
 
-  const dameIndice = (productosVentas,descripcion) => {
-      return productosVentas.findIndex(producto => producto.nombre === descripcion);
-  };
-
-
-  useEffect(() => {
-      console.log("PRODUCTOS ACTUALIZADOS:", productos);
-  }, [productos]);
-
-  useEffect(() => {
-    console.log("PRODUCTOS CON VENTAS ACTUALIZADOS :", productosConVentas);
- }, [productosConVentas]);
-
-useEffect(() => {
-  console.log("PRODUCTOS ACTUALIZADOS MAS VENDIDOS:", productosMasVendidos);
-  const menosvendidos = productosConVentas.sort((a, b) => a.cantidad - b.cantidad); // Ordenar de menor a mayor
-  setProductosMenosVendidos(menosvendidos)
-
- }, [productosMasVendidos]);
-
-useEffect(() => {
-  console.log("PRODUCTOS ACTUALIZADOS MENOS VENDIDOS:", productosMenosVendidos);
-  
- }, [productosMenosVendidos]);
-
-
-
-
-const ProductTable = ({ title, products, columns }) => (
-  <div className="col-md-6 mb-4">
-    <div className="card h-100" style={{ borderColor: 'rgba(212, 175, 55, 1)' }}>
-      <div className="card-header text-center" style={{ backgroundColor: '#000000' }}>
-        <h5 className="table-header">{title}</h5>
-      </div>
-      <div className="card-body table-container">
-        <table className="table table-striped table-hover">
-          <thead className="thead-light">
-            <tr>
-              {columns.map((col) => (
-                <th key={col} className="table-header">{col}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product._id}>
-                {columns.includes('Descripcion') && <td className="table-data">{product.descripcion || product.nombre}</td>}
-                {columns.includes('Stock') && <td className="table-data">{product.stock}</td>}
-                {columns.includes('Precio') && <td className="table-data">{product.price}</td>}
-                {columns.includes('Vendidos') && <td className="table-data">{product.cantidad}</td>}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-);
-ProductTable.propTypes = {
-  title: PropTypes.string.isRequired,
-  products: PropTypes.arrayOf(
-      PropTypes.shape({
-          _id: PropTypes.string.isRequired,
-          descripcion: PropTypes.string,
-          stock: PropTypes.number,
-          price: PropTypes.number,
-          visitas: PropTypes.number,
-          vendidos: PropTypes.number,
-      })
-  ).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    return (
+        <>
+            <NavBar />
+            <div className="container mt-5">
+                <div className="row">
+                    <ProductTable title="Con Bajo Stock" products={productos.filter(p => p.stock < 15)} columns={['Descripcion', 'Stock', 'Precio']} />
+                    <ProductTable title="Más Visitados" products={productosOrdenadosMasClickeados} columns={['Descripcion', 'Visitas']} />
+                    <ProductTable title="Más Vendidos" products={productosMasVendidos} columns={['Descripcion', 'Vendidos']} />
+                    <ProductTable title="Menos Vendidos" products={productosMenosVendidos} columns={['Descripcion','Vendidos']} />
+                </div>
+            </div>
+        </>
+    );
 };
-
-return (
-  <>
-      <NavBar />
-
-      <div className="container mt-5">
-          <div className="row">
-              {/* Tabla de productos con bajo stock */}
-              <ProductTable title="Con Bajo Stock" products={productosOrdenados.filter(p => p.stock < 15)} columns={['Descripcion', 'Stock', 'Precio']} />
-              
-              {/* Otras tablas usando `productosOrdenados` */}
-              <ProductTable title="Más Visitados" products={productosOrdenados} columns={['Descripcion', 'Stock', 'Precio']} />
-              <ProductTable title="Más Vendidos" products={productosMasVendidos} columns={['Descripcion', 'Vendidos']} />
-              <ProductTable title="Menos Vendidos" products={productosMenosVendidos} columns={['Descripcion','Vendidos']} />
-          </div>
-      </div>
-  </>
-);
-}
 
 export default Productos;
