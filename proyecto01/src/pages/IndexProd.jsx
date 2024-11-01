@@ -29,6 +29,7 @@ const IndexProd = () => {
             setLoading(false); // Cambia el estado de carga
         }
     };
+    
     const sumarVisitaWeb = async () => {
       try {
     
