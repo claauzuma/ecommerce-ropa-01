@@ -3,16 +3,15 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const FormAddProduct = () => {
-  const { id } = useParams(); // Extrae el id de los parámetros de la URL
+  const { id } = useParams();
   const [descripcion, setDescripcion] = useState('');
   const [imagen, setImagen] = useState(null);
   const [precio, setPrecio] = useState('');
   const [stock, setStock] = useState('');
+  const [colores, setColores] = useState([{ nombre: '', stock: '' }]);
 
-  // Efecto para cargar el producto si se está modificando
   useEffect(() => {
     const fetchProduct = async () => {
-      console.log("Entra al useEffect")
       if (id) {
         try {
           const response = await axios.get(`/api/productos/${id}`);
@@ -20,7 +19,9 @@ const FormAddProduct = () => {
           setDescripcion(producto.descripcion);
           setPrecio(producto.precio);
           setStock(producto.stock);
-          // No se establece la imagen aquí, ya que se subirá en el envío del formulario
+          if (producto.colores) {
+            setColores(producto.colores);
+          }
         } catch (error) {
           console.error('Error al cargar el producto:', error);
         }
@@ -30,41 +31,47 @@ const FormAddProduct = () => {
     fetchProduct();
   }, [id]);
 
-  // Maneja el cambio de los campos
   const handleDescripcionChange = (e) => setDescripcion(e.target.value);
   const handleImagenChange = (e) => setImagen(e.target.files[0]);
   const handlePrecioChange = (e) => setPrecio(e.target.value);
-  const handleStockChange = (e) => setStock(e.target.value);
+
+  // Maneja cambios en los colores
+  const handleColorChange = (index, field, value) => {
+    const newColores = [...colores];
+    newColores[index][field] = value;
+    setColores(newColores);
+  };
+
+  // Añadir un nuevo campo de color
+  const handleAddColor = () => {
+    setColores([...colores, { nombre: '', stock: '' }]);
+  };
 
   // Maneja el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Crear un objeto FormData para enviar los datos del producto, incluyendo la imagen
+
     const formData = new FormData();
     formData.append('descripcion', descripcion);
     if (imagen) {
-      formData.append('imagen', imagen); // La imagen es un archivo
+      formData.append('imagen', imagen);
     }
     formData.append('precio', precio);
-    formData.append('stock', stock);
+    formData.append('colores', JSON.stringify(colores));
 
     try {
       if (id) {
-        console.log("Hay un id, vamos a modificarlo")
         const response = await axios.put(`/api/productos/${id}`, formData);
         console.log('Producto modificado:', response.data);
       } else {
-        console.log("No hay ningun ID")
         const response = await axios.post('/api/productos', formData);
         console.log('Producto agregado:', response.data);
       }
 
-      // Limpia los campos después de enviar
       setDescripcion('');
       setImagen(null);
       setPrecio('');
-      setStock('');
+      setColores([{ nombre: '', stock: '' }]);
     } catch (error) {
       console.error('Error al procesar el producto:', error);
     }
@@ -106,18 +113,41 @@ const FormAddProduct = () => {
           />
         </div>
 
-        <div>
-          <label className="block text-gray-700">Stock:</label>
-          <input 
-            type="number" 
-            value={stock} 
-            onChange={handleStockChange} 
-            className="w-full border border-gray-300 p-2 rounded" 
-            required 
-          />
-        </div>
+        <h3 className="text-lg font-semibold">Colores:</h3>
+        {colores.map((color, index) => (
+          <div key={index} className="space-y-2">
+            <div>
+              <label className="block text-gray-700">Color:</label>
+              <input 
+                type="text" 
+                value={color.nombre} 
+                onChange={(e) => handleColorChange(index, 'nombre', e.target.value)} 
+                className="w-full border border-gray-300 p-2 rounded" 
+                required 
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Stock:</label>
+              <input 
+                type="number" 
+                value={color.stock} 
+                onChange={(e) => handleColorChange(index, 'stock', e.target.value)} 
+                className="w-full border border-gray-300 p-2 rounded" 
+                required 
+              />
+            </div>
+          </div>
+        ))}
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        <button
+          type="button"
+          onClick={handleAddColor}
+          className="mt-4 bg-green-500 text-white p-2 rounded hover:bg-green-600"
+        >
+          Agregar Color
+        </button>
+
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mt-4">
           {id ? 'Modificar Producto' : 'Agregar Producto'}
         </button>
       </form>

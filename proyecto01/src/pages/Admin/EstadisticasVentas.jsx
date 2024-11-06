@@ -8,6 +8,8 @@ import axios from 'axios';
 const EstadisticasVentas = () => {
     const [dataSales, setDataSales] = useState(new Array(31).fill(0)); // Inicializa con ceros
     const [dataIncome, setDataIncome] = useState(new Array(31).fill(0)); // Inicializa con ceros
+    const [cantidadVentas, setCantidadVentas] = useState(0); // Nuevo estado para cantidad de ventas
+    const [totalVentas, setTotalVentas] = useState(0); // Nuevo estado para total en ventas
 
     // Obtener el mes actual (0 para enero, 1 para febrero, ..., 11 para diciembre)
     const mesSeleccionado = new Date().getMonth() + 1; // +1 para que sea del 1 al 12
@@ -16,6 +18,9 @@ const EstadisticasVentas = () => {
         const fetchSalesData = async () => {
             const updatedDataSales = [...dataSales]; // Crea una copia del estado actual
             const updatedDataIncome = [...dataIncome]; // Crea una copia del estado actual
+
+            let totalVentasSum = 0; // Acumulador para totalVentas
+            let cantidadVentasSum = 0; // Acumulador para cantidadVentas
 
             try {
                 for (let dia = 1; dia <= 31; dia++) {
@@ -29,18 +34,22 @@ const EstadisticasVentas = () => {
                         },
                     });
 
-                     
-                    const totalVendido= response.data.data.totalVendido || 0
-                    // Asegurando que 'response.data.data' contiene la cantidad de ventas bajo la propiedad 'cantVentas'
+                    const totalVendido = response.data.data.totalVendido || 0; // Asegúrate que exista
                     const cantVentas = response.data.data.cantVentas || 0; // Maneja el caso en que no haya datos
 
                     // Actualiza el valor correspondiente en updatedDataSales
                     updatedDataSales[dia - 1] = cantVentas; // Almacena el valor en la posición correspondiente
-                    updatedDataIncome[dia-1] = totalVendido
+                    updatedDataIncome[dia - 1] = totalVendido;
+
+                    // Suma a los acumuladores
+                    totalVentasSum += totalVendido;
+                    cantidadVentasSum += cantVentas;
                 }
 
-                setDataSales(updatedDataSales); 
+                setDataSales(updatedDataSales);
                 setDataIncome(updatedDataIncome);
+                setCantidadVentas(cantidadVentasSum); // Actualiza el estado de cantidadVentas
+                setTotalVentas(totalVentasSum); // Actualiza el estado de totalVentas
 
             } catch (error) {
                 console.error('Error fetching sales data:', error);
@@ -141,10 +150,6 @@ const EstadisticasVentas = () => {
         backgroundColor: 'rgba(0, 0, 0, 1)', // Fondo negro
     };
 
-    // Ejemplo de datos informativos
-    const cantidadVentas = 250; // Cambia esto según necesites
-    const totalVentas = 4500;    // Cambia esto según necesites
-
     // Estado para manejar el gráfico actual
     const [showSales, setShowSales] = useState(true);
 
@@ -152,30 +157,30 @@ const EstadisticasVentas = () => {
         <>
             <NavBar />
             <div className="container mt-0">
-                <h1 className="text-center mb-4" style={{ color: 'rgba(212, 175, 55, 1)' }}>Ventas Diarias en el Mes</h1>
+                <br />
                 <div className="mb-4 d-flex justify-content-between">
                     <div className="info-box flex-fill mr-2">
                         <div className="info-title">Cantidad de Ventas</div>
-                        <div className="info-value">{cantidadVentas}</div>
+                        <div className="info-value">{cantidadVentas}</div> {/* Ahora muestra el total */}
                     </div>
                     <div className="info-box flex-fill ml-2">
                         <div className="info-title">Total en Ventas ($)</div>
-                        <div className="info-value">{totalVentas}</div>
+                        <div className="info-value">{totalVentas}</div> {/* Ahora muestra el total */}
                     </div>
                 </div>
 
                 {/* Botones para seleccionar y filtrar */}
                 <div className="mb-4 d-flex justify-content-center">
-                    <button 
-                        className={`btn ${showSales ? 'btn-primary' : 'btn-outline-primary'} mx-2`} 
-                        style={{ width: '200px' }} 
+                    <button
+                        className={`btn ${showSales ? 'btn-primary' : 'btn-outline-primary'} mx-2`}
+                        style={{ width: '200px' }}
                         onClick={() => setShowSales(true)}
                     >
                         Cantidad de Ventas
                     </button>
-                    <button 
-                        className={`btn ${!showSales ? 'btn-secondary' : 'btn-outline-secondary'} mx-2`} 
-                        style={{ width: '200px' }} 
+                    <button
+                        className={`btn ${!showSales ? 'btn-secondary' : 'btn-outline-secondary'} mx-2`}
+                        style={{ width: '200px' }}
                         onClick={() => setShowSales(false)}
                     >
                         Cantidad de Ingresos

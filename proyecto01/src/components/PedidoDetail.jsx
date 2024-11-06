@@ -27,26 +27,43 @@ const PedidoDetail = () => {
   if (!pedido) return <p>Cargando...</p>; // Muestra un mensaje de carga mientras se obtiene el pedido
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-        <h2 className="text-xl font-bold mb-4">Detalles del Pedido</h2>
-        <h3 className="font-semibold">Cliente:</h3>
-        <p>Nombre: {pedido.cliente.nombre} {pedido.cliente.apellido}</p>
-        <p>DNI: {pedido.cliente.dni}</p>
-        <p>Email: {pedido.cliente.email}</p>
-        <p>Dirección: {pedido.cliente.direccion}</p>
-        <h3 className="font-semibold mt-4">Productos:</h3>
-        <ul>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-2xl mx-auto text-white">
+        <h2 className="text-2xl font-bold mb-4 text-center text-gold">Detalles del Pedido</h2>
+        <div className="border-b border-gray-600 pb-4 mb-4">
+          <h3 className="font-semibold text-lg text-gold">Cliente:</h3>
+          <p className="text-gray-300">Nombre: {pedido.cliente.nombre} {pedido.cliente.apellido}</p>
+          <p className="text-gray-300">DNI: {pedido.cliente.dni}</p>
+          <p className="text-gray-300">Email: {pedido.cliente.email}</p>
+          <p className="text-gray-300">Dirección: {pedido.cliente.direccion}</p>
+        </div>
+        
+        {/* Nuevo campo de input para Provincia */}
+        <div className="mb-4">
+          <label htmlFor="provincia" className="block font-semibold text-lg text-gold mb-2">Provincia:</label>
+          <input
+            id="provincia"
+            type="text"
+            value={pedido.cliente.provincia || ''}
+            readOnly
+            className="w-full p-3 bg-gray-700 text-white rounded-lg border-2 border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <h3 className="font-semibold text-lg text-gold">Productos:</h3>
+        <ul className="mb-4">
           {pedido.productos.map((producto, index) => (
-            <li key={index}>
-              {producto.descripcion} - Cantidad: {producto.cantidad}
+            <li key={index} className="text-gray-300">
+              {producto.descripcion} - <span className="font-semibold">Cantidad: {producto.cantidad}</span>
             </li>
           ))}
         </ul>
-        <p className="font-bold mt-4">Total: ${pedido.total}</p>
+        
+        <p className="font-bold text-xl mt-4">Total: <span className="text-gold">${pedido.total}</span></p>
+        
         <button
           onClick={() => navigate(-1)} // Redirecciona a la página anterior
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+          className="mt-6 px-6 py-3 bg-black text-gold rounded-lg hover:bg-gray-700 transition duration-300 w-full"
         >
           Cerrar
         </button>

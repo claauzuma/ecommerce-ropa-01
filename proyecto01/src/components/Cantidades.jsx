@@ -2,18 +2,22 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 import PropTypes from 'prop-types';
 
-const Cantidades = ({ stock, cant, productId }) => {
+const Cantidades = ({ stock, cant, onChange, productId }) => {
   const { updateQuantity } = useCart();
 
   const handleIncrement = () => {
     if (cant < stock) {
-      updateQuantity(productId, cant + 1);
+      const newCantidad = cant + 1;
+      updateQuantity(productId, newCantidad);
+      onChange(newCantidad);  // Emitir el cambio a través de la función onChange
     }
   };
 
   const handleDecrement = () => {
     if (cant > 1) {
-      updateQuantity(productId, cant - 1);
+      const newCantidad = cant - 1;
+      updateQuantity(productId, newCantidad);
+      onChange(newCantidad);  // Emitir el cambio a través de la función onChange
     }
   };
 
@@ -41,8 +45,8 @@ const Cantidades = ({ stock, cant, productId }) => {
 Cantidades.propTypes = {
   stock: PropTypes.number.isRequired,
   cant: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired, // Asegúrate de que onChange es requerido
-  productId: PropTypes.func.isRequired, // Asegúrate de que onChange es requerido
+  onChange: PropTypes.func.isRequired,  // Asegúrate de que onChange es requerido
+  productId: PropTypes.string.isRequired,  // Cambiado a string
 };
 
 export default Cantidades;

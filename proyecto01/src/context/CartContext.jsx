@@ -12,44 +12,46 @@ export function CartProvider({ children }) {
 
   const agregarVisitaCarrito = async () => {
     try {
-  
-        const hoy = new Date();
-        const fechaHoy = hoy.toISOString().split('T')[0];
+      const hoy = new Date();
+      const fechaHoy = hoy.toISOString().split('T')[0];
 
-        const datosAñadido = {
-            fecha: fechaHoy, 
-            anadidosAlCarrito: 1,
-        };
+      const datosAñadido = {
+        fecha: fechaHoy,
+        anadidosAlCarrito: 1,
+      };
 
-        console.log("Sumamos una visita al carrito");
-        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadido);
-
-        console.log('Respuesta de la API:', respuesta.data);
-        return respuesta.data;
+      console.log("Sumamos una visita al carrito");
+      await axios.post('http://localhost:8080/api/estadisticas/', datosAñadido);
     } catch (error) {
-        console.error('Error al añadir al carrito:', error);
-        throw error; 
+      console.error('Error al añadir al carrito:', error);
     }
-};
+  };
 
   const addToCart = (product) => {
+    // Asíncrono, pero no bloquea la interfaz de usuario
     agregarVisitaCarrito();
-    const productInCartIndex = cart.findIndex(item => item.descripcion === product.descripcion);
+
+    // Encuentra si ya existe el mismo producto con el mismo talle y color en el carrito
+    const productInCartIndex = cart.findIndex(
+      item => item.descripcion === product.descripcion &&
+              item.selectedTalle.talle === product.selectedTalle.talle &&
+              item.selectedColor.color === product.selectedColor.color
+    );
 
     if (productInCartIndex >= 0) {
-
+      // Si el producto ya existe con el mismo talle y color, incrementa la cantidad
       const newCart = structuredClone(cart);
       newCart[productInCartIndex].cantidad += 1;
       setCart(newCart);
     } else {
-
-      setCart(prevState => ([
+      // Si es un nuevo producto o nueva combinación de talle y color, agrégalo al carrito
+      setCart(prevState => [
         ...prevState,
         {
           ...product,
           cantidad: 1,
         },
-      ]));
+      ]);
     }
     setIsCartVisible(true);
   };
@@ -69,13 +71,19 @@ export function CartProvider({ children }) {
     }
   };
 
+  const removeFromCart = (productId) => {
+    // Filtra el producto con el id correspondiente
+    const newCart = cart.filter(item => item._id !== productId);
+    setCart(newCart);
+  };
+
   const clearCart = () => {
-    console.log("Limpiamos el carrito")
+    console.log("Limpiamos el carrito");
     setCart([]);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, clearCart, isCartVisible, setIsCartVisible }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart, isCartVisible, setIsCartVisible }}>
       {children}
     </CartContext.Provider>
   );

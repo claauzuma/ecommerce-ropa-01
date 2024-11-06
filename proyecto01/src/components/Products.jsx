@@ -31,12 +31,12 @@ const Products = ({ products }) => {
         {products.map((product) => (
           <li key={product._id} className='product-item border rounded-lg shadow-lg overflow-hidden border-gold'>
             <img 
-              src={product.image} 
+              src={product.images[0]} 
               alt={product.descripcion}
               className='product-image w-full h-48 object-cover' 
             />
             <div className="p-4">
-              <h2 className="product-title">{product.descripcion}</h2>
+              <h2 className="product-title">{product.nombre}</h2>
               <p className="text-gold font-semibold">Precio: ${product.price}</p>
             </div>
 

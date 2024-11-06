@@ -1,37 +1,67 @@
-/* Estilos generales para móviles */
+
+
+
+
+
 .product-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.product-image {
+  width: 90%; /* Imagen más grande en móviles */
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+/* Ajustes para pantallas más grandes */
+@media (min-width: 768px) {
+  .product-image {
+    width: 70%; /* Imagen más grande en pantallas de escritorio */
+    max-height: 80vh; /* Aumenta el alto máximo en pantallas grandes */
   }
-  
-  .product-detail img {
-    width: 100%; /* En móviles, la imagen ocupa todo el ancho */
-    height: auto; /* Mantiene la proporción de la imagen */
-    max-height: 80vh; /* Evita que ocupe más del 80% de la altura visible */
-  }
-  
-  /* Ajustes para pantallas más grandes */
-  @media (min-width: 768px) {
-    .product-detail img {
-      width: 66%; /* Imagen ocupa el 66% del contenedor, dejando espacio en los lados */
-      margin-left: auto;
-      margin-right: auto; /* Centra la imagen horizontalmente */
-      max-height: 80vh; /* Mantiene la proporción de la imagen y evita que sea demasiado alta */
-    }
-  }
-  
-  .product-detail h2 {
-    font-size: 1.5rem;
-    margin-top: 1rem;
-  }
-  
-  .product-detail p {
-    font-size: 1.25rem;
-  }
-  
-  .product-detail button {
-    margin-top: 1rem;
-  }
-  
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.arrow.left {
+  left: 10px;
+}
+
+.arrow.right {
+  right: 10px;
+}
+
+.product-detail h2 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.product-detail p {
+  font-size: 1.25rem;
+}
+
+.product-detail button {
+  margin-top: 1rem;
+}

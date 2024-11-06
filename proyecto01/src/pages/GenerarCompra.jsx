@@ -10,29 +10,26 @@ const GenerarCompra = () => {
 
   const navigate = useNavigate();
 
-  
   const añadirPedido = async () => {
     try {
-  
-        const hoy = new Date();
-        const fechaHoy = hoy.toISOString().split('T')[0];
+      const hoy = new Date();
+      const fechaHoy = hoy.toISOString().split('T')[0];
 
-        const datosAñadidos = {
-            fecha: fechaHoy, 
-            pedidosRealizados: 1,
-        };
+      const datosAñadidos = {
+        fecha: fechaHoy, 
+        pedidosRealizados: 1,
+      };
 
-        console.log("SUMAMOS UN PEEEEEEEDIDO PARA PENDIENTEEEEEEEEEEEES");
-        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadidos);
+      console.log("SUMAMOS UN PEEEEEEEDIDO PARA PENDIENTEEEEEEEEEEEES");
+      const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadidos);
 
-        console.log('Respuesta de la API:', respuesta.data);
-        return respuesta.data;
+      console.log('Respuesta de la API:', respuesta.data);
+      return respuesta.data;
     } catch (error) {
-        console.error('Error al añadir cantidad pre pedido:', error);
-        throw error; 
+      console.error('Error al añadir cantidad pre pedido:', error);
+      throw error; 
     }
-};
-
+  };
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -40,6 +37,7 @@ const GenerarCompra = () => {
     dni: '',
     email: '',
     direccion: '',
+    provincia: '', // Campo de Provincia
     celular: '',
   });
 
@@ -61,6 +59,7 @@ Forma de Entrega
 • Método de Entrega: Envío a Domicilio
 • Recibe: ${formData.nombre} ${formData.apellido}
 • Dirección: ${formData.direccion}
+• Provincia: ${formData.provincia}  {/* Agregado Provincia */}
 • Google Maps: https://www.google.com/maps/place/-34.6737824,-58.4705525
 • Hora de Envío: Lo Antes Posible
 • Entre calles para mejor ubicación: ${formData.direccion}
@@ -89,6 +88,7 @@ Forma de Pago
         dni: formData.dni,
         email: formData.email,
         direccion: formData.direccion,
+        provincia: formData.provincia,  // Agregado Provincia
       },
       productos: products.map((product) => ({
         id: product._id,
@@ -114,7 +114,7 @@ Forma de Pago
         const responseData = await response.json();
         console.log('Pedido enviado con éxito:', responseData);
         alert("Compra realizada con éxito");
-        añadirPedido()
+        añadirPedido();
         mandarWhatsapp();
         clearCart();
 
@@ -129,100 +129,111 @@ Forma de Pago
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Detalles de la Compra</h2>
+    <div className="max-w-md mx-auto p-6 bg-gray-900 rounded-lg shadow-lg border-4 border-black mt-10"> {/* Cambiado a borde negro */}
+      <h2 className="text-2xl font-bold text-gold mb-6 text-center">Detalles de la Compra</h2>
       {products.length === 0 ? (
         <p className="text-center text-red-500">No hay productos en la compra</p>
       ) : (
         <>
-          <ul className="mb-4 border border-gray-300 rounded p-2">
+          <ul className="mb-6 border-b border-gray-600 pb-4">
             {products.map((product) => (
-              <li key={product._id} className="flex justify-between border-b py-2">
+              <li key={product._id} className="flex justify-between py-2 text-white">
                 <span>{product.descripcion}</span>
                 <span>${product.price} x {product.cantidad}</span>
               </li>
             ))}
-            <li className="font-bold text-right">Total: ${total}</li>
+            <li className="font-bold text-right text-white">Total: ${total}</li>
           </ul>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="nombre">Nombre</label>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="nombre">Nombre</label>
               <input
                 type="text"
                 name="nombre"
                 id="nombre"
                 value={formData.nombre}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="apellido">Apellido</label>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="apellido">Apellido</label>
               <input
                 type="text"
                 name="apellido"
                 id="apellido"
                 value={formData.apellido}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="dni">DNI</label>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="dni">DNI</label>
               <input
                 type="text"
                 name="dni"
                 id="dni"
                 value={formData.dni}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="celular">Celular</label>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="celular">Celular</label>
               <input
                 type="tel"
                 name="celular"
                 id="celular"
                 value={formData.celular}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="email">Email</label>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="email">Email</label>
               <input
                 type="email"
                 name="email"
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="direccion">Dirección</label>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="provincia">Provincia</label>
+              <input
+                type="text"
+                name="provincia"
+                id="provincia"
+                value={formData.provincia}
+                onChange={handleChange}
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                required
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-white mb-1" htmlFor="direccion">Dirección</label>
               <input
                 type="text"
                 name="direccion"
                 id="direccion"
                 value={formData.direccion}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
                 required
               />
             </div>
             <button
-
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300"
+              className="w-full bg-blue-600 text-white p-3 rounded mt-4 border-2 border-black hover:bg-blue-500 transition-colors"
             >
-              Siguiente
+              Confirmar Pedido
             </button>
           </form>
         </>

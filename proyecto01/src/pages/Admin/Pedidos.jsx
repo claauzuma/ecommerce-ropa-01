@@ -233,55 +233,55 @@ const sumarTotalVenta = async (id) => {
               </tr>
             </thead>
             <tbody>
-              {pedidosFiltrados.length === 0 ? (
-                <tr>
-                  <td colSpan="7" className="text-center py-4 text-gray-500">No hay pedidos disponibles</td>
-                </tr>
-              ) : (
-                pedidosFiltrados.map((pedido) => (
-                  <tr key={pedido._id} className="hover:bg-gray-100 transition duration-200">
-                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido._id}</td>
-                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
-                    <td className="border-b border-black px-4 py-2 text-gray-800">${pedido.total}</td>
-                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.estado}</td>
-                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.fechaCreacion}</td>
-                    <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.horaCreacion}</td>
-                    <td className="border-b border-black px-4 py-2 flex space-x-2">
-                      {pedido.estado !== 'confirmado' && (
-                        <button
-                          onClick={() => confirmarPedido(pedido._id)}
-                          className="px-4 py-2 bg-gold text-black rounded-lg hover:bg-yellow-600 transition duration-300"
-                        >
-                          Confirmar
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handlePedidoDetail(pedido._id)}
-                        className="px-4 py-2 bg-black text-gold rounded-lg hover:bg-gray-800 transition duration-300"
-                      >
-                        Detalle
-                      </button>
-                      {pedido.estado === 'confirmado' && !pedido.despachado && (
-                        <button
-                          onClick={() => despacharPedido(pedido._id)}
-                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-                        >
-                          Despachar
-                        </button>
-                      )}
-                      {pedido.estado === 'pendiente' && (
-                        <button
-                          onClick={() => eliminarPedido(pedido._id)}
-                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-                        >
-                          Eliminar
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
+  {pedidosFiltrados.length === 0 ? (
+    <tr>
+      <td colSpan="7" className="text-center py-4 text-gray-500">No hay pedidos disponibles</td>
+    </tr>
+  ) : (
+    pedidosFiltrados.map((pedido) => (
+      <tr key={pedido._id} className="hover:bg-gray-100 transition duration-200">
+        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido._id}</td>
+        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
+        <td className="border-b border-black px-4 py-2 text-gray-800">${pedido.total}</td>
+        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.estado}</td>
+        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.fechaCreacion}</td>
+        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.horaCreacion}</td>
+        <td className="border-b border-black px-4 py-2 flex space-x-2">
+          {pedido.estado !== 'confirmado' && (
+            <button
+              onClick={() => confirmarPedido(pedido._id)}
+              className="px-4 py-2 bg-gold text-black rounded-lg hover:bg-yellow-600 transition duration-300"
+            >
+              Confirmar
+            </button>
+          )}
+          <button
+            onClick={() => handlePedidoDetail(pedido._id)}
+            className="px-4 py-2 bg-black text-gold rounded-lg hover:bg-gray-800 transition duration-300"
+          >
+            Detalle
+          </button>
+          {pedido.estado === 'confirmado' && !pedido.despachado && (
+            <button
+              onClick={() => despacharPedido(pedido._id)}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+            >
+              Despachar
+            </button>
+          )}
+          {/* Botón de eliminar para todos los pedidos */}
+          <button
+            onClick={() => eliminarPedido(pedido._id)}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
           </table>
         </div>
       </div>

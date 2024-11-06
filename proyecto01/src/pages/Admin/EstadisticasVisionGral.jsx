@@ -68,7 +68,7 @@ const Estadisticas = () => {
             'Visitas carrito', 
             'Pre pedidos', 
             'Pedidos realizados', 
-            'Visitas instagram', 
+            'Ventas concretadas', 
             'Visitas whatsapp'
           ],
           datasets: [
@@ -79,9 +79,9 @@ const Estadisticas = () => {
                 datos.visitasProductos,
                 datos.anadidosCarrito,
                 datos.visitasCarrito,
-                datos.prePedidos,
+                datos.prepedidos,
                 datos.pedidosRealizados,
-                datos.visitasInstagram,
+                datos.cantVentas,
                 datos.visitasWhatsapp
               ],
               backgroundColor: 'rgba(212, 175, 55, 0.8)',  // Color dorado

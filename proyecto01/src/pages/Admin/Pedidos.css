@@ -1,4 +1,60 @@
+/* Estilo general de la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Para eliminar los espacios entre celdas */
+}
+
+th, td {
+  padding: 12px; /* Espaciado interno para las celdas */
+  text-align: left; /* Alinear el texto a la izquierda */
+}
+
+/* Estilo de las acciones */
+.acciones {
+  display: flex;
+  justify-content: space-around; /* Espacio uniforme entre los botones */
+  align-items: center; /* Alinear verticalmente los botones */
+  text-align: center; /* Alinear el contenido al centro */
+}
+
+/* Estilo de los botones */
+.boton-acccion {
+  padding: 8px 12px; /* Espaciado para los botones */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 14px; /* Tamaño de fuente */
+  margin: 0 4px; /* Espaciado entre botones */
+}
+
+/* Colores de los botones */
 .bg-gold {
-    background-color: #FFD700; /* Dorado */
-  }
-  
+  background-color: #FFD700; /* Color dorado */
+}
+
+.bg-black {
+  background-color: #000000; /* Color negro */
+}
+
+.bg-red-500 {
+  background-color: #F44336; /* Color rojo */
+}
+
+.text-black {
+  color: #000000; /* Color de texto negro */
+}
+
+.text-gold {
+  color: #FFD700; /* Color de texto dorado */
+}
+
+/* Efecto hover en los botones */
+.hover\:bg-yellow-600:hover {
+  background-color: #FFA500; /* Color amarillo oscuro en hover */
+}
+
+.hover\:bg-gray-800:hover {
+  background-color: #333333; /* Color gris oscuro en hover */
+}
+
+.hover\:bg-red-600:hover {
+  background-color: #D32F2F; /* Color rojo más oscuro en hover */
+}

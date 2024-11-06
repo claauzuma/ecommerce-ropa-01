@@ -2,18 +2,48 @@ import React, { useState, useEffect } from 'react';
 import NavBarAdmin from './NavBar';
 import axios from 'axios'; 
 import { useParams, useNavigate } from 'react-router-dom'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import './FormProduct.css';
 
 const FormProduct = () => {
   const { id } = useParams(); 
   const navigate = useNavigate(); 
 
+  const colorMapping = {
+    rosa: 'pink',
+    violeta: 'purple',
+    gris: 'gray',
+    turquesa: 'turquoise',
+    rojo: 'red',
+    azul: 'blue',
+    verde: 'green',
+    amarillo: 'yellow',
+    negro: 'black',
+    blanco: 'white',
+  };
+  
+
+  const colorOptions = [
+    { label: 'Sin color', value: 'sinColor', colorCode: '#FFFFFF' },
+    { label: 'Rosa', value: 'rosa', colorCode: '#FF66B2' },
+    { label: 'Violeta', value: 'violeta', colorCode: '#8A2BE2' },
+    { label: 'Gris', value: 'gris', colorCode: '#808080' },
+    { label: 'Turquesa', value: 'turquesa', colorCode: '#40E0D0' },
+    { label: 'Rojo', value: 'rojo', colorCode: '#FF0000' },
+    { label: 'Azul', value: 'azul', colorCode: '#0000FF' },
+    { label: 'Verde', value: 'verde', colorCode: '#00FF00' },
+    { label: 'Amarillo', value: 'amarillo', colorCode: '#FFFF00' },
+    { label: 'Negro', value: 'negro', colorCode: '#000000' },
+    { label: 'Blanco', value: 'blanco', colorCode: '#FFFFFF' },
+  ];
   const [formData, setFormData] = useState({
+    nombre: '',
     descripcion: '',
-    image: null,
     price: '',
-    stock: '',
+    tallesInputs: [{ talle: '', colores: [{ color: '', stock: '' }] }], // Siempre al menos un talle por defecto
     categoria: '',
-    imageUrl: '',
+    images: [],  // Solo este campo para las imágenes
   });
 
   useEffect(() => {
@@ -23,12 +53,12 @@ const FormProduct = () => {
           const response = await axios.get(`http://localhost:8080/api/productos/${id}`);
           const producto = response.data;
           setFormData({
+            nombre: producto.nombre,
             descripcion: producto.descripcion,
-            image: null, 
             price: producto.price,
-            stock: producto.stock,
+            tallesInputs: producto.talles.length > 0 ? producto.talles : [{ talle: '', colores: [{ color: '', stock: '' }] }], 
             categoria: producto.categoria,
-            imageUrl: producto.imageUrl,
+            images: producto.images || [],  // Cargar las imágenes del producto si existen
           });
         } catch (error) {
           console.error('Error al cargar el producto:', error);
@@ -43,46 +73,121 @@ const FormProduct = () => {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0] : value,
+      [name]: files ? files : value,  // Cambié para manejar múltiples archivos
     }));
+  };
+
+  const handleAddImage = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, null],
+    }));
+  };
+
+  const handleRemoveImage = (index) => {
+    setFormData((prevData) => {
+      const newImages = [...prevData.images];
+      newImages.splice(index, 1);
+      return { ...prevData, images: newImages };
+    });
+  };
+
+  const handleImageChange = (index, e) => {
+    const { files } = e.target;
+    setFormData((prevData) => {
+      const newImages = [...prevData.images];
+      newImages[index] = files[0];
+      return { ...prevData, images: newImages };
+    });
+  };
+
+  const handleAddTalle = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      tallesInputs: [...prevData.tallesInputs, { talle: '', colores: [{ color: '', stock: '' }] }],  // Mantener la estructura de talles y colores
+    }));
+  };
+
+  const handleRemoveTalle = (index) => {
+    setFormData((prevData) => {
+      const newTalles = [...prevData.tallesInputs];
+      newTalles.splice(index, 1);
+      return { ...prevData, tallesInputs: newTalles };
+    });
+  };
+
+  const handleTalleChange = (index, e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => {
+      const newTalles = [...prevData.tallesInputs];
+      newTalles[index][name] = value;
+      return { ...prevData, tallesInputs: newTalles };
+    });
+  };
+
+  const handleAddColor = (talleIndex) => {
+    setFormData((prevData) => {
+      const newTalles = [...prevData.tallesInputs];
+      newTalles[talleIndex].colores.push({ color: '', stock: '' });
+      return { ...prevData, tallesInputs: newTalles };
+    });
+  };
+
+  const handleRemoveColor = (talleIndex, colorIndex) => {
+    setFormData((prevData) => {
+      const newTalles = [...prevData.tallesInputs];
+      newTalles[talleIndex].colores.splice(colorIndex, 1);
+      return { ...prevData, tallesInputs: newTalles };
+    });
+  };
+
+  const handleColorChange = (talleIndex, colorIndex, e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => {
+      const newTalles = [...prevData.tallesInputs];
+      newTalles[talleIndex].colores[colorIndex][name] = value;
+      return { ...prevData, tallesInputs: newTalles };
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.price <= 0) {
+      alert('El precio debe ser mayor que cero.');
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
+      formDataToSend.append('nombre', formData.nombre);
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('categoria', formData.categoria);
-      if (formData.image) {
-        formDataToSend.append('image', formData.image); 
-      }
       formDataToSend.append('price', formData.price);
-      formDataToSend.append('stock', formData.stock);
+
+      // Agregar las imágenes al FormData
+      formData.images.forEach((image) => {
+        if (image) {
+          formDataToSend.append('images', image);
+        }
+      });
+
+      // Se agrega tallesInputs como un JSON string
+      formDataToSend.append('tallesInputs', JSON.stringify(formData.tallesInputs));
+
+      console.log("Vemos los datos de form data")
+      console.log(formData)
 
       if (id) {
         await axios.put(`http://localhost:8080/api/productos/${id}`, formDataToSend, {
-          headers: {
-            'Content-Type': 'multipart/form-data', 
-          },
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
         alert('Producto modificado exitosamente');
       } else {
         await axios.post('http://localhost:8080/api/productos', formDataToSend, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
         alert('Producto agregado exitosamente');
       }
-
-      setFormData({
-        descripcion: '',
-        categoria: '',
-        image: null,
-        price: '',
-        stock: '',
-        imageUrl: '',
-      });
 
       navigate('/admin/index-product');
     } catch (e) {
@@ -94,77 +199,150 @@ const FormProduct = () => {
     <>
       <NavBarAdmin />
       <div className="flex justify-center items-start p-4 bg-gray-900 mt-10">
-        <div className="bg-gray-800 p-6 rounded-xl shadow-md max-w-md w-full"> {/* Bordes más redondeados en el formulario */}
-          <h1 className="text-2xl font-semibold mb-4 text-white text-center">{id ? 'Modificar Producto' : 'Agregar Producto'}</h1>
+        <div className="bg-gray-800 p-6 rounded-xl shadow-md max-w-md w-full border-4 border-black">
+          <h1 className="text-2xl font-semibold mb-4 text-white text-center">
+            {id ? 'Modificar Producto' : 'Agregar Producto'}
+          </h1>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="descripcion" className="block text-gray-300 mb-2">Descripción</label>
-              <input 
-                type="text" 
-                name="descripcion" 
-                value={formData.descripcion} 
-                onChange={handleChange} 
-                required 
-                className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white" // Bordes más redondeados en los inputs
-              />
-            </div>
+            {/* Campos generales del formulario */}
+            <input
+              type="text"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              placeholder="Nombre del producto"
+              className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
+            />
+            <textarea
+              name="descripcion"
+              value={formData.descripcion}
+              onChange={handleChange}
+              placeholder="Descripción del producto"
+              className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
+            ></textarea>
 
-            <div className="mb-4">
-              <label htmlFor="categoria" className="block text-gray-300 mb-2">Categoria</label>
-              <input 
-                type="text" 
-                name="categoria" 
-                value={formData.categoria}
-                onChange={handleChange} 
-                required 
-                className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white" // Bordes más redondeados en los inputs
-              />
-            </div>
-            
-            <div className="mb-4">
-              <label htmlFor="image" className="block text-gray-300 mb-2">Imagen (JPEG o PNG)</label>
-              {formData.imageUrl && (
-                <div className="mb-2">
-                  <img src={formData.imageUrl} alt="Producto" className="w-full h-40 object-cover rounded-lg" /> 
-                  <p className="text-gray-400">Imagen actual del producto</p>
-                </div>
-              )}
-              <input 
-                type="file" 
-                name="image" 
-                accept="image/jpeg, image/png"
-                onChange={handleChange} 
-                className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white" // Bordes más redondeados en los inputs
-              />
-            </div>
+            {/* Input de categoria */}
+            <input
+              type="text"
+              name="categoria"
+              value={formData.categoria}
+              onChange={handleChange}
+              placeholder="Categoría del producto"
+              className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
+            />
 
-            <div className="mb-4">
-              <label htmlFor="price" className="block text-gray-300 mb-2">Precio Unitario</label>
-              <input 
-                type="number" 
-                name="price" 
-                value={formData.price} 
-                onChange={handleChange} 
-                required 
-                className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white" // Bordes más redondeados en los inputs
-              />
-            </div>
+            {/* Archivos adicionales */}
+            <h2 className="text-lg font-semibold mb-2 text-white">Imágenes del producto</h2>
+            {formData.images.map((image, index) => (
+              <div key={index} className="flex items-center mb-2">
+                <input
+                  type="file"
+                  onChange={(e) => handleImageChange(index, e)}
+                  className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="bg-red-600 text-white p-2 rounded-lg ml-2"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddImage}
+              className="bg-green-600 text-white p-2 rounded-lg mb-4"
+            >
+              Agregar archivo <FontAwesomeIcon icon={faPlus} />
+            </button>
 
-            <div className="mb-4">
-              <label htmlFor="stock" className="block text-gray-300 mb-2">Stock</label>
-              <input 
-                type="number" 
-                name="stock" 
-                value={formData.stock} 
-                onChange={handleChange} 
-                required 
-                className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white" // Bordes más redondeados en los inputs
-              />
-            </div>
+            {/* Precio */}
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="Precio"
+              className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
+            />
 
-            <button 
-              type="submit" 
-              className={`font-semibold py-2 px-4 rounded-lg w-full ${id ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gold-500 hover:bg-gold-600'} text-white`} // Bordes más redondeados en el botón
+            {/* Talles y colores */}
+            <h2 className="text-lg font-semibold mb-2 text-white">Talles</h2>
+            {formData.tallesInputs.map((talleInput, index) => (
+              <div key={index} className="mb-4">
+                <input
+                  type="text"
+                  name="talle"
+                  value={talleInput.talle}
+                  onChange={(e) => handleTalleChange(index, e)}
+                  placeholder={`Talle ${index + 1}`}
+                  className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
+                />
+{talleInput.colores.map((colorInput, colorIndex) => (
+  <div key={colorIndex} className="flex items-center mb-2">
+   <select
+  name="color"
+  value={colorInput.color}
+  onChange={(e) => handleColorChange(index, colorIndex, e)}
+  className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
+>
+  <option value="">Seleccionar color</option>
+  {colorOptions.map((colorOption, i) => (
+    <option key={i} value={colorOption.value}>
+      {colorOption.label}
+    </option>
+  ))}
+</select>
+<div
+  className="w-6 h-6 ml-2 rounded-full"
+  style={{ backgroundColor: colorInput.color ? colorOptions.find(color => color.value === colorInput.color)?.colorCode : '#ffffff' }}
+></div>
+    <input
+      type="number"
+      name="stock"
+      value={colorInput.stock}
+      onChange={(e) => handleColorChange(index, colorIndex, e)}
+      placeholder="Stock"
+      className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2 ml-2"
+    />
+    <button
+      type="button"
+      onClick={() => handleRemoveColor(index, colorIndex)}
+      className="bg-red-600 text-white p-2 rounded-lg ml-2"
+    >
+      <FontAwesomeIcon icon={faTrash} />
+    </button>
+  </div>
+))}
+                <button
+                  type="button"
+                  onClick={() => handleAddColor(index)}
+                  className="bg-blue-600 text-white p-2 rounded-lg"
+                >
+                  Agregar color
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTalle(index)}
+                  className="bg-red-600 text-white p-2 rounded-lg ml-2"
+                >
+                  Eliminar talle
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddTalle}
+              className="bg-blue-600 text-white p-2 rounded-lg mb-4"
+            >
+              Agregar talle
+            </button>
+
+            {/* Botón de envío */}
+            <button
+              type="submit"
+              className="w-full bg-green-600 text-white p-2 rounded-lg mt-4"
             >
               {id ? 'Modificar Producto' : 'Agregar Producto'}
             </button>
