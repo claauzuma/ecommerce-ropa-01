@@ -4,11 +4,13 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 import './FormProduct.css';
 
 const FormProduct = () => {
   const { id } = useParams(); 
   const navigate = useNavigate(); 
+  const [originalImages, setOriginalImages] = useState([]); // Imágenes originales del producto
 
   const colorMapping = {
     rosa: 'pink',
@@ -41,9 +43,10 @@ const FormProduct = () => {
     nombre: '',
     descripcion: '',
     price: '',
-    tallesInputs: [{ talle: '', colores: [{ color: '', stock: '' }] }], // Siempre al menos un talle por defecto
+    tallesInputs: [{ talle: '', colores: [{ color: '', stock: '' }] }],
     categoria: '',
-    images: [],  // Solo este campo para las imágenes
+    images: [], // Nuevas imágenes
+    originalImages: [], // Imágenes existentes
   });
 
   useEffect(() => {
@@ -56,16 +59,17 @@ const FormProduct = () => {
             nombre: producto.nombre,
             descripcion: producto.descripcion,
             price: producto.price,
-            tallesInputs: producto.talles.length > 0 ? producto.talles : [{ talle: '', colores: [{ color: '', stock: '' }] }], 
+            tallesInputs: producto.talles.length > 0 ? producto.talles : [{ talle: '', colores: [{ color: '', stock: '' }] }],
             categoria: producto.categoria,
-            images: producto.images || [],  // Cargar las imágenes del producto si existen
+            images: producto.images || [], // Se deja vacío porque `images` se usará solo para nuevas imágenes seleccionadas
           });
+
         } catch (error) {
           console.error('Error al cargar el producto:', error);
         }
       }
     };
-
+  
     fetchProduct();
   }, [id]);
 
@@ -78,6 +82,7 @@ const FormProduct = () => {
   };
 
   const handleAddImage = () => {
+    console.log("Se abre el archivo")
     setFormData((prevData) => ({
       ...prevData,
       images: [...prevData.images, null],
@@ -156,6 +161,39 @@ const FormProduct = () => {
       alert('El precio debe ser mayor que cero.');
       return;
     }
+  
+    // Verificar si al menos un talle está vacío o no existe un talle válido
+    const hasEmptyTalle = formData.tallesInputs.some(input => input.talle === "");
+    const hasValidTalle = formData.tallesInputs.some(input => input.talle !== "");
+  
+    if (hasEmptyTalle) {
+      alert("Hay al menos un campo 'talle' vacío");
+      return; // Detiene la ejecución si hay talle vacío
+    }
+  
+    if (!hasValidTalle) {
+      alert("Debe haber al menos un talle válido");
+      return; // Detiene la ejecución si no hay talle válido
+    }
+
+    console.log("El talle es:");
+    console.log(formData.tallesInputs);
+
+
+    
+
+  
+    // Verificar que cada talle tenga color y stock
+    const hasIncompleteTalle = formData.tallesInputs.some(input => 
+      input.talle !== "" && 
+      (!input.colores || input.colores.length === 0 || !input.colores[0].stock || !input.colores[0].color)
+    );
+    
+    if (hasIncompleteTalle) {
+      alert("Todos los talles deben tener un color y un stock asignado.");
+      return; // Detiene la ejecución si algún talle tiene color o stock incompleto
+    }
+
 
     try {
       const formDataToSend = new FormData();
@@ -163,32 +201,51 @@ const FormProduct = () => {
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('categoria', formData.categoria);
       formDataToSend.append('price', formData.price);
-
-      // Agregar las imágenes al FormData
-      formData.images.forEach((image) => {
-        if (image) {
-          formDataToSend.append('images', image);
-        }
-      });
-
-      // Se agrega tallesInputs como un JSON string
+  
+      // Si hay nuevas imágenes, agrégalas al FormData
+      if (formData.images.length > 0) {
+        formData.images.forEach((image) => {
+          if (image) {
+            formDataToSend.append('images', image);
+          }
+        });
+      } else {
+        // Si no hay nuevas imágenes, enviar las URLs de las imágenes originales
+        formDataToSend.append('originalImages', JSON.stringify(originalImages));
+      }
+  
       formDataToSend.append('tallesInputs', JSON.stringify(formData.tallesInputs));
-
-      console.log("Vemos los datos de form data")
-      console.log(formData)
-
+  
       if (id) {
+        console.log("VAMOS A MODIFICAR EL PRODUCTO ")
+        console.log("LA DATA A modificar ES:");
+
+        // Itera y muestra cada clave y valor en formDataToSend
+        for (let [key, value] of formDataToSend.entries()) {
+          console.log(`${key}:`, value);
+        }
+    
         await axios.put(`http://localhost:8080/api/productos/${id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         alert('Producto modificado exitosamente');
-      } else {
+      } 
+      
+      
+      else {
         await axios.post('http://localhost:8080/api/productos', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
+        console.log("LA DATA A agregar ES:");
+
+        // Itera y muestra cada clave y valor en formDataToSend
+        for (let [key, value] of formDataToSend.entries()) {
+          console.log(`${key}:`, value);
+        }
+    
         alert('Producto agregado exitosamente');
       }
-
+  
       navigate('/admin/index-product');
     } catch (e) {
       console.error('Error al agregar/modificar producto:', e);

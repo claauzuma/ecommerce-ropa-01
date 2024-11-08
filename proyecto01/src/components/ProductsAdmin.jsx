@@ -35,7 +35,7 @@ const ProductsAdmin = ({ products, setProducts }) => {
         {products.map((product) => (
           <li key={product._id} className='product-item border rounded-lg shadow-lg overflow-hidden border-gold'>
             <img 
-              src={product.image}
+              src={product.images[0]}
               alt={product.descripcion}
               className='product-image' 
             />

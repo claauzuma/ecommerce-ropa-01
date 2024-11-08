@@ -92,8 +92,12 @@ Forma de Pago
       },
       productos: products.map((product) => ({
         id: product._id,
+        nombre: product.nombre,
         descripcion: product.descripcion,
         cantidad: product.cantidad,
+        talle: product.selectedTalle.talle,
+        color: product.selectedColor.color
+
       })),
       total: total,
       estado: 'pendiente',
@@ -102,6 +106,7 @@ Forma de Pago
     };
 
     try {
+       
       const response = await fetch('http://localhost:8080/api/pedidos', {
         method: 'POST',
         headers: {
@@ -109,6 +114,9 @@ Forma de Pago
         },
         body: JSON.stringify(dataToSend),
       });
+
+      console.log("Mandamos la data")
+      console.log(dataToSend)
 
       if (response.ok) {
         const responseData = await response.json();

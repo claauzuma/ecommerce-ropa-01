@@ -224,6 +224,7 @@ const sumarTotalVenta = async (id) => {
             <thead>
               <tr className="bg-black text-gold">
                 <th className="border-b border-black px-4 py-2">ID</th>
+                <th className="border-b border-black px-4 py-2">Provincia</th>
                 <th className="border-b border-black px-4 py-2">Cliente</th>
                 <th className="border-b border-black px-4 py-2">Total</th>
                 <th className="border-b border-black px-4 py-2">Estado</th>
@@ -241,6 +242,7 @@ const sumarTotalVenta = async (id) => {
     pedidosFiltrados.map((pedido) => (
       <tr key={pedido._id} className="hover:bg-gray-100 transition duration-200">
         <td className="border-b border-black px-4 py-2 text-gray-800">{pedido._id}</td>
+        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.provincia}</td>
         <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
         <td className="border-b border-black px-4 py-2 text-gray-800">${pedido.total}</td>
         <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.estado}</td>

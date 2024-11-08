@@ -45,6 +45,8 @@ const Cart = () => {
     try {
       await añadirPrepedido(); // Manejamos la respuesta de la API correctamente
       setIsCartVisible(false);
+      console.log("La data del carrito es " + JSON.stringify(purchaseData.products, null, 2));
+
       navigate('/generar-compra', { state: { purchaseData } });
     } catch (error) {
       console.error("Error al procesar el prepedido");
