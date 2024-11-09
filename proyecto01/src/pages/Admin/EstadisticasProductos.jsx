@@ -14,6 +14,7 @@ const Productos = () => {
     const [productosMenosVendidos, setProductosMenosVendidos] = useState([]);
     const [productosClickeados, setProductosClickeados] = useState([]);
     const [productosOrdenadosMasClickeados, setProductosOrdenadosMasClickeados] = useState([]);
+    const [productosPorTalleStock, setProductosPorTalleStock] = useState([])
     const [loading, setLoading] = useState(true);
 
     const topProductsCount = 50;
@@ -26,7 +27,7 @@ const Productos = () => {
                 axios.get('http://localhost:8080/api/pedidos'),
                 axios.get('http://localhost:8080/api/estadisticas'),
             ]);
-            setProductos(productosResponse.data.sort((a, b) => a.stock - b.stock));
+            setProductos(productosResponse.data);
             setPedidos(pedidosResponse.data);
             setEstadisticas(estadisticasResponse.data.data);
         } catch (error) {
@@ -35,6 +36,69 @@ const Productos = () => {
             setLoading(false);
         }
     };
+   
+
+
+    useEffect(() => {
+        if (productos.length > 0) {
+            const productosConTallesYColores = [];
+
+            productos.forEach((producto) => {
+                console.log("Este es un producto : " , producto)
+
+                producto.talles.forEach(talle => {
+                    console.log("Este es un talle " , talle)
+
+                    talle.colores.forEach(color => {
+
+                   
+                     
+                        let productoTalleColor = {
+                            nombre: producto.nombre,
+                            talle: talle.talle, // Talle
+                            color: color.color, // Color
+                            stock: color.stock, // Stock
+                            price: producto.price
+                  
+                        };
+                        productosConTallesYColores.push(productoTalleColor);
+
+                    }
+
+                        
+                )
+                    
+                });
+
+
+
+            });
+            
+    
+
+            // Ordenamos los productos por stock de manera descendente (puedes cambiarlo si lo deseas ascendente)
+            const productosOrdenados = productosConTallesYColores.sort((a, b) => a.stock - b.stock);
+
+            // Actualizamos el estado con los productos ordenados
+            setProductosPorTalleStock(productosOrdenados);
+        }
+    }, [productos]);
+
+
+    useEffect(() => {
+        console.log("Productos filtrados con talles y colores " , productosPorTalleStock)
+    }, [productosPorTalleStock]); 
+
+
+
+
+
+    
+
+    
+
+
+
 
     useEffect(() => {
         fetchData();
@@ -113,11 +177,14 @@ const Productos = () => {
                         <tbody>
                             {products.map((product) => (
                                 <tr key={product._id}>
-                                    {columns.includes('Descripcion') && <td className="table-data">{product.descripcion || product.nombre}</td>}
+                                    {columns.includes('Nombre') && <td className="table-data">{product.descripcion || product.nombre}</td>}
+                                    {columns.includes('Talle') && <td className="table-data">{product.talle}</td>}
+                                    {columns.includes('Color') && <td className="table-data">{product.color}</td>}
                                     {columns.includes('Stock') && <td className="table-data">{product.stock}</td>}
                                     {columns.includes('Precio') && <td className="table-data">{product.price}</td>}
                                     {columns.includes('Vendidos') && <td className="table-data">{product.cantidad}</td>}
                                     {columns.includes('Visitas') && <td className="table-data">{product.click}</td>}
+
                                 </tr>
                             ))}
                         </tbody>
@@ -151,10 +218,11 @@ const Productos = () => {
             <NavBar />
             <div className="container mt-5">
                 <div className="row">
-                    <ProductTable title="Con Bajo Stock" products={productos.filter(p => p.stock < 15)} columns={['Descripcion', 'Stock', 'Precio']} />
-                    <ProductTable title="Más Visitados" products={productosOrdenadosMasClickeados} columns={['Descripcion', 'Visitas']} />
-                    <ProductTable title="Más Vendidos" products={productosMasVendidos} columns={['Descripcion', 'Vendidos']} />
-                    <ProductTable title="Menos Vendidos" products={productosMenosVendidos} columns={['Descripcion','Vendidos']} />
+                    <ProductTable title="Con Bajo Stock" products={productosPorTalleStock.filter(p => p.stock < 30)} columns={['Nombre', 'Talle', 'Color', 'Stock', 'Precio']} />
+                    
+                    <ProductTable title="Más Visitados" products={productosOrdenadosMasClickeados} columns={['Nombre', 'Visitas']} />
+                    <ProductTable title="Más Vendidos" products={productosMasVendidos} columns={['Nombre', 'Vendidos']} />
+                    <ProductTable title="Menos Vendidos" products={productosMenosVendidos} columns={['Nombre','Vendidos']} />
                 </div>
             </div>
         </>
