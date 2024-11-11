@@ -165,7 +165,7 @@ const Productos = () => {
                 <div className="card-header text-center" style={{ backgroundColor: '#000000' }}>
                     <h5 className="table-header">{title}</h5>
                 </div>
-                <div className="card-body table-container">
+                <div className="card-body table-container" style={{ maxHeight: '300px', overflowY: 'auto' }}>
                     <table className="table table-striped table-hover">
                         <thead className="thead-light">
                             <tr>
@@ -175,16 +175,15 @@ const Productos = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product) => (
+                            {products.slice(0, 50).map((product) => (
                                 <tr key={product._id}>
-                                    {columns.includes('Nombre') && <td className="table-data">{product.descripcion || product.nombre}</td>}
+                                    {columns.includes('Nombre') && <td className="table-data">{product.nombre}</td>}
                                     {columns.includes('Talle') && <td className="table-data">{product.talle}</td>}
                                     {columns.includes('Color') && <td className="table-data">{product.color}</td>}
                                     {columns.includes('Stock') && <td className="table-data">{product.stock}</td>}
                                     {columns.includes('Precio') && <td className="table-data">{product.price}</td>}
                                     {columns.includes('Vendidos') && <td className="table-data">{product.cantidad}</td>}
                                     {columns.includes('Visitas') && <td className="table-data">{product.click}</td>}
-
                                 </tr>
                             ))}
                         </tbody>

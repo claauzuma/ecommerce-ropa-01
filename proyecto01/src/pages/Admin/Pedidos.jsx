@@ -6,15 +6,29 @@ import './Pedidos.css'
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
+  const [productos, setProductos] = useState([])
   const [tipo, setTipo] = useState('pendiente');
   const navigate = useNavigate();
+  const [originalImages, setOriginalImages] = useState([]); 
+
+  const [formData, setFormData] = useState({
+    nombre: '',
+    descripcion: '',
+    price: '',
+    tallesInputs: [{ talle: '', colores: [{ color: '', stock: '' }] }],
+    categoria: '',
+    images: [], 
+    originalImages: [], 
+  });
 
   useEffect(() => {
     const obtenerPedidos = async () => {
       try {
         const response = await fetch('http://localhost:8080/api/pedidos');
+        const responseProd = await axios.get('http://localhost:8080/api/productos');
         const data = await response.json();
         setPedidos(data);
+        setProductos(responseProd.data);
       } catch (error) {
         console.error('Error al obtener los pedidos:', error);
       }
@@ -52,8 +66,140 @@ const Pedidos = () => {
     navigate(`/pedido/detail/${id}`);
   };
 
+
+  const verificarStock = async (producto) => {
+    let hayStock = true;
+    const productoBuscado = productos.find(prod => prod.nombre === producto.nombre);
+    if (!productoBuscado) return false;
+    const talleBuscado = productoBuscado.talles.find(talle => talle.talle === producto.talle);
+    if (!talleBuscado) return false;
+    const colorBuscado = talleBuscado.colores.find(color => color.color === producto.color);
+    if (!colorBuscado) return false;
+  
+    if (colorBuscado.stock < producto.cantidad) {
+      hayStock = false;
+    }
+    return hayStock;
+  };
+
+  const hayStock = async (pedido) => {
+
+    let i = 0;
+    let stock = true;
+  
+    while (i < pedido.productos.length && stock) {
+      const productoActual = pedido.productos[i];
+      if (!(await verificarStock(productoActual))) {
+        stock = false; 
+      }
+      i += 1;
+    }
+
+    return stock;
+  };
+
+
+
+  const descontarStockDeProducto = async (producto) => {
+    console.log("Vamos a buscar el producto para descontar el stock de: " + producto.nombre);
+  
+    const productoEncontrado = productos.find((prod) => prod.nombre === producto.nombre);
+    console.log("Producto encontrado:", productoEncontrado);
+  
+    if (productoEncontrado) {
+
+      const talle = productoEncontrado.talles.find((talle) => talle.talle === producto.talle);
+  
+      if (talle) {
+
+        const color = talle.colores.find((color) => color.color === producto.color);
+  
+        if (color && color.stock >= producto.cantidad) {
+          console.log("Stock antes de descontar:", color.stock);
+
+          color.stock -= producto.cantidad;
+          console.log("Stock después de descontar:", color.stock);
+  
+
+          const formDataToSend = new FormData();
+          formDataToSend.append('nombre', productoEncontrado.nombre);
+          formDataToSend.append('descripcion', productoEncontrado.descripcion);
+          formDataToSend.append('categoria', productoEncontrado.categoria);
+          formDataToSend.append('price', productoEncontrado.price);
+  
+
+          if (productoEncontrado.images && productoEncontrado.images.length > 0) {
+            productoEncontrado.images.forEach((image) => {
+              formDataToSend.append('images', image);
+            });
+          } else {
+            formDataToSend.append('originalImages', JSON.stringify(productoEncontrado.images || []));
+          }
+
+          formDataToSend.append('tallesInputs', JSON.stringify(productoEncontrado.talles));
+  
+          try {
+            console.log("Actualizando el stock en la base de datos para el producto:", productoEncontrado.nombre);
+  
+            formDataToSend.forEach((value, key) => {
+              console.log(key + ": " + value);
+            });
+  
+            await axios.put(
+              `http://localhost:8080/api/productos/${productoEncontrado._id}`,
+              formDataToSend,
+              { headers: { 'Content-Type': 'multipart/form-data' } }
+            );
+  
+            console.log('Stock actualizado en la base de datos.');
+  
+            const nuevosProductos = productos.map((prod) =>
+              prod.nombre === productoEncontrado.nombre
+                ? { ...productoEncontrado, talles: productoEncontrado.talles }
+                : prod
+            );
+            setProductos(nuevosProductos);
+  
+          } catch (error) {
+            console.error('Error al actualizar el stock en la base de datos:', error);
+          }
+        } else {
+          console.log('Stock insuficiente para este producto.');
+        }
+      } else {
+        console.log('Talle no encontrado para este producto.');
+      }
+    } else {
+      console.log('Producto no encontrado en la lista.');
+    }
+  };
+  
+  
+
+
+  const descontarStock = (pedido) => {
+
+  pedido.productos.forEach(prod => {
+
+  descontarStockDeProducto(prod);    
+
+
+    
+  });  
+
+
+
+  }
+  
+
   const confirmarPedido = async (id) => {
     try {
+      console.log("Vamos a verificar los stocks de los productos del pedido " + id)
+      const response = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+      const pedido = response.data;
+
+      if(hayStock(pedido)) {
+
       const response = await fetch(`http://localhost:8080/api/pedidos/${id}`, {
         method: 'PUT',
         headers: {
@@ -65,13 +211,21 @@ const Pedidos = () => {
       if (!response.ok) {
         throw new Error('Error al confirmar el pedido');
       }
+        const updatedPedidos = pedidos.map((pedido) =>
+          pedido._id === id ? { ...pedido, estado: 'confirmado' } : pedido
+        );
+        setPedidos(updatedPedidos);
+        descontarStock(pedido)
+      
+  
+        sumarIngreso(id);
 
-      const updatedPedidos = pedidos.map((pedido) =>
-        pedido._id === id ? { ...pedido, estado: 'confirmado' } : pedido
-      );
-      setPedidos(updatedPedidos);
+      }
+      else {
+        console.log("Al menos hay un producto sin stock")
+      }
 
-      sumarIngreso(id);
+
     } catch (error) {
       console.error('Error al confirmar el pedido:', error);
     }
@@ -271,7 +425,7 @@ const sumarTotalVenta = async (id) => {
               Despachar
             </button>
           )}
-          {/* Botón de eliminar para todos los pedidos */}
+  
           <button
             onClick={() => eliminarPedido(pedido._id)}
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"

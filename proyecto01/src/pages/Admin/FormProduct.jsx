@@ -220,7 +220,7 @@ const FormProduct = () => {
         console.log("VAMOS A MODIFICAR EL PRODUCTO ")
         console.log("LA DATA A modificar ES:");
 
-        // Itera y muestra cada clave y valor en formDataToSend
+       console.log("Iteramos el formdatatosend")
         for (let [key, value] of formDataToSend.entries()) {
           console.log(`${key}:`, value);
         }
@@ -228,6 +228,7 @@ const FormProduct = () => {
         await axios.put(`http://localhost:8080/api/productos/${id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
+
         alert('Producto modificado exitosamente');
       } 
       
