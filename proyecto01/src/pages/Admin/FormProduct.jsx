@@ -45,8 +45,8 @@ const FormProduct = () => {
     price: '',
     tallesInputs: [{ talle: '', colores: [{ color: '', stock: '' }] }],
     categoria: '',
-    images: [], // Nuevas imágenes
-    originalImages: [], // Imágenes existentes
+    images: [], 
+    originalImages: [], 
   });
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const FormProduct = () => {
             price: producto.price,
             tallesInputs: producto.talles.length > 0 ? producto.talles : [{ talle: '', colores: [{ color: '', stock: '' }] }],
             categoria: producto.categoria,
-            images: producto.images || [], // Se deja vacío porque `images` se usará solo para nuevas imágenes seleccionadas
+            images: producto.images || [], 
           });
 
         } catch (error) {
@@ -77,7 +77,7 @@ const FormProduct = () => {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files : value,  // Cambié para manejar múltiples archivos
+      [name]: files ? files : value,  
     }));
   };
 
@@ -109,7 +109,7 @@ const FormProduct = () => {
   const handleAddTalle = () => {
     setFormData((prevData) => ({
       ...prevData,
-      tallesInputs: [...prevData.tallesInputs, { talle: '', colores: [{ color: '', stock: '' }] }],  // Mantener la estructura de talles y colores
+      tallesInputs: [...prevData.tallesInputs, { talle: '', colores: [{ color: '', stock: '' }] }],  
     }));
   };
 
@@ -162,28 +162,25 @@ const FormProduct = () => {
       return;
     }
   
-    // Verificar si al menos un talle está vacío o no existe un talle válido
+
     const hasEmptyTalle = formData.tallesInputs.some(input => input.talle === "");
     const hasValidTalle = formData.tallesInputs.some(input => input.talle !== "");
   
     if (hasEmptyTalle) {
       alert("Hay al menos un campo 'talle' vacío");
-      return; // Detiene la ejecución si hay talle vacío
+      return; 
     }
   
     if (!hasValidTalle) {
       alert("Debe haber al menos un talle válido");
-      return; // Detiene la ejecución si no hay talle válido
+      return;
     }
 
     console.log("El talle es:");
     console.log(formData.tallesInputs);
 
 
-    
 
-  
-    // Verificar que cada talle tenga color y stock
     const hasIncompleteTalle = formData.tallesInputs.some(input => 
       input.talle !== "" && 
       (!input.colores || input.colores.length === 0 || !input.colores[0].stock || !input.colores[0].color)
@@ -191,7 +188,7 @@ const FormProduct = () => {
     
     if (hasIncompleteTalle) {
       alert("Todos los talles deben tener un color y un stock asignado.");
-      return; // Detiene la ejecución si algún talle tiene color o stock incompleto
+      return; 
     }
 
 
@@ -202,7 +199,7 @@ const FormProduct = () => {
       formDataToSend.append('categoria', formData.categoria);
       formDataToSend.append('price', formData.price);
   
-      // Si hay nuevas imágenes, agrégalas al FormData
+
       if (formData.images.length > 0) {
         formData.images.forEach((image) => {
           if (image) {
@@ -210,7 +207,7 @@ const FormProduct = () => {
           }
         });
       } else {
-        // Si no hay nuevas imágenes, enviar las URLs de las imágenes originales
+
         formDataToSend.append('originalImages', JSON.stringify(originalImages));
       }
   
@@ -239,7 +236,7 @@ const FormProduct = () => {
         });
         console.log("LA DATA A agregar ES:");
 
-        // Itera y muestra cada clave y valor en formDataToSend
+
         for (let [key, value] of formDataToSend.entries()) {
           console.log(`${key}:`, value);
         }
@@ -262,7 +259,7 @@ const FormProduct = () => {
             {id ? 'Modificar Producto' : 'Agregar Producto'}
           </h1>
           <form onSubmit={handleSubmit}>
-            {/* Campos generales del formulario */}
+     
             <input
               type="text"
               name="nombre"
@@ -279,7 +276,7 @@ const FormProduct = () => {
               className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
             ></textarea>
 
-            {/* Input de categoria */}
+    
             <input
               type="text"
               name="categoria"
@@ -289,7 +286,6 @@ const FormProduct = () => {
               className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white mb-2"
             />
 
-            {/* Archivos adicionales */}
             <h2 className="text-lg font-semibold mb-2 text-white">Imágenes del producto</h2>
             {formData.images.map((image, index) => (
               <div key={index} className="flex items-center mb-2">
@@ -396,8 +392,7 @@ const FormProduct = () => {
             >
               Agregar talle
             </button>
-
-            {/* Botón de envío */}
+            
             <button
               type="submit"
               className="w-full bg-green-600 text-white p-2 rounded-lg mt-4"

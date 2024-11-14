@@ -14,7 +14,7 @@ const Productos = () => {
     const [productosMenosVendidos, setProductosMenosVendidos] = useState([]);
     const [productosClickeados, setProductosClickeados] = useState([]);
     const [productosOrdenadosMasClickeados, setProductosOrdenadosMasClickeados] = useState([]);
-    const [productosPorTalleStock, setProductosPorTalleStock] = useState([])
+    const [productosPorTalleStock, setProductosPorTalleStock] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const topProductsCount = 50;
@@ -36,47 +36,31 @@ const Productos = () => {
             setLoading(false);
         }
     };
-   
 
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     useEffect(() => {
         if (productos.length > 0) {
             const productosConTallesYColores = [];
 
             productos.forEach((producto) => {
-                console.log("Este es un producto : " , producto)
-
                 producto.talles.forEach(talle => {
-                    console.log("Este es un talle " , talle)
-
                     talle.colores.forEach(color => {
-
-                   
-                     
                         let productoTalleColor = {
                             nombre: producto.nombre,
                             talle: talle.talle, // Talle
                             color: color.color, // Color
                             stock: color.stock, // Stock
                             price: producto.price
-                  
                         };
                         productosConTallesYColores.push(productoTalleColor);
-
-                    }
-
-                        
-                )
-                    
+                    });
                 });
-
-
-
             });
-            
-    
 
-            // Ordenamos los productos por stock de manera descendente (puedes cambiarlo si lo deseas ascendente)
+            // Ordenamos los productos por stock de manera ascendente
             const productosOrdenados = productosConTallesYColores.sort((a, b) => a.stock - b.stock);
 
             // Actualizamos el estado con los productos ordenados
@@ -84,31 +68,11 @@ const Productos = () => {
         }
     }, [productos]);
 
-
-    useEffect(() => {
-        console.log("Productos filtrados con talles y colores " , productosPorTalleStock)
-    }, [productosPorTalleStock]); 
-
-
-
-
-
-    
-
-    
-
-
-
-
-    useEffect(() => {
-        fetchData();
-    }, []); 
-
     useEffect(() => {
         if (pedidos.length > 0) {
             fetchProductosVenta();
         }
-    }, [pedidos]); 
+    }, [pedidos]);
 
     const fetchProductosVenta = () => {
         let productosVentas = [];
@@ -209,19 +173,40 @@ const Productos = () => {
     };
 
     if (loading) {
-        return <div>Cargando...</div>; 
+        return <div>Cargando...</div>;
     }
 
     return (
         <>
             <NavBar />
-            <div className="container mt-5">
+            <br />
+            {/* Contenedor principal con margen superior específico */}
+            <div className="container mt-5 pt-5">
                 <div className="row">
-                    <ProductTable title="Con Bajo Stock" products={productosPorTalleStock.filter(p => p.stock < 30)} columns={['Nombre', 'Talle', 'Color', 'Stock', 'Precio']} />
-                    
-                    <ProductTable title="Más Visitados" products={productosOrdenadosMasClickeados} columns={['Nombre', 'Visitas']} />
-                    <ProductTable title="Más Vendidos" products={productosMasVendidos} columns={['Nombre', 'Vendidos']} />
-                    <ProductTable title="Menos Vendidos" products={productosMenosVendidos} columns={['Nombre','Vendidos']} />
+                    {/* Filtrar productos con bajo stock */}
+                    <ProductTable
+                        title="Con Bajo Stock"
+                        products={productosPorTalleStock.filter(p => p.stock < 30)}
+                        columns={['Nombre', 'Talle', 'Color', 'Stock', 'Precio']}
+                    />
+                    {/* Filtrar productos más visitados */}
+                    <ProductTable
+                        title="Más Visitados"
+                        products={productosOrdenadosMasClickeados}
+                        columns={['Nombre', 'Visitas']}
+                    />
+                    {/* Filtrar productos más vendidos */}
+                    <ProductTable
+                        title="Más Vendidos"
+                        products={productosMasVendidos}
+                        columns={['Nombre', 'Vendidos']}
+                    />
+                    {/* Filtrar productos menos vendidos */}
+                    <ProductTable
+                        title="Menos Vendidos"
+                        products={productosMenosVendidos}
+                        columns={['Nombre', 'Vendidos']}
+                    />
                 </div>
             </div>
         </>

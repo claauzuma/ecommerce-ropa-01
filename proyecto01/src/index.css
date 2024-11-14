@@ -5,9 +5,9 @@
 @import "~slick-carousel/slick/slick-theme.css";
 
 
-/* Establecer el fondo de la aplicación */
+
 html, body {
-    @apply bg-gray-100; /* Cambia a bg-gray-300 si prefieres más oscuro */
+    @apply bg-gray-100; 
     background-color: grey;
 }
 

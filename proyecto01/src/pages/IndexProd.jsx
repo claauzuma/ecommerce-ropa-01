@@ -7,26 +7,26 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const IndexProd = () => {
-  const [products, setProducts] = useState([]); // Estado para almacenar los productos
+  const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
     category: 'all',
     minPrice: 0,
   });
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para el buscador
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
   const [visitRecorded, setVisitRecorded] = useState(false); 
 
   useEffect(() => {
     const fetchProducts = async () => {
-        setLoading(true); // Cambia el estado de carga antes de iniciar la carga de productos
+        setLoading(true); 
         try {
-            const response = await axios.get('http://localhost:8080/api/productos'); // Cambia esta URL a tu API
-            setProducts(response.data); // Establece los productos obtenidos en el estado
+            const response = await axios.get('http://localhost:8080/api/productos'); 
+            setProducts(response.data); 
         } catch (error) {
-            console.error('Error fetching products:', error); // Manejo de errores
+            console.error('Error fetching products:', error); 
         } finally {
-            setLoading(false); // Cambia el estado de carga
+            setLoading(false); 
         }
     };
     
@@ -77,12 +77,12 @@ const IndexProd = () => {
 
   const handleAddProduct = () => {
     navigate('/admin/form-product'); 
-    setSearchTerm(''); // Limpia el término de búsqueda al navegar
+    setSearchTerm(''); 
   };
 
   return (
     <>
-      {/* Contenedor del buscador y botón */}
+     
       <div className="container mx-auto p-6 mt-4">
         <div className="flex justify-between items-center">
           <input
@@ -90,11 +90,9 @@ const IndexProd = () => {
             placeholder="Buscar productos..."
             className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el término de búsqueda
+            onChange={(e) => setSearchTerm(e.target.value)} 
           />
-          <button onClick={handleAddProduct} className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">
-            Agregar producto
-          </button>
+  
         </div>
       </div>
 
@@ -102,7 +100,7 @@ const IndexProd = () => {
 
       <div className="container mx-auto p-6">
         {loading ? (
-          <p>Cargando productos...</p> // Mensaje de carga
+          <p>Cargando productos...</p> 
         ) : (
           <Products products={filteredProducts} setProducts={setProducts}/>
         )}
@@ -111,9 +109,9 @@ const IndexProd = () => {
   );
 };
 
-// Validación de props usando PropTypes
+
 IndexProd.propTypes = {
-  // Aquí podrías definir las props si decides pasar alguna al componente
+
 };
 
 export default IndexProd;

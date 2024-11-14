@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const Cart = () => {
   const cartCheckboxId = useId();
-  const { clearCart, cart, isCartVisible, setIsCartVisible, updateQuantity, removeFromCart } = useCart();  // Asegúrate de tener una función `removeFromCart`
+  const { clearCart, cart, isCartVisible, setIsCartVisible, updateQuantity, removeFromCart } = useCart(); 
   const navigate = useNavigate(); 
 
   const closeCart = () => setIsCartVisible(false);
@@ -43,7 +43,7 @@ const Cart = () => {
     };
 
     try {
-      await añadirPrepedido(); // Manejamos la respuesta de la API correctamente
+      await añadirPrepedido();
       setIsCartVisible(false);
       console.log("La data del carrito es " + JSON.stringify(purchaseData.products, null, 2));
 
@@ -102,10 +102,10 @@ const Cart = () => {
                 </div>
                 <footer className="flex flex-col items-end">
                   <Cantidades
-                    stock={product.selectedColor.stock}  // Asegúrate de que 'stock' sea el stock del color seleccionado.
-                    cant={product.cantidad}             // La cantidad del producto en el carrito.
-                    onChange={(newCantidad) => updateQuantity(product._id, newCantidad)}  // Actualiza la cantidad en el carrito.
-                    productId={product._id}             // El ID del producto para asegurarte de que estás actualizando el correcto.
+                    stock={product.selectedColor.stock}  
+                    cant={product.cantidad}           
+                    onChange={(newCantidad) => updateQuantity(product._id, newCantidad)}  
+                    productId={product._id}            
                   />
                   <small className="text-gray-400 mt-1">Total: ${product.price * product.cantidad}</small>
                   <button
@@ -120,7 +120,7 @@ const Cart = () => {
           )}
         </ul>
 
-        {/* Botón de Iniciar Compra */}
+   
         <button
           onClick={handleCheckout}
           className="mt-4 w-full bg-yellow-500 text-gray-800 py-2 rounded hover:bg-yellow-600 flex items-center justify-center"
@@ -128,7 +128,7 @@ const Cart = () => {
           Iniciar Compra
         </button>
 
-        {/* Botón para limpiar el carrito */}
+     
         <button
           onClick={clearCart}
           className="mt-2 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 flex items-center justify-center"

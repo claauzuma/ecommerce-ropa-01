@@ -1,25 +1,30 @@
 import React, { useRef, useEffect } from 'react';
-import Cart from '../components/Cart'; // Asegúrate de importar el componente del carrito
-import { useCart } from '../context/CartContext'; // Importar correctamente el contexto
+import Cart from '../components/Cart';
+import { useCart } from '../context/CartContext';
 
 const NavBar = () => {
   const cartRef = useRef(null);
-  const { isCartVisible, setIsCartVisible } = useCart(); // Tomar isCartVisible y setIsCartVisible del contexto
+  const { isCartVisible, setIsCartVisible, token } = useCart();
 
-  // Función para manejar clics fuera del carrito
+
   const handleClickOutside = (event) => {
     if (cartRef.current && !cartRef.current.contains(event.target)) {
       setIsCartVisible(false);
     }
   };
 
-  // Efecto para agregar y limpiar el listener de clics
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+
+  if (token) {
+    return null;
+  }
 
   return (
     <>
@@ -31,18 +36,26 @@ const NavBar = () => {
             </a>
           </div>
           <div className="space-x-8">
+
             <button
-              onClick={() => setIsCartVisible(true)} // Corregir paréntesis
+              onClick={() => setIsCartVisible(true)}
               className="text-white font-medium text-lg hover:text-gray-300 transition duration-300 ease-in-out"
             >
               🛒 Carrito
             </button>
-            <a href="/loginpage" className="text-white font-medium text-lg hover:text-gray-300 transition duration-300 ease-in-out">
+
+            <a
+              href="/loginpage"
+              className="text-white font-medium text-lg hover:text-gray-300 transition duration-300 ease-in-out"
+            >
               🔒 Login
             </a>
           </div>
         </div>
       </nav>
+
+
+      {isCartVisible && <Cart ref={cartRef} />}
     </>
   );
 };

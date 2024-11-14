@@ -137,7 +137,7 @@ Forma de Pago
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-gray-900 rounded-lg shadow-lg border-4 border-black mt-10"> {/* Cambiado a borde negro */}
+    <div className="max-w-md mx-auto p-6 bg-gray-900 rounded-lg shadow-lg border-4 border-black mt-10"> 
       <h2 className="text-2xl font-bold text-gold mb-6 text-center">Detalles de la Compra</h2>
       {products.length === 0 ? (
         <p className="text-center text-red-500">No hay productos en la compra</p>
@@ -161,7 +161,7 @@ Forma de Pago
                 id="nombre"
                 value={formData.nombre}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
                 required
               />
             </div>
@@ -173,7 +173,7 @@ Forma de Pago
                 id="apellido"
                 value={formData.apellido}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
                 required
               />
             </div>
@@ -185,7 +185,7 @@ Forma de Pago
                 id="dni"
                 value={formData.dni}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
                 required
               />
             </div>
@@ -197,7 +197,7 @@ Forma de Pago
                 id="celular"
                 value={formData.celular}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
                 required
               />
             </div>
@@ -209,7 +209,7 @@ Forma de Pago
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -221,7 +221,7 @@ Forma de Pago
                 id="provincia"
                 value={formData.provincia}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
                 required
               />
             </div>
@@ -233,7 +233,7 @@ Forma de Pago
                 id="direccion"
                 value={formData.direccion}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" // Borde negro
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
                 required
               />
             </div>

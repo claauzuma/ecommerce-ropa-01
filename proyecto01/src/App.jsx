@@ -18,34 +18,54 @@ import PedidoDetail from './components/PedidoDetail';
 import Estadisticas from './pages/Admin/EstadisticasVisionGral';
 import EstadisticasVentas from './pages/Admin/EstadisticasVentas';
 import EstadisticasProductos from './pages/Admin/EstadisticasProductos';
+import PrivateRoute from './components/PrivateRoute';
+import NavBarAdmin from './pages/Admin/NavBar';
+import PrivateRouteNoToken from './components/PrivateRouteNoToken';
+
 
 
 
 const App = () => {
+
+
   return (
 
 
   <CartProvider>
     <Router>
-  
-      <NavBar /> 
+
+  <NavBar /> 
 
       <Routes>
 
-        <Route path="/" element={<IndexProd />} />
-        <Route path="/addproduct" element={<FormAddProduct />} />
-        <Route path="/loginpage" element={<LoginForm/>} />
-        <Route path="/admin/pedidos" element={<Pedidos />} /> 
-        <Route path="/admin/form-product" element={<FormProduct />} />
-        <Route path="/admin/form-product/:id" element={<FormProduct />} />
-        <Route path="/admin/index-product" element={<Index />} />
+          <Route element={<PrivateRoute/>}>
+          <Route path="/admin/pedidos" element={ <Pedidos />} />
+          <Route path="/admin/form-product" element={  <FormProduct /> } />
+          <Route path="/admin/form-product/:id" element={<FormProduct />} />
+          <Route path="/admin/index-product" element={<Index />} />
+          <Route path="/admin/estadisticas/vision-general" element={<Estadisticas />} />
+          <Route path="/admin/estadisticas/ventas" element={<EstadisticasVentas />} />
+          <Route path="/admin/estadisticas/productos" element={<EstadisticasProductos />} />
+          <Route path="/addproduct" element={<FormAddProduct />} />
+          </Route>
+
+      
+          <Route element={<PrivateRouteNoToken/>}>
+          <Route path="/" element={<IndexProd />} />
+          <Route path="/loginpage" element={<LoginForm/>} />
+        
         <Route path="/cart" element={<Carrito />} />
         <Route path="/product/:productId" element={<ProductDetail/>} /> 
         <Route path="/generar-compra" element={<GenerarCompra />} /> 
         <Route path="/pedido/detail/:id" element={<PedidoDetail />} /> 
-        <Route path="/admin/estadisticas/vision-general" element={<Estadisticas />} /> 
-        <Route path="/admin/estadisticas/ventas" element={<EstadisticasVentas />} /> 
-        <Route path="/admin/estadisticas/productos" element={<EstadisticasProductos />} /> 
+        </Route>
+
+
+
+  
+
+
+
 
 
       </Routes>

@@ -16,7 +16,7 @@ const ProductDetail = () => {
   const [coloresDisponibles, setColoresDisponibles] = useState([]); // Estado para los colores disponibles
   const [selectedColor, setSelectedColor] = useState(null); // Estado para el color seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); // Estado del slider de imágenes
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); 
 
   const navigate = useNavigate();
 
@@ -60,7 +60,7 @@ const ProductDetail = () => {
   };
 
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen); // Alternar el estado del modal
+    setIsModalOpen(!isModalOpen);
   };
 
   const handleAddToCart = () => {
@@ -69,7 +69,7 @@ const ProductDetail = () => {
       return;
     }
 
-    // Agregar el producto, talle y color seleccionados al carrito
+   
     addToCart({ ...product, selectedTalle, selectedColor });
     navigate('/');
   };
@@ -80,11 +80,11 @@ const ProductDetail = () => {
 
   return (
     <div className="product-detail">
-      {/* Slider de imágenes */}
+
       <div className="image-slider">
         <button onClick={goToPreviousImage} className="arrow left">&#8592;</button>
         
-        {/* Verificar si es imagen o video */}
+
         {product.images[currentImageIndex].includes(".mp4") ? (
           <video
             src={product.images[currentImageIndex]}
@@ -102,7 +102,7 @@ const ProductDetail = () => {
         <button onClick={goToNextImage} className="arrow right">&#8594;</button>
       </div>
 
-      {/* Botón para agrandar/disminuir imagen */}
+
       <div className="image-controls text-center mt-2">
         <button 
           className="expand-button bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
@@ -112,7 +112,6 @@ const ProductDetail = () => {
         </button>
       </div>
 
-      {/* Modal para vista ampliada */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={toggleModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -135,7 +134,7 @@ const ProductDetail = () => {
         </div>
       )}
 
-      {/* Resto del contenido */}
+
       <div className="p-4 text-center">
         <h2 className="text-2xl font-bold">{product.nombre}</h2>
         <h3 className="text-xl font-semibold">{product.descripcion}</h3>

@@ -156,6 +156,7 @@ const EstadisticasVentas = () => {
     return (
         <>
             <NavBar />
+            <br /> <br /> <br /> <br />
             <div className="container mt-0">
                 <br />
                 <div className="mb-4 d-flex justify-content-between">

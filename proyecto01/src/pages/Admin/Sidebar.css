@@ -4,8 +4,8 @@ body {
 }
 
 .navbar {
-    background-color: #000; /* Cambiado a negro */
-    color: gold; /* Color de texto dorado */
+    background-color: #000; 
+    color: gold; 
     position: fixed;
     top: 0;
     left: 0;
@@ -27,7 +27,7 @@ body {
 
 .logo {
     font-size: 24px;
-    color: gold; /* Cambiado a dorado */
+    color: gold; 
 }
 
 .navbar-nav {
@@ -38,13 +38,13 @@ body {
     display: flex;
     align-items: center;
     padding: 15px 20px;
-    color: gold; /* Cambiado a dorado */
+    color: gold; 
     text-decoration: none;
     transition: background 0.3s;
 }
 
 .navbar-link:hover {
-    background: rgba(255, 215, 0, 0.2); /* Color dorado más claro al pasar el mouse */
+    background: rgba(255, 215, 0, 0.2); 
 }
 
 .link-title {
@@ -55,8 +55,8 @@ body {
     position: fixed;
     top: 10px;
     left: 10px;
-    background-color: #000; /* Cambiado a negro */
-    color: gold; /* Color de texto dorado */
+    background-color: #000; 
+    color: gold; 
     border: none;
     padding: 10px 15px;
     cursor: pointer;
@@ -64,12 +64,12 @@ body {
 }
 
 .toggle-button.active {
-    background-color: #222; /* Un tono más oscuro cuando está activo */
+    background-color: #222; 
 }
 
 @media (max-width: 768px) {
     .navbar {
-        width: 200px; /* Opcional, puedes ajustar el tamaño */
+        width: 200px; 
     }
 
     .toggle-button {

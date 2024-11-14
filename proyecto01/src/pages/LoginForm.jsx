@@ -1,26 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { useCart } from '../context/CartContext'; 
+
+
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const {user, setUser} = useCart();
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      // Realiza la petición al backend
       const response = await fetch("http://localhost:8080/api/usuarios/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email, // Usamos el estado del email
-          password, // Usamos el estado del password
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
@@ -28,13 +29,18 @@ const LoginForm = () => {
       if (response.ok) {
         const token = data.token;
         console.log("Logeamos bien");
+    
 
-        // Guarda el token en localStorage
+        const decodedToken = jwtDecode(token);
+        const { email, rol } = decodedToken;
+        console.log("El mail del token es " + email)
+        console.log("El rol del token es " + rol)
+        console.log("El rol es " + rol)
+        const usuario = {"email" : email, "rol" : rol}
+        setUser(usuario);
         localStorage.setItem("token", token);
-        // Redirigir después de un inicio de sesión exitoso (opcional)
-        navigate("/home"); // Cambia esto según la ruta de tu aplicación
+        navigate("/admin/index-product");
       } else {
-        // Si las credenciales son incorrectas
         setError(data.message);
       }
     } catch (err) {
@@ -43,44 +49,51 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex items-start justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6 mt-10"> {/* Ajusta mt-10 para mover hacia arriba */}
-        <h2 className="text-2xl font-bold text-gray-800 text-center">Login</h2>
-        <form className="space-y-4" onSubmit={handleLogin}>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900">
+
+      <div className="bg-gray-800 p-10 rounded-lg shadow-lg max-w-lg w-full space-y-8 mt-[0px]">
+        <h2 className="text-3xl font-bold text-yellow-400 text-center">Admin Login</h2>
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+              Email
+            </label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter your email"
+              className="mt-2 w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              placeholder="Ingresa tu email"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+              Contraseña
+            </label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter your password"
+              className="mt-2 w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              placeholder="Ingresa tu contraseña"
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>} 
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-yellow-400 text-gray-900 py-3 px-6 rounded-lg font-semibold hover:bg-yellow-500 transition-all duration-300"
           >
-            Sign in
+            Iniciar sesión
           </button>
         </form>
         <div className="text-sm text-center">
-          <a href="#" className="text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
+          <a href="#" className="text-yellow-400 hover:text-yellow-500 transition-all duration-300">
+            ¿Olvidaste tu contraseña?
+          </a>
         </div>
       </div>
     </div>

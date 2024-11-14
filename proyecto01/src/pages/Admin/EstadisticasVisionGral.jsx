@@ -146,6 +146,7 @@ const Estadisticas = () => {
   return (
     <>
       <NavBar />
+      <br /><br /><br />
       <div className="estadisticas-container">
         <h1>Estadísticas</h1>
         <div className="filter-container">

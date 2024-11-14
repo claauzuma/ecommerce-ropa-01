@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './NavBar.css';
+import { useNavigate } from 'react-router-dom';
 
 const NavBarAdmin = () => {
-  const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
-  const [isStatsOpen, setIsStatsOpen] = useState(false); // Estado para la sublista de estadísticas
-  const dropdownRef = useRef(null); // Referencia para el dropdown
+  const [isOpen, setIsOpen] = useState(false);
+  const [isStatsOpen, setIsStatsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -15,7 +17,13 @@ const NavBarAdmin = () => {
     setIsStatsOpen(!isStatsOpen);
   };
 
-  // Cerrar el dropdown si se hace clic fuera de él
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    console.log("Token eliminado");
+    navigate('/');
+    window.location.reload();
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,10 +40,8 @@ const NavBarAdmin = () => {
   return (
     <nav className="bg-black fixed top-0 w-full p-4 shadow-md z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Título del NavBar */}
         <div className="text-yellow-400 text-2xl font-bold">Admin Panel</div>
 
-        {/* Botón para el menú móvil */}
         <button
           className="md:hidden text-yellow-400 focus:outline-none"
           onClick={toggleMenu}
@@ -43,7 +49,6 @@ const NavBarAdmin = () => {
           {isOpen ? '✖' : '☰'}
         </button>
 
-        {/* Opciones del NavBar */}
         <ul
           className={`md:flex md:space-x-6 absolute md:relative bg-black w-full md:w-auto transition-all duration-300 ${
             isOpen ? 'top-16' : '-top-48 md:top-0'
@@ -103,12 +108,12 @@ const NavBarAdmin = () => {
           </li>
 
           <li>
-            <a
-              href="/logout"
+            <button
+              onClick={handleLogout}
               className="block text-yellow-400 hover:text-red-400 transition-colors duration-300 p-2"
             >
               Cerrar sesión
-            </a>
+            </button>
           </li>
         </ul>
       </div>

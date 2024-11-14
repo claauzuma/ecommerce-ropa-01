@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Pedidos.css'
+import { Modal, Button } from "react-bootstrap";
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -10,6 +11,9 @@ const Pedidos = () => {
   const [tipo, setTipo] = useState('pendiente');
   const navigate = useNavigate();
   const [originalImages, setOriginalImages] = useState([]); 
+  const [showModal, setShowModal] = useState(false);
+  const [pedidoId, setPedidoId] = useState(null);
+  
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -67,7 +71,7 @@ const Pedidos = () => {
   };
 
 
-  const verificarStock = async (producto) => {
+  const verificarStock = (producto) => {
     let hayStock = true;
     const productoBuscado = productos.find(prod => prod.nombre === producto.nombre);
     if (!productoBuscado) return false;
@@ -76,9 +80,13 @@ const Pedidos = () => {
     const colorBuscado = talleBuscado.colores.find(color => color.color === producto.color);
     if (!colorBuscado) return false;
   
+    console.log("Comparamos los colores")
+    console.log("Color buscado " , colorBuscado.stock)
+    console.log("Cantidad de producto del pedido con ese color" , producto.cantidad)
     if (colorBuscado.stock < producto.cantidad) {
       hayStock = false;
     }
+    console.log(hayStock)
     return hayStock;
   };
 
@@ -89,7 +97,8 @@ const Pedidos = () => {
   
     while (i < pedido.productos.length && stock) {
       const productoActual = pedido.productos[i];
-      if (!(await verificarStock(productoActual))) {
+      if (verificarStock(productoActual) == false) {
+        console.log("El stock pasa a ser falso ya que no hay stock suficiente")
         stock = false; 
       }
       i += 1;
@@ -182,23 +191,51 @@ const Pedidos = () => {
   pedido.productos.forEach(prod => {
 
   descontarStockDeProducto(prod);    
-
-
-    
   });  
 
-
-
   }
-  
+
+  const eliminarPedido2 = async () => {
+    try {
+      console.log("Eliminamos el pedido")
+      await eliminarPedido(pedidoId)
+      setShowModal(false); 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const seguirPedido = () => {
+    console.log("Se sigue con el pedido a pesar de la falta de stock");
+    setShowModal(false); 
+  };
+
 
   const confirmarPedido = async (id) => {
+   try {
+    console.log("Vamos a verificar los stocks de los productos del pedido " + id)
+    const response = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+    const pedido = response.data;
+    console.log("Vamos a verificar el stock del pedido ", pedido)
+    let stockpositivo = false;
+    stockpositivo = await hayStock(pedido)
+    console.log("Hay stock???" , stockpositivo)
+    if(!stockpositivo) {
+      console.log("Falta stock de al menos un producto")
+      setPedidoId(id); 
+      setShowModal(true); 
+    } else {
+     console.log("Hay stock asi que procedemos a confirmar el pedido")
+      confirmarPedido2(id,pedido);
+    }
+   } catch (error) {
+    console.log(error)
+   }
+  }
+  
+  const confirmarPedido2 = async (id,pedido) => {
     try {
-      console.log("Vamos a verificar los stocks de los productos del pedido " + id)
-      const response = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
-      const pedido = response.data;
-
-      if(hayStock(pedido)) {
 
       const response = await fetch(`http://localhost:8080/api/pedidos/${id}`, {
         method: 'PUT',
@@ -216,14 +253,9 @@ const Pedidos = () => {
         );
         setPedidos(updatedPedidos);
         descontarStock(pedido)
-      
-  
         sumarIngreso(id);
 
-      }
-      else {
-        console.log("Al menos hay un producto sin stock")
-      }
+    
 
 
     } catch (error) {
@@ -344,6 +376,23 @@ const sumarTotalVenta = async (id) => {
   return (
     <>
       <NavBar />
+      <br /> <br /> <br />
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Falta de Stock</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Cantidad insuficiente de al menos un producto</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={eliminarPedido2}>
+            Eliminar Pedido
+          </Button>
+          <Button variant="primary" onClick={seguirPedido}>
+            Seguir Pedido
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <div className="max-w-7xl mx-auto p-4 bg-white shadow-md rounded-lg mt-8">
         <h2 className="text-2xl font-bold mb-4 text-black">Lista de Pedidos</h2>
         <div className="mb-4 flex space-x-2">

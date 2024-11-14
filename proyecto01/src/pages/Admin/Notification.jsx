@@ -1,17 +1,17 @@
-// Notification.js
+
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
-import './Notificacion.css'; // Estilos para la notificación
+import PropTypes from 'prop-types'; 
+import './Notificacion.css'; 
 
 const Notification = ({ message, onClose }) => {
     useEffect(() => {
         if (message) {
-            const timer = setTimeout(onClose, 3000); // Ocultar después de 3 segundos
-            return () => clearTimeout(timer); // Limpiar el timer si el componente se desmonta
+            const timer = setTimeout(onClose, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [message, onClose]);
 
-    if (!message) return null; // No renderizar si no hay mensaje
+    if (!message) return null;
 
     return (
         <figure className="notification">
@@ -36,10 +36,10 @@ const Notification = ({ message, onClose }) => {
     );
 };
 
-// Define PropTypes para el componente
+
 Notification.propTypes = {
-    message: PropTypes.string, // message debe ser una cadena
-    onClose: PropTypes.func.isRequired, // onClose debe ser una función y es requerida
+    message: PropTypes.string, 
+    onClose: PropTypes.func.isRequired, 
 };
 
 export default Notification;

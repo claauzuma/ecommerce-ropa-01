@@ -4,6 +4,9 @@ import Header from '../../components/Header';
 import NavBarAdmin from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Importa Axios
+import { useCart } from '../../context/CartContext.jsx'; // Hook para agregar al carrito
+
+
 
 const Index = () => {
   const [products, setProducts] = useState([]); // Estado para almacenar los productos
@@ -13,6 +16,7 @@ const Index = () => {
   });
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el buscador
   const navigate = useNavigate();
+  const { user } = useCart();
 
  
 
@@ -49,9 +53,12 @@ const Index = () => {
 
   return (
     <>
-      <NavBarAdmin />
+    <NavBarAdmin/>
+    <br />
+    <br />
+    <br />
+   
 
-      {/* Contenedor del buscador y botón */}
       <div className="container mx-auto p-6 mt-4">
         <div className="flex justify-between items-center">
           <input
@@ -59,7 +66,7 @@ const Index = () => {
             placeholder="Buscar productos..."
             className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el término de búsqueda
+            onChange={(e) => setSearchTerm(e.target.value)} 
           />
 
           <button onClick={handleAddProduct} className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">

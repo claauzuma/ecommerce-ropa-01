@@ -9,7 +9,7 @@ const Cantidades = ({ stock, cant, onChange, productId }) => {
     if (cant < stock) {
       const newCantidad = cant + 1;
       updateQuantity(productId, newCantidad);
-      onChange(newCantidad);  // Emitir el cambio a través de la función onChange
+      onChange(newCantidad);  
     }
   };
 
@@ -17,7 +17,7 @@ const Cantidades = ({ stock, cant, onChange, productId }) => {
     if (cant > 1) {
       const newCantidad = cant - 1;
       updateQuantity(productId, newCantidad);
-      onChange(newCantidad);  // Emitir el cambio a través de la función onChange
+      onChange(newCantidad);  
     }
   };
 
@@ -45,8 +45,8 @@ const Cantidades = ({ stock, cant, onChange, productId }) => {
 Cantidades.propTypes = {
   stock: PropTypes.number.isRequired,
   cant: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,  // Asegúrate de que onChange es requerido
-  productId: PropTypes.string.isRequired,  // Cambiado a string
+  onChange: PropTypes.func.isRequired,  
+  productId: PropTypes.string.isRequired, 
 };
 
 export default Cantidades;
