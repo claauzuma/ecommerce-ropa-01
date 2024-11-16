@@ -196,3 +196,157 @@
   }
   
 }
+
+
+/* Estilos generales */
+
+@media (max-width: 768px) {
+
+  .product-title {
+    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
+    font-size: 1rem; 
+  }
+
+
+  .p-6 {
+    padding: 0.2rem;
+
+  }
+  .products {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0; /* Eliminar márgenes */
+    box-sizing: border-box;
+    overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
+    white-space: nowrap; /* Evitar el salto de línea en elementos hijos para permitir desplazamiento horizontal */
+  }
+  
+  /* Estilo para la lista de productos */
+  .products ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
+    gap: 1rem; /* Espacio pequeño entre los productos */
+    width: 100%; /* Ocupa el 100% del ancho disponible */
+    margin: 0; /* Eliminar el margen lateral */
+    padding-left: 0.5rem; /* Reducir el margen izquierdo */
+    padding-right: 0.5rem; /* Reducir el margen derecho */
+    list-style: none;
+  }
+
+  .product-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center; /* Centramos el contenido del producto */
+  }
+  
+  .product-image {
+    width: 100%;
+  }
+  
+  .product-description {
+    display: flex;
+    justify-content: center; /* Centramos horizontalmente el contenido */
+    align-items: center; /* Alinea el texto verticalmente en el centro */
+    text-align: center; /* Alinea el texto en el centro del bloque */
+    padding-top: 1rem;
+  }
+  
+  .product-details {
+    padding: 0 1rem;
+  }
+  
+  .border-gold {
+    border-color: gold; /* Si tienes una clase personalizada */
+  }
+
+}
+
+/* Estilo para el contenedor de los productos */
+.products {
+  display: flex; /* Usamos flex para que los productos se alineen horizontalmente */
+  justify-content: flex-start; /* Alineamos los productos hacia la izquierda */
+  align-items: flex-start; /* Alineamos los productos al principio */
+  flex-wrap: nowrap; /* Impide que los productos se envuelvan en una nueva línea */
+  overflow-x: auto; /* Permite el desplazamiento horizontal */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Estilo para la lista de productos */
+.products ul {
+  display: flex; /* Usamos flex en lugar de grid */
+  gap: 1.5rem; /* Espacio entre productos */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-wrap: nowrap; /* No se envuelven los productos */
+}
+
+/* Estilo para los elementos individuales de la lista (productos) */
+.products li {
+  flex: 0 0 250px; /* Establece un tamaño fijo para cada producto (250px de ancho) */
+  margin: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  padding: 1.5rem;
+  transition: transform 0.3s ease;
+  min-height: 300px;
+  max-width: 250px; /* Limita el ancho máximo de los productos */
+  width: 100%; /* Asegura que se ajuste al contenedor */
+}
+
+/* Estilo para las imágenes de los productos */
+.products img {
+  border-radius: 8px;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Mantiene la proporción 16:9 */
+  object-fit: cover; /* Ajuste de la imagen */
+}
+
+/* Agrega un desplazamiento horizontal en dispositivos pequeños */
+@media (max-width: 768px) {
+  .products {
+    padding: 0 8px; /* Ajusta el espaciado */
+  }
+
+  .products ul {
+    flex-wrap: nowrap; /* Mantiene la fila sin saltos */
+  }
+
+  .products li {
+    flex: 0 0 180px; /* Reduce el ancho de los productos en pantallas pequeñas */
+  }
+}
+
+
+/* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  .products ul {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adaptar a pantallas pequeñas */
+  }
+
+  .products li {
+    padding: 1rem;
+  }
+
+  .products img {
+    aspect-ratio: 4 / 3; /* Cambiar el aspecto de las imágenes para pantallas pequeñas */
+  }
+
+  .p-6 {
+    padding: 0.2rem;
+
+  }
+
+  .product-title {
+    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
+    font-size: 1rem; 
+  }
+  
+}

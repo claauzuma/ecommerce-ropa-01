@@ -3,24 +3,23 @@ import PropTypes from 'prop-types';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
-const PrivateRouteNoToken = ({ children }) => {
- 
-    const {setUser, user, setToken} = useCart()
-    console.log(user)
-    const token = localStorage.getItem('token');
-    console.log(token)
+const PrivateRouteNoToken = () => {
+  const { setToken } = useCart();
+  const token = localStorage.getItem('token');
 
-    if(token) {
-    console.log("No hay un token");
-    return <Navigate to="admin/index-product" replace />;
-    }
+  if (token) {
+    // Si existe un token, redirigimos a la ruta específica.
+    console.log("Token encontrado, redirigiendo a admin/index-product");
+    setToken(token); // Opcional: establecer el token en el contexto si lo necesitas.
+    return <Navigate to="/admin/index-product" replace />;
+  }
 
-    return <Outlet/>;
-}
+  // Si no hay token, renderizamos los componentes hijos de esta ruta.
+  return <Outlet />;
+};
 
 PrivateRouteNoToken.propTypes = {
-  children: PropTypes.node.isRequired, 
-
+  children: PropTypes.node, // Eliminamos isRequired ya que no siempre recibe children
 };
 
 export default PrivateRouteNoToken;

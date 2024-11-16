@@ -1,48 +1,117 @@
+/* Fondo negro para toda la página */
+body {
+  background-color: #000;
+  color: #fff; /* Texto blanco */
+}
 
+/* Modal de imagen */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+/* Contenido del modal */
+.modal-content {
+  max-width: 80%;
+  max-height: 80%;
+  position: relative;
+  border-radius: 15px; /* Cuadro redondeado en el modal */
+  background: #fff; /* Fondo blanco */
+  padding: 10px;
+  overflow: hidden; /* Para evitar que el contenido se desborde */
+}
 
+/* Imagen dentro del modal */
+.modal-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px; /* Bordes redondeados en la imagen */
+}
 
+/* Botón cerrar del modal */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #FF4500; /* Rojo anaranjado */
+  color: #fff;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
+/* Contenedor del detalle del producto */
 .product-detail {
-  padding: 1rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 15px; /* Cuadro redondeado */
+  background: #111; /* Fondo oscuro para el contenedor */
 }
 
+/* Slider de imágenes */
 .image-slider {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-bottom: 1rem;
+}
+
+.product-image-container {
+  width: 100%;
+  height: auto;
+  max-width: 100%; /* Asegura que no se exceda el tamaño del contenedor */
+  min-height: 300px; /* Esto asegura que el contenedor tenga una altura mínima */
 }
 
 .product-image {
-  width: 90%; /* Imagen más grande en móviles */
-  max-height: 60vh;
-  object-fit: contain;
+  width: 100%;
+  height: auto; /* Ajusta la altura para mantener la proporción */
+  object-fit: contain; /* Mantiene la proporción de la imagen */
+  border: 2px solid #333;
+  border-radius: 10px;
 }
 
 /* Ajustes para pantallas más grandes */
 @media (min-width: 768px) {
   .product-image {
-    width: 70%; /* Imagen más grande en pantallas de escritorio */
-    max-height: 80vh; /* Aumenta el alto máximo en pantallas grandes */
+    width: 70%;
+    max-height: 80vh;
   }
 }
 
+/* Botones de navegación de imágenes */
 .arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 10px;
-  font-size: 24px;
+  background: rgba(255, 215, 0, 0.7); /* Fondo dorado con opacidad */
+  color: #000; /* Texto negro */
+  padding: 0.5rem;
+  font-size: 1.5rem;
   border: none;
   cursor: pointer;
+  border-radius: 50%;
   z-index: 1;
+  transition: background 0.3s;
+}
+
+.arrow:hover {
+  background: #FFD700; /* Dorado más claro */
 }
 
 .arrow.left {
@@ -53,15 +122,88 @@
   right: 10px;
 }
 
+/* Título y descripción del producto */
 .product-detail h2 {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
   margin-top: 1rem;
+  color: #FFD700; /* Título dorado */
+}
+
+.product-detail h3 {
+  font-size: 1.5rem;
+  color: #ccc; /* Texto gris claro */
+  margin-bottom: 1rem;
 }
 
 .product-detail p {
   font-size: 1.25rem;
+  color: #1E90FF; /* Texto azul oscuro */
 }
 
-.product-detail button {
+/* Botón expandir imagen */
+.expand-button {
+  background-color: #1E90FF; /* Azul oscuro */
+  color: #fff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.expand-button:hover {
+  background-color: #104E8B; /* Azul oscuro más intenso */
+}
+
+/* Botones de selección de talle */
+button.talle-button {
+  background-color: #333; /* Gris oscuro */
+  color: #fff;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border: 2px solid #FFD700; /* Borde dorado */
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.talle-button:hover {
+  background-color: #1E90FF; /* Azul oscuro */
+}
+
+/* Colores disponibles */
+.color-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #FFD700; /* Borde dorado */
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.color-circle:hover {
+  transform: scale(1.1);
+}
+
+.selected {
+  box-shadow: 0 0 10px #FFD700; /* Sombra dorada */
+}
+
+/* Botón agregar al carrito */
+.add-to-cart-button {
+  background-color: #FFD700; /* Dorado */
+  color: #000; /* Texto negro */
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s;
   margin-top: 1rem;
+}
+
+.add-to-cart-button:hover {
+  background-color: #FFEC8B; /* Dorado más claro */
 }

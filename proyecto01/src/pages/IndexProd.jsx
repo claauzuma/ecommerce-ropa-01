@@ -1,117 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import '../components/Products.css';
 import Header from '../components/Header';
 import Products from '../components/Products';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './indexProd.css';
 
 const IndexProd = () => {
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
     category: 'all',
     minPrice: 0,
+    searchTerm: '',
   });
-  const [searchTerm, setSearchTerm] = useState(''); 
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [visitRecorded, setVisitRecorded] = useState(false); 
 
   useEffect(() => {
     const fetchProducts = async () => {
-        setLoading(true); 
-        try {
-            const response = await axios.get('http://localhost:8080/api/productos'); 
-            setProducts(response.data); 
-        } catch (error) {
-            console.error('Error fetching products:', error); 
-        } finally {
-            setLoading(false); 
-        }
-    };
-    
-    const sumarVisitaWeb = async () => {
+      setLoading(true);
       try {
-    
-          const hoy = new Date();
-          const fechaHoy = hoy.toISOString().split('T')[0];
-  
-          const datosVisita = {
-              fecha: fechaHoy, 
-              visitas: 1,
-          };
-  
-          console.log("Sumamos una visita");
-          const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosVisita);
-  
-          console.log('Respuesta de la API:', respuesta.data);
-          return respuesta.data;
+        const response = await axios.get('http://localhost:8080/api/productos');
+        setProducts(response.data);
       } catch (error) {
-          console.error('Error al sumar la visita:', error);
-          throw error; 
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
       }
-  };
-  
-  
-    const initialize = async () => {
-        await sumarVisitaWeb(); 
-        await fetchProducts(); 
     };
 
-    initialize(); 
+    fetchProducts();
+  }, []);
 
-}, [visitRecorded]);
-
-
+  // Función de filtrado de productos
   const filterProducts = (products) => {
     return products.filter((product) => {
-      return (
-        product.price >= filters.minPrice &&
-        (filters.category === 'all' || product.categoria === filters.category) &&
-        product.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const matchesCategory =
+        filters.category === 'all' || product.categoria === filters.category;
+      const matchesSearchTerm = product.descripcion
+        .toLowerCase()
+        .includes(filters.searchTerm.toLowerCase());
+      return matchesCategory && matchesSearchTerm;
     });
   };
 
   const filteredProducts = filterProducts(products);
 
-  const handleAddProduct = () => {
-    navigate('/admin/form-product'); 
-    setSearchTerm(''); 
+  // Manejador de cambios de filtros
+  const handleFiltersChange = (newFilters) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters,
+    }));
   };
 
   return (
     <>
-     
+      {/* Buscador y Filtros */}
       <div className="container mx-auto p-6 mt-4">
-        <div className="flex justify-between items-center">
-          <input
-            type="text"
-            placeholder="Buscar productos..."
-            className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} 
-          />
-  
-        </div>
+        <Header changeFilters={handleFiltersChange} filters={filters} />
       </div>
 
-      <Header changeFilters={setFilters} />
-
+      {/* Lista de Productos */}
       <div className="container mx-auto p-6">
         {loading ? (
-          <p>Cargando productos...</p> 
+          <p>Cargando productos...</p>
         ) : (
-          <Products products={filteredProducts} setProducts={setProducts}/>
+          <Products products={filteredProducts} setProducts={setProducts} />
         )}
       </div>
     </>
   );
 };
 
-
+// PropTypes
 IndexProd.propTypes = {
-
+  products: PropTypes.array,
 };
 
 export default IndexProd;

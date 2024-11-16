@@ -1,15 +1,45 @@
-
-
-
-.filters {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-    font-weight: 700 ;
-}
-
-.filters > diiv {
-    display: flex;
-    gap: 1rem;
-}
+/* Paleta de colores */
+:root {
+    --black: #000000;
+    --gold: #FFD700;
+    --white: #FFFFFF;
+    --dark-blue: #003366;
+    --gray: #808080;
+  }
+  
+  /* Estilo para el contenedor principal */
+  section {
+    background-color: var(--black); /* Fondo negro */
+    color: var(--white); /* Texto blanco */
+    border: 2px solid var(--dark-blue); /* Borde azul oscuro */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 1rem; /* Espaciado interno */
+  }
+  
+  /* Estilo para los inputs y selectores */
+  input, select {
+    background-color: var(--white); /* Fondo blanco */
+    color: var(--black); /* Texto negro */
+    border: 2px solid var(--gold); /* Borde dorado */
+  }
+  
+  input:focus, select:focus {
+    border-color: var(--dark-blue); /* Borde azul oscuro en foco */
+    outline: none;
+    box-shadow: 0 0 10px var(--dark-blue); /* Resalto azul oscuro en foco */
+  }
+  
+  /* Estilo para los textos y etiquetas */
+  label {
+    color: var(--gold); /* Etiquetas doradas */
+  }
+  
+  span {
+    color: var(--gold); /* Texto dorado para el precio */
+  }
+  
+  /* Estilos adicionales para el espaciado */
+  .ml-2 {
+    margin-left: 0.5rem;
+  }
+  

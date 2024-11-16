@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // Hook para agregar al carrito
+import { useCart } from '../context/CartContext';
 import './ProductDetail.css';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const ProductDetail = () => {
   const { addToCart } = useCart();
-  const { productId } = useParams(); // Obtener el id del producto de la URL
-  const [product, setProduct] = useState(null); // Estado local para el producto
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState(null); // Estado de error
-  const [tallesDisponibles, setTallesDisponibles] = useState([]); // Estado para los talles disponibles
-  const [selectedTalle, setSelectedTalle] = useState(null); // Estado para el talle seleccionado
-  const [coloresDisponibles, setColoresDisponibles] = useState([]); // Estado para los colores disponibles
-  const [selectedColor, setSelectedColor] = useState(null); // Estado para el color seleccionado
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); 
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [tallesDisponibles, setTallesDisponibles] = useState([]);
+  const [selectedTalle, setSelectedTalle] = useState(null);
+  const [coloresDisponibles, setColoresDisponibles] = useState([]);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const navigate = useNavigate();
 
@@ -38,9 +37,20 @@ const ProductDetail = () => {
     fetchProduct();
   }, [productId]);
 
+  const colorTranslations = {
+    "rojo": "red",
+    "azul": "blue",
+    "verde": "green",
+    "amarillo": "yellow",
+    "negro": "black",
+    "blanco": "white",
+    // Puedes añadir más colores aquí
+  };
+  
+
   const handleTalleSelect = (talle) => {
     setSelectedTalle(talle);
-    setColoresDisponibles(talle.colores.filter(color => color.stock > 0));
+    setColoresDisponibles(talle.colores.filter((color) => color.stock > 0));
     setSelectedColor(null);
   };
 
@@ -48,7 +58,6 @@ const ProductDetail = () => {
     setSelectedColor(color);
   };
 
-  // Slider de imágenes
   const goToNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.images.length);
   };
@@ -59,17 +68,20 @@ const ProductDetail = () => {
     );
   };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleAddToCart = () => {
     if (!selectedTalle || !selectedColor) {
-      alert("Por favor, selecciona un talle y un color antes de agregar al carrito.");
+      alert('Por favor, selecciona un talle y un color antes de agregar al carrito.');
       return;
     }
 
-   
     addToCart({ ...product, selectedTalle, selectedColor });
     navigate('/');
   };
@@ -80,43 +92,36 @@ const ProductDetail = () => {
 
   return (
     <div className="product-detail">
-
       <div className="image-slider">
-        <button onClick={goToPreviousImage} className="arrow left">&#8592;</button>
-        
+        <button onClick={goToPreviousImage} className="arrow left">
+          &#8592;
+        </button>
 
-        {product.images[currentImageIndex].includes(".mp4") ? (
-          <video
-            src={product.images[currentImageIndex]}
-            className="product-image"
-            controls
-          />
-        ) : (
-          <img
-            src={product.images[currentImageIndex]}
-            alt={product.nombre}
-            className="product-image"
-          />
-        )}
+        <div onClick={openModal}>
+          {product.images[currentImageIndex].includes('.mp4') ? (
+            <video
+              src={product.images[currentImageIndex]}
+              className="product-image"
+              controls
+            />
+          ) : (
+            <img
+              src={product.images[currentImageIndex]}
+              alt={product.nombre}
+              className="product-image"
+            />
+          )}
+        </div>
 
-        <button onClick={goToNextImage} className="arrow right">&#8594;</button>
-      </div>
-
-
-      <div className="image-controls text-center mt-2">
-        <button 
-          className="expand-button bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
-          onClick={toggleModal}
-        >
-          {isModalOpen ? 'Disminuir imagen' : 'Agrandar imagen'}
+        <button onClick={goToNextImage} className="arrow right">
+          &#8594;
         </button>
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay" onClick={toggleModal}>
+        <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button onClick={toggleModal} className="close-button">×</button>
-            {product.images[currentImageIndex].includes(".mp4") ? (
+            {product.images[currentImageIndex].includes('.mp4') ? (
               <video
                 src={product.images[currentImageIndex]}
                 className="modal-image"
@@ -134,7 +139,6 @@ const ProductDetail = () => {
         </div>
       )}
 
-
       <div className="p-4 text-center">
         <h2 className="text-2xl font-bold">{product.nombre}</h2>
         <h3 className="text-xl font-semibold">{product.descripcion}</h3>
@@ -147,7 +151,9 @@ const ProductDetail = () => {
             {tallesDisponibles.map((talle, index) => (
               <button
                 key={index}
-                className={`py-2 px-4 rounded-lg ${selectedTalle === talle ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                className={`py-2 px-4 rounded-lg ${
+                  selectedTalle === talle ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-800'
+                }`}
                 onClick={() => handleTalleSelect(talle)}
               >
                 {talle.talle}
@@ -159,22 +165,30 @@ const ProductDetail = () => {
         {/* Colores */}
         {selectedTalle && coloresDisponibles.length > 0 && (
           <div className="mt-4">
-            <p className="text-lg font-semibold">Colores disponibles:</p>
+            <p className="text-lg font-semibold">Selecciona un color:</p>
             <div className="flex justify-center gap-4 mt-2">
-              {coloresDisponibles.map((color, index) => (
-                <div
-                  key={index}
-                  className={`w-10 h-10 rounded-full border cursor-pointer ${selectedColor === color ? 'ring-4 ring-green-500' : ''}`}
-                  style={{ backgroundColor: color.color }}
-                  onClick={() => handleColorSelect(color)}
-                />
-              ))}
+            {coloresDisponibles.map((color, index) => {
+  console.log("Color recibido:", color); // Esto imprimirá el valor del color cada vez que se renderiza un círculo
+  return (
+    <div
+      key={index}
+      className={`w-10 h-10 rounded-full border cursor-pointer ${
+        selectedColor === color ? 'ring-4 ring-blue-900' : ''
+      }`}
+      style={{ backgroundColor: colorTranslations[color.color] }} // Normaliza a minúsculas
+      onClick={() => handleColorSelect(color)}
+    >
+      {/* El color es el fondo del círculo */}
+    </div>
+  );
+})}
+
             </div>
           </div>
         )}
 
-        <button 
-          className="mt-4 bg-green-500 text-white font-semibold py-2 px-4 rounded-lg"
+        <button
+          className="mt-4 bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg"
           onClick={handleAddToCart}
         >
           Agregar al carrito
