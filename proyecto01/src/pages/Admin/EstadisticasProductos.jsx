@@ -134,6 +134,7 @@ const Productos = () => {
                     <table className="table table-striped table-hover">
                         <thead className="thead-light">
                             <tr>
+                                {columns.includes('Imagen') && <th className="table-header">Imagen</th>}
                                 {columns.map((col) => (
                                     <th key={col} className="table-header">{col}</th>
                                 ))}
@@ -142,6 +143,15 @@ const Productos = () => {
                         <tbody>
                             {products.slice(0, 50).map((product) => (
                                 <tr key={product._id}>
+                                    {columns.includes('Imagen') && (
+                                        <td className="table-data">
+                                            <img
+                                                src={product.imagen || 'default-image.jpg'}
+                                                alt={product.nombre}
+                                                className="product-image"
+                                            />
+                                        </td>
+                                    )}
                                     {columns.includes('Nombre') && <td className="table-data">{product.nombre}</td>}
                                     {columns.includes('Talle') && <td className="table-data">{product.talle}</td>}
                                     {columns.includes('Color') && <td className="table-data">{product.color}</td>}
@@ -180,8 +190,8 @@ const Productos = () => {
     return (
         <>
             <NavBar />
-            <br />
-            {/* Contenedor principal con margen superior específico */}
+            <br /> <br /> <br />  <br />
+            {/* Contenedor principal con mayor espacio arriba */}
             <div className="container mt-5 pt-5">
                 <div className="row">
                     {/* Filtrar productos con bajo stock */}

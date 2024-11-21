@@ -5,6 +5,7 @@ import NavBarAdmin from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Importa Axios
 import { useCart } from '../../context/CartContext.jsx'; // Hook para agregar al carrito
+import ApiUrls from '../../components/ApiUrls.jsx';
 
 
 
@@ -23,7 +24,7 @@ const Index = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/productos'); // Cambia esta URL a tu API
+        const response = await axios.get(ApiUrls.productos);
         setProducts(response.data); // Establece los productos obtenidos en el estado
 
       } catch (error) {
@@ -57,7 +58,11 @@ const Index = () => {
     <br />
     <br />
     <br />
-   
+    <br />
+    <br />
+    <br />
+    
+
 
       <div className="container mx-auto p-6 mt-4">
         <div className="flex justify-between items-center">

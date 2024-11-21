@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import ApiUrls from '../components/ApiUrls'
 
 
 export const CartContext = createContext();
@@ -23,7 +24,7 @@ export function CartProvider({ children }) {
       };
 
       console.log("Sumamos una visita al carrito");
-      await axios.post('http://localhost:8080/api/estadisticas/', datosAñadido);
+      await axios.post(ApiUrls.estadisticas, datosAñadido)
     } catch (error) {
       console.error('Error al añadir al carrito:', error);
     }

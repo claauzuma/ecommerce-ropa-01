@@ -2,8 +2,8 @@
 
 
 const urlLocal = 'http://localhost:8080';
-const urlServidor = 'http://localhost:8080'; // Si más tarde quieres cambiar la URL, puedes usar esta variable
-let url = urlLocal;
+const urlServidor = 'https://ecommerce-ropa-nodejs-production.up.railway.app';
+let url = urlServidor;
 
 const ApiUrls = {
   estadisticas: `${url}/api/estadisticas/`,

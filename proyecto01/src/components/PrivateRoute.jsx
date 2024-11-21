@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = () => {
   const { setUser, setToken } = useCart();
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (token) {
-      setToken(token);
-      // Aquí podrías hacer una petición para obtener el usuario con el token, si lo necesitas
+      setToken(token); // Establece el token en el contexto solo después de la primera renderización
+      // Aquí podrías hacer una petición para obtener el usuario con el token si lo necesitas
     }
-  }, [token, setToken]);
+  }, [token, setToken]);  // Dependemos del token y setToken para ejecutar el efecto correctamente
 
   if (!token) {
     console.log("No hay un token");
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace />; // Si no hay token, redirige al login
   }
 
-  return <Outlet />;
+  return <Outlet />; // Si hay token, muestra los componentes hijos
 };
 
 PrivateRoute.propTypes = {

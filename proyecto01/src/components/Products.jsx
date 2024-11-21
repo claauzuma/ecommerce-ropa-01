@@ -36,12 +36,13 @@ const Products = ({ products }) => {
             precioOriginal = precioConDescuento * 1.15
           }
 
-          let descuento = (precioOriginal * 100/precioConDescuento) - 100
+          let descuento = Math.round((precioOriginal * 100 / precioConDescuento) - 100);
+
   
           // Establecemos si el producto está en oferta
           const isOffer = product.isOffer; // Esto lo puedes agregar a tu base de datos o definir en el frontend
           const isPromo = product.promo; // Asegúrate de que 'promo' esté en tu base de datos
-          const discountPercentage = product.discountPercentage || 25; // Definir un porcentaje de descuento, si no hay se pone 25%
+
   
           return (
             <li

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -7,10 +7,16 @@ const PrivateRouteNoToken = () => {
   const { setToken } = useCart();
   const token = localStorage.getItem('token');
 
+  useEffect(() => {
+    if (token) {
+      // Solo actualizamos el token si existe
+      console.log("Token encontrado, redirigiendo a admin/index-product");
+      setToken(token); // Establece el token en el contexto solo después del primer renderizado
+    }
+  }, [token, setToken]);
+
   if (token) {
-    // Si existe un token, redirigimos a la ruta específica.
-    console.log("Token encontrado, redirigiendo a admin/index-product");
-    setToken(token); // Opcional: establecer el token en el contexto si lo necesitas.
+    // Si existe el token, redirigimos a la página principal del admin
     return <Navigate to="/admin/index-product" replace />;
   }
 

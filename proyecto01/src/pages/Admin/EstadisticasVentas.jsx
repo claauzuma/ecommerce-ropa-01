@@ -158,7 +158,8 @@ const EstadisticasVentas = () => {
         <>
             <NavBar />
             <br /> <br /> <br /> <br />
-            <div className="container mt-0">
+            <div className="container custom-margin-top">
+
                 <br />
                 <div className="mb-4 d-flex justify-content-between">
                     <div className="info-box flex-fill mr-2">

@@ -3,6 +3,9 @@
     padding: 20px; /* Espaciado para que no esté pegado a los bordes */
     border-radius: 5px; /* Opcional: para bordes redondeados */
   }
+  .custom-margin-top {
+    margin-top: 80px; /* Ajusta según tus necesidades */
+}
   
 
 

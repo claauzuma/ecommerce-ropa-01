@@ -259,7 +259,8 @@ const FormProduct = () => {
   return (
     <>
       <NavBarAdmin />
-      <div className="flex justify-center items-start p-4 bg-gray-900 mt-10">
+      <div className="flex justify-center items-start p-4 bg-gray-900 mt-20">
+
         <div className="bg-gray-800 p-6 rounded-xl shadow-md max-w-md w-full border-4 border-black">
           <h1 className="text-2xl font-semibold mb-4 text-white text-center">
             {id ? 'Modificar Producto' : 'Agregar Producto'}

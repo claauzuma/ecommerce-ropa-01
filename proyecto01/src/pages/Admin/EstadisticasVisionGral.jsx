@@ -147,8 +147,8 @@ const Estadisticas = () => {
   return (
     <>
       <NavBar />
-      <br /><br /><br />
-      <div className="estadisticas-container">
+   
+      <div className="estadisticas-container" style={{ marginTop: '180px' }}>
         <h1>Estadísticas</h1>
         <div className="filter-container">
           <label htmlFor="month">Filtrar por mes:</label>

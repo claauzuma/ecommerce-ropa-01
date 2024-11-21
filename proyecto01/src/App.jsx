@@ -21,6 +21,7 @@ import PrivateRouteNoToken from './components/PrivateRouteNoToken';
 import Footer from './components/Footer';
 import ProductBanner from './components/ProductBanner';
 import Cart from './components/Cart';
+import ProductDetailAdmin from './components/ProductDetailAdmin';
 
 
 const App = () => {
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/admin/estadisticas/productos" element={<EstadisticasProductos />} />
             <Route path="/addproduct" element={<FormAddProduct />} />
             <Route path="/pedido/detail/:id" element={<PedidoDetail />} />
+             <Route path="/admin/product-detail/:productId" element={<ProductDetailAdmin />} /> 
           </Route>
 
           <Route element={<PrivateRouteNoToken/>}>

@@ -3,6 +3,7 @@ body {
     background-color: #343a40 !important; /* Color gris oscuro con !important */
 }
 
+
 /* Estilo de la tarjeta */
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
