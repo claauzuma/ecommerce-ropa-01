@@ -6,6 +6,11 @@ import Products from '../components/Products';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './indexProd.css';
+import ApiUrls from'../components/ApiUrls';
+import Imagen from '../assets/logo.png';
+import Banner from '../components/Banner';
+import Categories from '../components/Categories';
+import ProductBanner from '../components/ProductBanner';
 
 const IndexProd = () => {
   const [products, setProducts] = useState([]);
@@ -21,7 +26,7 @@ const IndexProd = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/api/productos');
+        const response = await axios.get(ApiUrls.productos); // Usamos la URL de productos desde apiUrls.js
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -38,7 +43,7 @@ const IndexProd = () => {
     return products.filter((product) => {
       const matchesCategory =
         filters.category === 'all' || product.categoria === filters.category;
-      const matchesSearchTerm = product.descripcion
+      const matchesSearchTerm = product.nombre
         .toLowerCase()
         .includes(filters.searchTerm.toLowerCase());
       return matchesCategory && matchesSearchTerm;
@@ -57,10 +62,19 @@ const IndexProd = () => {
 
   return (
     <>
-      {/* Buscador y Filtros */}
-      <div className="container mx-auto p-6 mt-4">
-        <Header changeFilters={handleFiltersChange} filters={filters} />
-      </div>
+    <ProductBanner/>
+    <br /> 
+    <br />
+    <br />
+    <br />
+    <br />
+
+    
+
+
+<Banner className="-mt-2" />  
+      <Categories changeFilters={handleFiltersChange} filters={filters} />
+      <Header changeFilters={handleFiltersChange} filters={filters}/>
 
       {/* Lista de Productos */}
       <div className="container mx-auto p-6">

@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import './EstadisticasProductos.css';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import ApiUrls from '../../components/ApiUrls';
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
@@ -23,9 +24,9 @@ const Productos = () => {
         setLoading(true);
         try {
             const [productosResponse, pedidosResponse, estadisticasResponse] = await Promise.all([
-                axios.get('http://localhost:8080/api/productos'),
-                axios.get('http://localhost:8080/api/pedidos'),
-                axios.get('http://localhost:8080/api/estadisticas'),
+                axios.get(ApiUrls.productos),
+                axios.get(ApiUrls.pedidos),
+                axios.get(ApiUrls.estadisticas),
             ]);
             setProductos(productosResponse.data);
             setPedidos(pedidosResponse.data);

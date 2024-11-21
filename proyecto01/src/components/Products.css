@@ -1,75 +1,108 @@
 /* Estilos generales */
 
-@media (max-width: 768px) {
-
-  .product-title {
-    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
-    font-size: 1rem; 
-  }
-
-
-  .p-6 {
-    padding: 0.2rem;
-
-  }
-  .products {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-left: 0;
-    padding-right: 0;
-    margin: 0; /* Eliminar márgenes */
-    box-sizing: border-box;
-    overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
-    white-space: nowrap; /* Evitar el salto de línea en elementos hijos para permitir desplazamiento horizontal */
-  }
-  
-  /* Estilo para la lista de productos */
-  .products ul {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-    gap: 1rem; /* Espacio pequeño entre los productos */
-    width: 100%; /* Ocupa el 100% del ancho disponible */
-    margin: 0; /* Eliminar el margen lateral */
-    padding-left: 0.5rem; /* Reducir el margen izquierdo */
-    padding-right: 0.5rem; /* Reducir el margen derecho */
-    list-style: none;
-  }
-
-  .product-item {
-    display: flex;
-    flex-direction: column;
-    text-align: center; /* Centramos el contenido del producto */
-  }
-  
-  .product-image {
-    width: 100%;
-  }
-  
-  .product-description {
-    display: flex;
-    justify-content: center; /* Centramos horizontalmente el contenido */
-    align-items: center; /* Alinea el texto verticalmente en el centro */
-    text-align: center; /* Alinea el texto en el centro del bloque */
-    padding-top: 1rem;
-  }
-  
-  .product-details {
-    padding: 0 1rem;
-  }
-  
-  .border-gold {
-    border-color: gold; /* Si tienes una clase personalizada */
-  }
-
+/* Products.css */
+/* Aplica la fuente 'Chewy' al body */
+body {
+  font-family: 'Chewy', cursive;
 }
 
+/* Estilo del contenedor del producto */
+.product-item {
+  position: relative;
+}
+
+/* Estilo para el cartel "Promo" */
+/* Estilo para el cartel "Promo" */
+.promo-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff4081; /* Un color llamativo para la promo */
+  color: white;
+  font-size: 12px; /* Reducir el tamaño de la fuente */
+  font-weight: bold;
+  padding: 4px 8px; /* Reducir padding */
+  border-radius: 5px;
+  z-index: 20;
+}
+
+.promo-text {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Estilo para el cartel de descuento */
+.discount-tag {
+  position: absolute;
+  top: 50px; /* Asegura separación entre los carteles */
+  left: 10px;
+  background-color: #ff5722; /* Color del cartel de descuento */
+  color: white;
+  font-size: 12px; /* Reducir el tamaño de la fuente */
+  font-weight: bold;
+  padding: 4px 8px; /* Reducir padding */
+  border-radius: 5px;
+  z-index: 10;
+}
+
+.discount-text {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+/* Estilo para productos en oferta */
+.offer-product {
+  border: 2px solid #FF6347; /* Borde rojo para productos en oferta */
+  background-color: #FFF5F0; /* Fondo suave con un tono cálido */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilo para la etiqueta de oferta */
+.offer-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #FF6347; /* Color de fondo para la etiqueta */
+  color: white;
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.offer-tag::after {
+  content: "🔥";
+  margin-left: 5px;
+}
+
+
+
+/* Aplica la fuente 'Rakkas' a todos los h2 */
+h2 {
+  font-family: 'Rakkas', cursive !important;
+}
+
+/* Aplica la fuente 'Roboto' con peso específico a los títulos de producto */
+.product-title {
+  font-family: 'Chewy', sans-serif !important;
+  font-weight: 300 !important; /* Cambia el peso según lo que necesites */
+}
+
+.products ul {
+  gap: 0.5rem; /* Reducir el espacio entre los productos */
+}
+
+/* Estilos para los contenedores y productos */
 .products {
   display: flex; /* Usar flexbox para un diseño flexible */
   justify-content: center; /* Centrar el contenido horizontalmente */
   padding: 16px; /* Espaciado alrededor del contenedor principal */
   flex-wrap: wrap; /* Permitir que los elementos se envuelvan en la siguiente línea */
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
+  white-space: nowrap; /* Evitar el salto de línea en elementos hijos para permitir desplazamiento horizontal */
 }
 
 .product-item {
@@ -94,21 +127,9 @@
   margin-top: -1.5rem; /* Reduce el margen superior */
 }
 
-.products {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.3rem;
-  box-sizing: border-box;
-  overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
-  white-space: nowrap; /* Evitar el salto de línea en elementos hijos para permitir desplazamiento horizontal */
-}
-
-/* Estilo para la lista de productos */
 .products ul {
   display: grid; /* Cambia a grid layout para crear una cuadrícula adaptable */
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Cambiar para que en pantallas grandes sean 5 productos por fila */
   gap: 1.5rem;
   width: 100%;
   max-width: 1200px; /* Máximo ancho para pantallas grandes */
@@ -137,13 +158,11 @@
   transform: scale(1.05); /* Animación al pasar el mouse */
 }
 
-/* Estilo para los títulos de los productos */
 .products h3 {
   margin: 0;
   font-size: 1.25rem;
 }
 
-/* Estilo para información adicional (como el precio) */
 .products span {
   font-size: 1rem;
   opacity: 0.9;
@@ -158,60 +177,26 @@
   background: #fff;
 }
 
-/* Estilo para el borde dorado */
+/* Borde dorado */
 .border-gold {
-  border-color: gold; /* Color dorado para el borde */
+  border-color: gold; /* Si tienes una clase personalizada */
 }
 
 .text-gold {
   color: gold; /* Color dorado para el texto */
 }
 
-.product-title {
-  font-size: 1.25rem; /* Equivalente a text-xl en Tailwind */
-}
-
 /* Media queries para pantallas pequeñas */
 @media (max-width: 768px) {
-  .products ul {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adaptar a pantallas pequeñas */
-  }
-
-  .products li {
-    padding: 1rem;
-  }
-
-  .products img {
-    aspect-ratio: 4 / 3; /* Cambiar el aspecto de las imágenes para pantallas pequeñas */
+  .product-title {
+    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
+    font-size: 1rem;
   }
 
   .p-6 {
     padding: 0.2rem;
-
   }
 
-  .product-title {
-    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
-    font-size: 1rem; 
-  }
-  
-}
-
-
-/* Estilos generales */
-
-@media (max-width: 768px) {
-
-  .product-title {
-    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
-    font-size: 1rem; 
-  }
-
-
-  .p-6 {
-    padding: 0.2rem;
-
-  }
   .products {
     width: 100%;
     display: flex;
@@ -224,16 +209,16 @@
     overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
     white-space: nowrap; /* Evitar el salto de línea en elementos hijos para permitir desplazamiento horizontal */
   }
-  
+
   /* Estilo para la lista de productos */
   .products ul {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-    gap: 1rem; /* Espacio pequeño entre los productos */
-    width: 100%; /* Ocupa el 100% del ancho disponible */
-    margin: 0; /* Eliminar el margen lateral */
-    padding-left: 0.5rem; /* Reducir el margen izquierdo */
-    padding-right: 0.5rem; /* Reducir el margen derecho */
+    grid-template-columns: repeat(5, 1fr); /* Asegura 5 productos por fila */
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px; /* Limita el ancho máximo */
+    padding: 0;
+    margin: 0;
     list-style: none;
   }
 
@@ -242,11 +227,11 @@
     flex-direction: column;
     text-align: center; /* Centramos el contenido del producto */
   }
-  
+
   .product-image {
     width: 100%;
   }
-  
+
   .product-description {
     display: flex;
     justify-content: center; /* Centramos horizontalmente el contenido */
@@ -254,79 +239,16 @@
     text-align: center; /* Alinea el texto en el centro del bloque */
     padding-top: 1rem;
   }
-  
+
   .product-details {
     padding: 0 1rem;
   }
-  
+
   .border-gold {
     border-color: gold; /* Si tienes una clase personalizada */
   }
 
-}
-
-/* Estilo para el contenedor de los productos */
-.products {
-  display: flex; /* Usamos flex para que los productos se alineen horizontalmente */
-  justify-content: flex-start; /* Alineamos los productos hacia la izquierda */
-  align-items: flex-start; /* Alineamos los productos al principio */
-  flex-wrap: nowrap; /* Impide que los productos se envuelvan en una nueva línea */
-  overflow-x: auto; /* Permite el desplazamiento horizontal */
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-/* Estilo para la lista de productos */
-.products ul {
-  display: flex; /* Usamos flex en lugar de grid */
-  gap: 1.5rem; /* Espacio entre productos */
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  flex-wrap: nowrap; /* No se envuelven los productos */
-}
-
-/* Estilo para los elementos individuales de la lista (productos) */
-.products li {
-  flex: 0 0 250px; /* Establece un tamaño fijo para cada producto (250px de ancho) */
-  margin: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background: #111;
-  color: #fff;
-  padding: 1.5rem;
-  transition: transform 0.3s ease;
-  min-height: 300px;
-  max-width: 250px; /* Limita el ancho máximo de los productos */
-  width: 100%; /* Asegura que se ajuste al contenedor */
-}
-
-/* Estilo para las imágenes de los productos */
-.products img {
-  border-radius: 8px;
-  width: 100%;
-  aspect-ratio: 16 / 9; /* Mantiene la proporción 16:9 */
-  object-fit: cover; /* Ajuste de la imagen */
-}
-
-/* Agrega un desplazamiento horizontal en dispositivos pequeños */
-@media (max-width: 768px) {
-  .products {
-    padding: 0 8px; /* Ajusta el espaciado */
-  }
-
-  .products ul {
-    flex-wrap: nowrap; /* Mantiene la fila sin saltos */
-  }
-
-  .products li {
-    flex: 0 0 180px; /* Reduce el ancho de los productos en pantallas pequeñas */
-  }
-}
-
-
-/* Media queries para pantallas pequeñas */
-@media (max-width: 768px) {
+  /* Ajustes específicos para pantallas muy pequeñas */
   .products ul {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adaptar a pantallas pequeñas */
   }
@@ -338,15 +260,4 @@
   .products img {
     aspect-ratio: 4 / 3; /* Cambiar el aspecto de las imágenes para pantallas pequeñas */
   }
-
-  .p-6 {
-    padding: 0.2rem;
-
-  }
-
-  .product-title {
-    margin-left: -1.25rem; /* Margen negativo equivalente a -ml-5 en Tailwind */
-    font-size: 1rem; 
-  }
-  
 }

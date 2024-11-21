@@ -13,6 +13,7 @@ import {
 import NavBar from './NavBar';
 import './EstadisticasVisionGral.css';
 import axios from 'axios';
+import ApiUrls from '../../components/ApiUrls';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -47,7 +48,7 @@ const Estadisticas = () => {
     if (mesSeleccionado) {
       console.log("El mes seleccionado es " + mesSeleccionado)
       console.log("Ahora vamos a obtener los datos")
-      axios.get(`http://localhost:8080/api/estadisticas`, {
+      axios.get(ApiUrls.estadisticas, {
         params: {
           mes: mesSeleccionado ,
           anio : anioActual

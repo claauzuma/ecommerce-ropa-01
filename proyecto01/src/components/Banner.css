@@ -1,0 +1,15 @@
+/* Estilos para la banda horizontal */
+.banner-container {
+    width: 100%;             /* Ocupa todo el ancho de la pantalla */
+    background-color: #FFD700;  /* Color dorado */
+    text-align: center;      /* Centra el texto */
+    padding: 15px 0;         /* Espaciado arriba y abajo */
+  }
+  
+  .banner-text {
+    font-size: 1.5rem;       /* Tamaño de fuente */
+    font-weight: bold;       /* Negrita */
+    color: black;            /* Color de texto negro */
+    margin: 0;               /* Elimina margen extra */
+  }
+  

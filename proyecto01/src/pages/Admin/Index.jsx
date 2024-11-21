@@ -75,7 +75,7 @@ const Index = () => {
         </div>
       </div>
 
-      <Header changeFilters={setFilters} />
+
 
       <div className="container mx-auto p-6">
         <ProductsAdmin products={filteredProducts} setProducts={setProducts}/>

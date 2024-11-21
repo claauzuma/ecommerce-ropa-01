@@ -1,0 +1,19 @@
+/* NavBar.css */
+nav img {
+  max-height: 140px !important; /* Asegúrate de que la imagen tenga el tamaño adecuado */
+  height: auto !important;
+  width: auto !important;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+}
+
+nav .text-gold {
+  color: #FFD700; /* Color dorado */
+}
+
+nav .hover\:text-gold:hover {
+  color: #FFD700;
+}

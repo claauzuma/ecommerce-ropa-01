@@ -1,0 +1,74 @@
+/* Contenedor de las categorías */
+
+.category-button {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.category-button:hover {
+  background-color: #e0e0e0;
+}
+
+.category-button.active {
+  background-color: #007bff; /* Color de fondo cuando está activo */
+  color: white; /* Color del texto cuando está activo */
+  font-weight: bold; /* O puedes hacer el texto más grueso */
+}
+
+.categories-scroll {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+
+.categories-container {
+  width: 100%;              /* Ocupa todo el ancho disponible */
+  padding: 10px 0;          /* Espaciado arriba y abajo */
+  background-color: black; /* Fondo negro */
+  text-align: center;       /* Centra el texto */
+}
+
+/* Título de la sección */
+.categories-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Contenedor con desplazamiento horizontal */
+.categories-scroll {
+  display: flex;            /* Utilizamos flex para colocar las categorías en fila */
+  justify-content: center;  /* Centra las categorías dentro del contenedor */
+  overflow-x: auto;         /* Permite el desplazamiento horizontal */
+  padding: 5px 0;           /* Espaciado arriba y abajo */
+  gap: 15px;                /* Espacio entre botones de categorías */
+  scroll-snap-type: x mandatory; /* Asegura que el scroll se haga por categorías completas */
+}
+
+/* Estilos para los botones de categorías */
+.category-button {
+  background-color: rgb(57, 54, 54); /* Fondo oscuro */
+  border: none;               /* Sin borde */
+  padding: 10px 20px;         /* Espaciado alrededor del texto */
+  font-size: 1rem;
+  font-weight: bold;
+  color: gold;               /* Color de texto dorado */
+  cursor: pointer;           /* El cursor se muestra como una mano */
+  border-radius: 5px;         /* Bordes redondeados */
+  transition: background-color 0.3s ease;
+}
+
+/* Efecto de hover para los botones */
+.category-button:hover {
+  background-color: #756f59;  /* Color más claro al pasar el ratón */
+}
+
+/* Margen izquierdo para la primera categoría */
+.categories-scroll .category-button:first-child {
+  margin-left: 10px;  /* Ajusta este valor según el espacio que desees */
+}

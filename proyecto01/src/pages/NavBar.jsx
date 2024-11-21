@@ -1,10 +1,18 @@
+// NavBar.jsx
 import React, { useRef, useEffect } from 'react';
-import Cart from '../components/Cart';
 import { useCart } from '../context/CartContext';
+import Carrito from '../components/Cart'; // Importa el componente Carrito
+import logo from '../assets/logo.png';
+import { MdShoppingCart, MdLogin } from 'react-icons/md';
+import './NavBar.css';
 
 const NavBar = () => {
   const cartRef = useRef(null);
-  const { isCartVisible, setIsCartVisible, token } = useCart();
+  const { isCartVisible, setIsCartVisible, token, getCartItemsCount } = useCart(); 
+
+  useEffect(() => {
+    console.log("isCartVisible", isCartVisible);
+  }, [isCartVisible]);
 
   const handleClickOutside = (event) => {
     if (cartRef.current && !cartRef.current.contains(event.target)) {
@@ -24,35 +32,45 @@ const NavBar = () => {
   }
 
   return (
-    <>
-      <nav className="bg-gradient-to-r from-black via-dark-blue to-black p-4 shadow-lg border-b-4 border-gold">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="text-white text-2xl font-semibold">
-            <a href="/" className="hover:text-gray-300 transition duration-300 ease-in-out">
-              <span className="font-bold text-gold">Inicio</span>
-            </a>
-          </div>
-          <div className="space-x-8 flex items-center">
+    <nav className="w-full bg-gradient-to-r from-black via-dark-blue to-black p-3 shadow-lg border-b-4 border-gold">
+      <div className="container mx-auto flex justify-between items-center">
+        <a href="/" className="flex-shrink-0">
+          <img
+            src={logo}
+            alt="Logo"
+            className="h-full object-contain" 
+            style={{ maxHeight: '140px' }} // Mantén el tamaño del logo
+          />
+        </a>
 
-            <button
-              onClick={() => setIsCartVisible(true)}
-              className="text-white font-medium text-lg hover:text-gold transition duration-300 ease-in-out"
-            >
-              🛒 Carrito
-            </button>
-
-            <a
-              href="/loginpage"
-              className="text-white font-medium text-lg hover:text-gold transition duration-300 ease-in-out"
-            >
-              🔒 Login
-            </a>
-          </div>
+        <div className="flex-grow text-center">
+          <span className="text-white font-extrabold" style={{ fontSize: '3rem', fontFamily: 'Charmonman, cursive' }}>
+            Blessed Store
+          </span>
         </div>
-      </nav>
 
-    
-    </>
+        <div className="space-x-4 flex items-center">
+          <a
+            href="/loginpage"
+            className="text-white hover:text-gold transition duration-300 ease-in-out"
+          >
+            <MdLogin size={24} />
+          </a>
+
+          <button
+            onClick={() => setIsCartVisible(true)}
+            className="relative flex items-center justify-center"
+          >
+            <MdShoppingCart size={40} className="text-white" />  {/* Aumenté el tamaño del icono */}
+            {getCartItemsCount() > 0 && (
+              <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                {getCartItemsCount()}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+    </nav>
   );
 };
 

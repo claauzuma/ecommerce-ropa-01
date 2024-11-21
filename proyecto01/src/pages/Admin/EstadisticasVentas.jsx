@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './NavBar';
 import './EstadisticasVentas.css';
 import axios from 'axios';
+import ApiUrls from '../../components/ApiUrls';
 
 const EstadisticasVentas = () => {
     const [dataSales, setDataSales] = useState(new Array(31).fill(0)); // Inicializa con ceros
@@ -27,7 +28,7 @@ const EstadisticasVentas = () => {
                     // Formatear el día para que sea un número de dos dígitos
                     const diaFormateado = String(dia).padStart(2, '0');
 
-                    const response = await axios.get(`http://localhost:8080/api/estadisticas`, {
+                    const response = await axios.get(ApiUrls.estadisticas, {
                         params: {
                             mes: mesSeleccionado,
                             dia: diaFormateado, // Envía el día como parámetro

@@ -1,45 +1,66 @@
 /* Paleta de colores */
 :root {
-    --black: #000000;
-    --gold: #FFD700;
-    --white: #FFFFFF;
-    --dark-blue: #003366;
-    --gray: #808080;
+  --black: #000000;
+  --gold: #FFD700;
+  --white: #FFFFFF;
+  --gray: #808080;
+  --dark-blue: #003366;
+}
+
+/* Contenedor principal */
+.filters-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--black);
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--dark-blue);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo del contenedor de búsqueda */
+.filters-search {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Icono de búsqueda */
+.search-icon {
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+/* Input de búsqueda */
+.search-input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  background-color: var(--white);
+  color: var(--black);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: var(--dark-blue);
+  outline: none;
+  box-shadow: 0 0 8px var(--dark-blue);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .filters-container {
+    padding: 0.5rem;
   }
-  
-  /* Estilo para el contenedor principal */
-  section {
-    background-color: var(--black); /* Fondo negro */
-    color: var(--white); /* Texto blanco */
-    border: 2px solid var(--dark-blue); /* Borde azul oscuro */
-    border-radius: 8px; /* Bordes redondeados */
-    padding: 1rem; /* Espaciado interno */
+
+  .search-input {
+    font-size: 0.9rem;
   }
-  
-  /* Estilo para los inputs y selectores */
-  input, select {
-    background-color: var(--white); /* Fondo blanco */
-    color: var(--black); /* Texto negro */
-    border: 2px solid var(--gold); /* Borde dorado */
-  }
-  
-  input:focus, select:focus {
-    border-color: var(--dark-blue); /* Borde azul oscuro en foco */
-    outline: none;
-    box-shadow: 0 0 10px var(--dark-blue); /* Resalto azul oscuro en foco */
-  }
-  
-  /* Estilo para los textos y etiquetas */
-  label {
-    color: var(--gold); /* Etiquetas doradas */
-  }
-  
-  span {
-    color: var(--gold); /* Texto dorado para el precio */
-  }
-  
-  /* Estilos adicionales para el espaciado */
-  .ml-2 {
-    margin-left: 0.5rem;
-  }
-  
+}

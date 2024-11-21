@@ -29,6 +29,10 @@ export function CartProvider({ children }) {
     }
   };
 
+  const getCartItemsCount = () => {
+    return cart.reduce((total, product) => total + product.cantidad, 0);
+  };
+
   const addToCart = (product) => {
  
     agregarVisitaCarrito();
@@ -85,7 +89,7 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart, isCartVisible, setIsCartVisible, user,setUser,token,setToken }}>
+    <CartContext.Provider value={{ getCartItemsCount, cart, addToCart, updateQuantity, removeFromCart, clearCart, isCartVisible, setIsCartVisible, user,setUser,token,setToken }}>
       {children}
     </CartContext.Provider>
   );

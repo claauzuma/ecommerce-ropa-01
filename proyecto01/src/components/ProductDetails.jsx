@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './ProductDetail.css';
 import { useNavigate } from 'react-router-dom';
+import ApiUrls from './ApiUrls';
 
 const ProductDetail = () => {
   const { addToCart } = useCart();
@@ -22,7 +23,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/productos/${productId}`);
+        const response = await fetch(`${ApiUrls.productos}/${productId}`);
         if (!response.ok) throw new Error('Error al obtener el producto');
         const data = await response.json();
         setProduct(data);
@@ -46,7 +47,6 @@ const ProductDetail = () => {
     "blanco": "white",
     // Puedes añadir más colores aquí
   };
-  
 
   const handleTalleSelect = (talle) => {
     setSelectedTalle(talle);
@@ -97,7 +97,7 @@ const ProductDetail = () => {
           &#8592;
         </button>
 
-        <div onClick={openModal}>
+        <div onClick={openModal} className="mb-0"> {/* Eliminar margen inferior de la imagen */}
           {product.images[currentImageIndex].includes('.mp4') ? (
             <video
               src={product.images[currentImageIndex]}
@@ -139,9 +139,9 @@ const ProductDetail = () => {
         </div>
       )}
 
-      <div className="p-4 text-center">
-        <h2 className="text-2xl font-bold">{product.nombre}</h2>
-        <h3 className="text-xl font-semibold">{product.descripcion}</h3>
+      <div className="p-4 text-center mt-2"> {/* Reducir margen superior para acercar más el contenido */}
+        <h2 className="text-2xl font-bold mb-2">{product.nombre}</h2> {/* Menor margen inferior */}
+        <h3 className="text-xl font-semibold mb-2">{product.descripcion}</h3> {/* Menor margen inferior */}
         <p className="text-xl text-gold font-semibold">Precio: ${product.price}</p>
 
         {/* Talles */}
@@ -161,39 +161,38 @@ const ProductDetail = () => {
             ))}
           </div>
         </div>
-
-        {/* Colores */}
-        {selectedTalle && coloresDisponibles.length > 0 && (
-          <div className="mt-4">
-            <p className="text-lg font-semibold">Selecciona un color:</p>
-            <div className="flex justify-center gap-4 mt-2">
-            {coloresDisponibles.map((color, index) => {
-  console.log("Color recibido:", color); // Esto imprimirá el valor del color cada vez que se renderiza un círculo
-  return (
-    <div
-      key={index}
-      className={`w-10 h-10 rounded-full border cursor-pointer ${
-        selectedColor === color ? 'ring-4 ring-blue-900' : ''
-      }`}
-      style={{ backgroundColor: colorTranslations[color.color] }} // Normaliza a minúsculas
-      onClick={() => handleColorSelect(color)}
-    >
-      {/* El color es el fondo del círculo */}
-    </div>
-  );
-})}
-
-            </div>
-          </div>
-        )}
-
-        <button
-          className="mt-4 bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg"
-          onClick={handleAddToCart}
-        >
-          Agregar al carrito
-        </button>
       </div>
+
+      {/* Colores */}
+      {selectedTalle && coloresDisponibles.length > 0 && (
+        <div className="mt-4">
+          <p className="text-lg font-semibold">Selecciona un color:</p>
+          <div className="flex justify-center gap-4 mt-2">
+            {coloresDisponibles.map((color, index) => {
+              console.log("Color recibido:", color); // Esto imprimirá el valor del color cada vez que se renderiza un círculo
+              return (
+                <div
+                  key={index}
+                  className={`w-10 h-10 rounded-full border cursor-pointer ${
+                    selectedColor === color ? 'ring-4 ring-blue-900' : ''
+                  }`}
+                  style={{ backgroundColor: colorTranslations[color.color] }} // Normaliza a minúsculas
+                  onClick={() => handleColorSelect(color)}
+                >
+                  {/* El color es el fondo del círculo */}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <button
+        className="mt-4 bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg"
+        onClick={handleAddToCart}
+      >
+        Agregar al carrito
+      </button>
     </div>
   );
 };

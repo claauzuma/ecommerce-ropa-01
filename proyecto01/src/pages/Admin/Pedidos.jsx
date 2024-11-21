@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Pedidos.css'
 import { Modal, Button } from "react-bootstrap";
+import ApiUrls from '../../components/ApiUrls';
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -28,8 +29,8 @@ const Pedidos = () => {
   useEffect(() => {
     const obtenerPedidos = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/pedidos');
-        const responseProd = await axios.get('http://localhost:8080/api/productos');
+        const response = await fetch(ApiUrls.pedidos);
+        const responseProd = await axios.get(ApiUrls.productos);
         const data = await response.json();
         setPedidos(data);
         setProductos(responseProd.data);
@@ -49,10 +50,11 @@ const Pedidos = () => {
 
   const sumarIngreso = async (id) => {
     try {
-      const pedidoResponse = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+      const pedidoResponse = await axios.get(`${ApiUrls.pedidos}/${id}`);
+
       const ingresoPedido = pedidoResponse.data.total;
 
-      await axios.post('http://localhost:8080/api/estadisticas', {
+      await axios.post(ApiUrls.estadisticas, {
         tipoEvento: 'ingreso',
         datos: {
           fecha: new Date().toISOString().split('T')[0],
@@ -155,7 +157,7 @@ const Pedidos = () => {
             });
   
             await axios.put(
-              `http://localhost:8080/api/productos/${productoEncontrado._id}`,
+             `${ApiUrls.productos}/${productoEncontrado._id}`,
               formDataToSend,
               { headers: { 'Content-Type': 'multipart/form-data' } }
             );
@@ -215,7 +217,7 @@ const Pedidos = () => {
   const confirmarPedido = async (id) => {
    try {
     console.log("Vamos a verificar los stocks de los productos del pedido " + id)
-    const response = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+    const response = await axios.get(`${ApiUrls.pedidos}/${id}`);
     const pedido = response.data;
     console.log("Vamos a verificar el stock del pedido ", pedido)
     let stockpositivo = false;
@@ -237,7 +239,7 @@ const Pedidos = () => {
   const confirmarPedido2 = async (id,pedido) => {
     try {
 
-      const response = await fetch(`http://localhost:8080/api/pedidos/${id}`, {
+      const response = await fetch(`${ApiUrls.pedidos}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -276,7 +278,8 @@ const Pedidos = () => {
         };
 
         console.log("Sumamos una venta");
-        const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosVenta);
+        const respuesta = await axios.post(`${ApiUrls.pedidos}/estadisticas`, datosVenta);
+
 
         console.log('Respuesta de la API:', respuesta.data);
         return respuesta.data;
@@ -288,7 +291,8 @@ const Pedidos = () => {
 
 const sumarTotalVenta = async (id) => {
   try {
-      const respuesta = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+       const respuesta = await axios.get(`${ApiUrls.pedidos}/${id}`);
+
 
       if (typeof respuesta.data.total === 'undefined') {
           throw new Error('El campo "total" no está disponible en la respuesta');
@@ -306,7 +310,8 @@ const sumarTotalVenta = async (id) => {
       };
 
       console.log("Sumamos una venta");
-      const response = await axios.post('http://localhost:8080/api/estadisticas/', datosVenta);
+      const response = await axios.post(`${ApiUrls.estadisticas}`, datosVenta);
+
       console.log('Respuesta de la API:', response.data);
 
       return response.data; 
@@ -321,7 +326,7 @@ const sumarTotalVenta = async (id) => {
 
   const despacharPedido = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/pedidos/${id}`, {
+      const response = await fetch(`${ApiUrls.pedidos}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -348,7 +353,7 @@ const sumarTotalVenta = async (id) => {
 
   const eliminarPedido = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/pedidos/${id}`, {
+      const response = await fetch(`${ApiUrls.pedidos}/${id}`, {
         method: 'DELETE',
       });
 
@@ -393,103 +398,106 @@ const sumarTotalVenta = async (id) => {
         </Modal.Footer>
       </Modal>
 
-      <div className="max-w-7xl mx-auto p-4 bg-white shadow-md rounded-lg mt-8">
-        <h2 className="text-2xl font-bold mb-4 text-black">Lista de Pedidos</h2>
-        <div className="mb-4 flex space-x-2">
-          <button
-            onClick={() => setTipo('confirmado')}
-            className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
-              tipo === 'confirmado' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
-            }`}
-          >
-            Pedidos Confirmados
-          </button>
-          <button
-            onClick={() => setTipo('pendiente')}
-            className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
-              tipo === 'pendiente' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
-            }`}
-          >
-            Pedidos Pendientes
-          </button>
-          <button
-            onClick={() => setTipo('todos')}
-            className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
-              tipo === 'todos' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
-            }`}
-          >
-            Todos los Pedidos
-          </button>
-        </div>
+      <div className="max-w-full mx-auto p-4 bg-white shadow-md rounded-lg mt-8">
+  <h2 className="text-2xl font-bold mb-4 text-black">Lista de Pedidos</h2>
+  <div className="mb-4 flex space-x-2">
+    <button
+      onClick={() => setTipo('confirmado')}
+      className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
+        tipo === 'confirmado' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
+      }`}
+    >
+      Pedidos Confirmados
+    </button>
+    <button
+      onClick={() => setTipo('pendiente')}
+      className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
+        tipo === 'pendiente' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
+      }`}
+    >
+      Pedidos Pendientes
+    </button>
+    <button
+      onClick={() => setTipo('todos')}
+      className={`px-4 py-2 rounded-lg transition duration-300 border-2 ${
+        tipo === 'todos' ? 'bg-gold border-black text-black' : 'bg-gray-300 text-black hover:bg-gray-400'
+      }`}
+    >
+      Todos los Pedidos
+    </button>
+  </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full border-4 border-black rounded-lg bg-gray-50 w-full">
-            <thead>
-              <tr className="bg-black text-gold">
-                <th className="border-b border-black px-4 py-2">ID</th>
-                <th className="border-b border-black px-4 py-2">Provincia</th>
-                <th className="border-b border-black px-4 py-2">Cliente</th>
-                <th className="border-b border-black px-4 py-2">Total</th>
-                <th className="border-b border-black px-4 py-2">Estado</th>
-                <th className="border-b border-black px-4 py-2">Fecha de Creación</th>
-                <th className="border-b border-black px-4 py-2">Hora de Creación</th>
-                <th className="border-b border-black px-4 py-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-  {pedidosFiltrados.length === 0 ? (
-    <tr>
-      <td colSpan="7" className="text-center py-4 text-gray-500">No hay pedidos disponibles</td>
-    </tr>
-  ) : (
-    pedidosFiltrados.map((pedido) => (
-      <tr key={pedido._id} className="hover:bg-gray-100 transition duration-200">
-        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido._id}</td>
-        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.provincia}</td>
-        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
-        <td className="border-b border-black px-4 py-2 text-gray-800">${pedido.total}</td>
-        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.estado}</td>
-        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.fechaCreacion}</td>
-        <td className="border-b border-black px-4 py-2 text-gray-800">{pedido.horaCreacion}</td>
-        <td className="border-b border-black px-4 py-2 flex space-x-2">
-          {pedido.estado !== 'confirmado' && (
-            <button
-              onClick={() => confirmarPedido(pedido._id)}
-              className="px-4 py-2 bg-gold text-black rounded-lg hover:bg-yellow-600 transition duration-300"
-            >
-              Confirmar
-            </button>
-          )}
-          <button
-            onClick={() => handlePedidoDetail(pedido._id)}
-            className="px-4 py-2 bg-black text-gold rounded-lg hover:bg-gray-800 transition duration-300"
-          >
-            Detalle
-          </button>
-          {pedido.estado === 'confirmado' && !pedido.despachado && (
-            <button
-              onClick={() => despacharPedido(pedido._id)}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-            >
-              Despachar
-            </button>
-          )}
-  
-          <button
-            onClick={() => eliminarPedido(pedido._id)}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-          >
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
+  {/* Contenedor para la tabla con desplazamiento horizontal */}
+  <div className="overflow-x-auto max-w-full">
+    <table className="min-w-full border-4 border-black rounded-lg bg-gray-50 w-full">
+      <thead>
+        <tr className="bg-black text-gold">
+          <th className="border-b border-black px-6 py-3">ID</th>
+          <th className="border-b border-black px-6 py-3">Provincia</th>
+          <th className="border-b border-black px-6 py-3">Cliente</th>
+          <th className="border-b border-black px-6 py-3">Total</th>
+          <th className="border-b border-black px-6 py-3">Estado</th>
+          <th className="border-b border-black px-6 py-3">Fecha de Creación</th>
+          <th className="border-b border-black px-6 py-3">Hora de Creación</th>
+          <th className="border-b border-black px-6 py-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {pedidosFiltrados.length === 0 ? (
+          <tr>
+            <td colSpan="8" className="text-center py-4 text-gray-500">
+              No hay pedidos disponibles
+            </td>
+          </tr>
+        ) : (
+          pedidosFiltrados.map((pedido) => (
+            <tr key={pedido._id} className="hover:bg-gray-100 transition duration-200">
+              <td className="border-b border-black px-6 py-3 text-gray-800">{pedido._id}</td>
+              <td className="border-b border-black px-6 py-3 text-gray-800">{pedido.cliente.provincia}</td>
+              <td className="border-b border-black px-6 py-3 text-gray-800">{pedido.cliente.nombre} {pedido.cliente.apellido}</td>
+              <td className="border-b border-black px-6 py-3 text-gray-800">${pedido.total}</td>
+              <td className="border-b border-black px-6 py-3 text-gray-800">{pedido.estado}</td>
+              <td className="border-b border-black px-6 py-3 text-gray-800">{pedido.fechaCreacion}</td>
+              <td className="border-b border-black px-6 py-3 text-gray-800">{pedido.horaCreacion}</td>
+              <td className="border-b border-black px-6 py-3 flex space-x-2">
+                {pedido.estado !== 'confirmado' && (
+                  <button
+                    onClick={() => confirmarPedido(pedido._id)}
+                    className="px-4 py-2 bg-gold text-black rounded-lg hover:bg-yellow-600 transition duration-300"
+                  >
+                    Confirmar
+                  </button>
+                )}
+                <button
+                  onClick={() => handlePedidoDetail(pedido._id)}
+                  className="px-4 py-2 bg-black text-gold rounded-lg hover:bg-gray-800 transition duration-300"
+                >
+                  Detalle
+                </button>
+                {pedido.estado === 'confirmado' && !pedido.despachado && (
+                  <button
+                    onClick={() => despacharPedido(pedido._id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+                  >
+                    Despachar
+                  </button>
+                )}
+                <button
+                  onClick={() => eliminarPedido(pedido._id)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-          </table>
-        </div>
-      </div>
+
     </>
   );
 };

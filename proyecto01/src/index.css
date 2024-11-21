@@ -1,13 +1,19 @@
+/* index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 
-
-
-html, body {
-    @apply bg-gray-100; 
-    background-color: grey;
+/* Asegúrate de que el fondo negro se aplique correctamente al body y html */
+body, html {
+    background-color: #000 !important; /* Fondo negro */
+    margin: 0; /* Elimina los márgenes predeterminados */
+    padding: 0; /* Elimina el padding predeterminado */
+    height: 100%; /* Asegúrate de que el body ocupe toda la pantalla */
 }
 
+#root {
+    background-color: #000 !important; /* Fondo negro en el contenedor raíz */
+    min-height: 100%; /* Asegura que el contenido ocupe toda la pantalla */
+}

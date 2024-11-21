@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import ApiUrls from './ApiUrls';
 
 const FormAddProduct = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const FormAddProduct = () => {
     const fetchProduct = async () => {
       if (id) {
         try {
-          const response = await axios.get(`/api/productos/${id}`);
+          const response = await axios.get(`${ApiUrls.productos}/${id}`);
           const producto = response.data;
           setDescripcion(producto.descripcion);
           setPrecio(producto.precio);
@@ -61,10 +62,10 @@ const FormAddProduct = () => {
 
     try {
       if (id) {
-        const response = await axios.put(`/api/productos/${id}`, formData);
+        const response = await axios.put(`${ApiUrls.productos}/${id}`, formData);
         console.log('Producto modificado:', response.data);
       } else {
-        const response = await axios.post('/api/productos', formData);
+        const response = await axios.post(ApiUrls.productos, formData);
         console.log('Producto agregado:', response.data);
       }
 

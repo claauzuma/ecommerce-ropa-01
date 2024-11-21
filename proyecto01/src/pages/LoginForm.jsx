@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useCart } from '../context/CartContext'; 
-
-
+import { useCart } from '../context/CartContext';
+import ApiUrls from '../components/ApiUrls.jsx'; // Importamos las URLs desde el archivo de constantes
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const {user, setUser} = useCart();
+  const { setUser } = useCart();
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/api/usuarios/login", {
+      const response = await fetch(ApiUrls.login, { // Usamos ApiUrls.login aquí
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,14 +28,13 @@ const LoginForm = () => {
       if (response.ok) {
         const token = data.token;
         console.log("Logeamos bien");
-    
 
         const decodedToken = jwtDecode(token);
         const { email, rol } = decodedToken;
-        console.log("El mail del token es " + email)
-        console.log("El rol del token es " + rol)
-        console.log("El rol es " + rol)
-        const usuario = {"email" : email, "rol" : rol}
+        console.log("El mail del token es " + email);
+        console.log("El rol del token es " + rol);
+
+        const usuario = { email, rol };
         setUser(usuario);
         localStorage.setItem("token", token);
         navigate("/admin/index-product");
@@ -49,9 +47,8 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-
-      <div className="bg-gray-800 p-10 rounded-lg shadow-lg max-w-lg w-full space-y-8 mt-[0px]">
+    <div className="flex items-center justify-center bg-black mt-10"> {/* Agregado mt-10 para margen superior */}
+      <div className="bg-gray-800 p-10 rounded-lg shadow-lg max-w-lg w-full space-y-8 mb-10"> {/* Agregado mb-10 para margen inferior */}
         <h2 className="text-3xl font-bold text-yellow-400 text-center">Admin Login</h2>
         <form className="space-y-6" onSubmit={handleLogin}>
           <div>

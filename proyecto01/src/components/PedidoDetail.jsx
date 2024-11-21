@@ -1,6 +1,7 @@
 // PedidoDetail.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ApiUrls from './ApiUrls';
 
 const PedidoDetail = () => {
   const { id } = useParams(); // Obtener el ID del pedido de los parámetros de la URL
@@ -10,7 +11,8 @@ const PedidoDetail = () => {
   useEffect(() => {
     const obtenerPedido = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/pedidos/${id}`);
+       
+const response = await fetch(`${ApiUrls.pedidos}/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener el pedido');
         }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './Products.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ApiUrls from './ApiUrls';
 
 const ProductsAdmin = ({ products, setProducts }) => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ProductsAdmin = ({ products, setProducts }) => {
     if (confirmDelete) {
       console.log("Eliminamos al producto");
       try {
-        const response = await axios.delete(`http://localhost:8080/api/productos/${id}`);
+        const response = await axios.delete(`${ApiUrls.productos}/${id}`);
         console.log("Producto eliminado correctamente:", response.data);
         setProducts(prevProducts => prevProducts.filter(p => p._id !== id));
       } catch (error) {
@@ -31,7 +32,7 @@ const ProductsAdmin = ({ products, setProducts }) => {
 
   return (
     <main className='products'>
-      <ul className="flex flex-wrap justify-between"> {/* Cambiado a flex para el diseño */}
+      <ul className="flex flex-wrap justify-between"> 
         {products.map((product) => (
           <li key={product._id} className='product-item border rounded-lg shadow-lg overflow-hidden border-gold'>
             <img 
@@ -40,7 +41,7 @@ const ProductsAdmin = ({ products, setProducts }) => {
               className='product-image' 
             />
             <div className="p-4">
-              <h2 className="product-title font-bold text-xl">{product.descripcion}</h2>
+              <h2 className="product-title font-bold text-xl">{product.nombre}</h2>
               <p className="text-gold font-semibold">Categoría: {product.categoria}</p>
               <p className="text-gold font-semibold">Precio: ${product.price}</p>
               <p className="text-gold font-semibold">Stock: {product.stock}</p>
@@ -66,7 +67,7 @@ const ProductsAdmin = ({ products, setProducts }) => {
   );
 };
 
-// Validación de props usando PropTypes
+
 ProductsAdmin.propTypes = {
   products: PropTypes.arrayOf(
     PropTypes.shape({

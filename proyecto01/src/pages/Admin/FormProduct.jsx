@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ApiUrls from '../../components/ApiUrls'
 
 import './FormProduct.css';
 
@@ -47,13 +48,15 @@ const FormProduct = () => {
     categoria: '',
     images: [], 
     originalImages: [], 
+    promo: false
   });
 
   useEffect(() => {
     const fetchProduct = async () => {
       if (id) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/productos/${id}`);
+          const response = await axios.get(`${ApiUrls.productos}/${id}`);
+
           const producto = response.data;
           setFormData({
             nombre: producto.nombre,
@@ -61,7 +64,8 @@ const FormProduct = () => {
             price: producto.price,
             tallesInputs: producto.talles.length > 0 ? producto.talles : [{ talle: '', colores: [{ color: '', stock: '' }] }],
             categoria: producto.categoria,
-            images: producto.images || [], 
+            images: producto.images || [],
+            promo : producto.promo
           });
 
         } catch (error) {
@@ -112,6 +116,7 @@ const FormProduct = () => {
       tallesInputs: [...prevData.tallesInputs, { talle: '', colores: [{ color: '', stock: '' }] }],  
     }));
   };
+
 
   const handleRemoveTalle = (index) => {
     setFormData((prevData) => {
@@ -198,6 +203,7 @@ const FormProduct = () => {
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('categoria', formData.categoria);
       formDataToSend.append('price', formData.price);
+      formDataToSend.append('promo', formData.promo);
   
 
       if (formData.images.length > 0) {
@@ -222,7 +228,7 @@ const FormProduct = () => {
           console.log(`${key}:`, value);
         }
     
-        await axios.put(`http://localhost:8080/api/productos/${id}`, formDataToSend, {
+        await axios.put(`${ApiUrls.productos}/${id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -310,6 +316,34 @@ const FormProduct = () => {
             >
               Agregar archivo <FontAwesomeIcon icon={faPlus} />
             </button>
+
+            <h2 className="text-lg font-semibold mb-2 text-white">Promoción</h2>
+            <div className="mb-4">
+  <label className="text-white mr-4">
+    <input
+      type="radio"
+      name="promocion"
+      value="true" // Representa "Con promoción"
+      checked={formData.promo === true}
+      onChange={(e) => setFormData({ ...formData, promo: e.target.value === "true" })}
+      className="mr-2"
+    />
+    Con promoción
+  </label>
+  <label className="text-white">
+    <input
+      type="radio"
+      name="promocion"
+      value="false" // Representa "Sin promoción"
+      checked={formData.promo === false}
+      onChange={(e) => setFormData({ ...formData, promo: e.target.value === "true" })}
+      className="mr-2"
+    />
+    Sin promoción
+  </label>
+</div>
+
+
 
             {/* Precio */}
             <input

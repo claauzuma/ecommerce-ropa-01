@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import axios from 'axios';
+import ApiUrls from '../components/ApiUrls';
 
 const GenerarCompra = () => {
   const { state } = useLocation();
@@ -21,7 +22,7 @@ const GenerarCompra = () => {
       };
 
       console.log("SUMAMOS UN PEEEEEEEDIDO PARA PENDIENTEEEEEEEEEEEES");
-      const respuesta = await axios.post('http://localhost:8080/api/estadisticas/', datosAñadidos);
+      const respuesta = await axios.post(ApiUrls.estadisticas, datosAñadidos);
 
       console.log('Respuesta de la API:', respuesta.data);
       return respuesta.data;
@@ -37,9 +38,11 @@ const GenerarCompra = () => {
     dni: '',
     email: '',
     direccion: '',
-    provincia: '', // Campo de Provincia
+    provincia: '', 
     celular: '',
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);  // Estado para controlar el modal
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,7 +62,7 @@ Forma de Entrega
 • Método de Entrega: Envío a Domicilio
 • Recibe: ${formData.nombre} ${formData.apellido}
 • Dirección: ${formData.direccion}
-• Provincia: ${formData.provincia}  {/* Agregado Provincia */}
+• Provincia: ${formData.provincia}  
 • Google Maps: https://www.google.com/maps/place/-34.6737824,-58.4705525
 • Hora de Envío: Lo Antes Posible
 • Entre calles para mejor ubicación: ${formData.direccion}
@@ -74,13 +77,18 @@ Forma de Pago
     window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`, '_blank');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit1 = (e) => {
+    e.preventDefault();
+    setIsModalOpen(true);  // Abrir el modal cuando se hace submit
+  };
+
+  const handleSubmit2 = async (e) => {
     e.preventDefault();
 
     const now = new Date();
-    const fechaCreacion = now.toISOString().split('T')[0]; // Obtener solo la fecha (YYYY-MM-DD)
-    const horaCreacion = now.toTimeString().split(' ')[0]; // Obtener solo la hora (HH:MM:SS)
-    
+    const fechaCreacion = now.toISOString().split('T')[0];
+    const horaCreacion = now.toTimeString().split(' ')[0];
+
     const dataToSend = {
       cliente: {
         nombre: formData.nombre,
@@ -88,7 +96,7 @@ Forma de Pago
         dni: formData.dni,
         email: formData.email,
         direccion: formData.direccion,
-        provincia: formData.provincia,  // Agregado Provincia
+        provincia: formData.provincia, 
       },
       productos: products.map((product) => ({
         id: product._id,
@@ -97,17 +105,15 @@ Forma de Pago
         cantidad: product.cantidad,
         talle: product.selectedTalle.talle,
         color: product.selectedColor.color
-
       })),
       total: total,
       estado: 'pendiente',
-      fechaCreacion: fechaCreacion, // Solo la fecha
-      horaCreacion: horaCreacion, // Solo la hora
+      fechaCreacion: fechaCreacion, 
+      horaCreacion: horaCreacion, 
     };
 
     try {
-       
-      const response = await fetch('http://localhost:8080/api/pedidos', {
+      const response = await fetch(ApiUrls.pedidos, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,13 +121,10 @@ Forma de Pago
         body: JSON.stringify(dataToSend),
       });
 
-      console.log("Mandamos la data")
-      console.log(dataToSend)
-
       if (response.ok) {
         const responseData = await response.json();
         console.log('Pedido enviado con éxito:', responseData);
-        alert("Compra realizada con éxito");
+        alert("Pedido realizado con éxito");
         añadirPedido();
         mandarWhatsapp();
         clearCart();
@@ -134,6 +137,10 @@ Forma de Pago
     } catch (error) {
       console.error('Error al enviar el pedido:', error);
     }
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);  // Cerrar el modal si el usuario cancela
   };
 
   return (
@@ -152,7 +159,7 @@ Forma de Pago
             ))}
             <li className="font-bold text-right text-white">Total: ${total}</li>
           </ul>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit1}>
             <div className="mb-2">
               <label className="block text-white mb-1" htmlFor="nombre">Nombre</label>
               <input
@@ -233,19 +240,53 @@ Forma de Pago
                 id="direccion"
                 value={formData.direccion}
                 onChange={handleChange}
-                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500" 
+                className="w-full p-2 bg-gray-800 text-white border-2 border-black rounded focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white p-3 rounded mt-4 border-2 border-black hover:bg-blue-500 transition-colors"
+              className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
               Confirmar Pedido
             </button>
           </form>
         </>
       )}
+
+      {/* Modal */}
+      {isModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-black p-6 rounded-lg shadow-lg">
+      <h2 className="text-xl font-bold mb-4 text-white">Resumen del Pedido</h2>
+      <p><strong>Nombre:</strong> {formData.nombre} {formData.apellido}</p>
+      <p><strong>DNI:</strong> {formData.dni}</p>
+      <p><strong>Email:</strong> {formData.email}</p>
+      <p><strong>Dirección:</strong> {formData.direccion}</p>
+      <p><strong>Provincia:</strong> {formData.provincia}</p>
+      <p><strong>Total:</strong> ${total}</p>
+
+      {/* Espaciado entre los atributos y los botones */}
+      <div className="mb-6"></div>
+
+      <div className="flex space-x-4">
+        <button
+          onClick={handleSubmit2}
+          className="py-2 px-4 bg-blue-600 text-black rounded hover:bg-blue-700"
+        >
+          Aceptar
+        </button>
+        <button
+          onClick={handleCancel}
+          className="py-2 px-4 bg-gold text-black rounded hover:bg-gray-700"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
