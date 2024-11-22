@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Products from '../components/Products';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './indexProd.css';
+import './IndexProd.css';
 import ApiUrls from'../components/ApiUrls';
 import Imagen from '../assets/logo.png';
 import Banner from '../components/Banner';
