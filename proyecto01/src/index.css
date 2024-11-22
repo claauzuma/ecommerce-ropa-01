@@ -1,9 +1,12 @@
 /* index.css */
+
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
 
 /* Asegúrate de que el fondo negro se aplique correctamente al body y html */
 body, html {
