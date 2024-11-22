@@ -1,6 +1,6 @@
-// NavBar.jsx
 import React, { useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import Carrito from '../components/Cart'; // Importa el componente Carrito
 import logo from '../assets/logo.png';
 import { MdShoppingCart, MdLogin } from 'react-icons/md';
@@ -8,7 +8,8 @@ import './NavBar.css';
 
 const NavBar = () => {
   const cartRef = useRef(null);
-  const { isCartVisible, setIsCartVisible, token, getCartItemsCount } = useCart(); 
+  const { isCartVisible, setIsCartVisible, token, getCartItemsCount } = useCart();
+  const navigate = useNavigate(); // Crear la instancia de navigate
 
   useEffect(() => {
     console.log("isCartVisible", isCartVisible);
@@ -38,7 +39,7 @@ const NavBar = () => {
           <img
             src={logo}
             alt="Logo"
-            className="h-full object-contain" 
+            className="h-full object-contain"
             style={{ maxHeight: '140px' }} // Mantén el tamaño del logo
           />
         </a>
@@ -50,12 +51,12 @@ const NavBar = () => {
         </div>
 
         <div className="space-x-4 flex items-center">
-          <a
-            href="/loginpage"
+          <button
+            onClick={() => navigate('/loginpage')} // Usar navigate en lugar de href
             className="text-white hover:text-gold transition duration-300 ease-in-out"
           >
             <MdLogin size={24} />
-          </a>
+          </button>
 
           <button
             onClick={() => setIsCartVisible(true)}
