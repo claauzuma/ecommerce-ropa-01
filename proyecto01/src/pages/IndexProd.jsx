@@ -11,6 +11,7 @@ import Imagen from '../assets/logo.png';
 import Banner from '../components/Banner';
 import Categories from '../components/Categories';
 import ProductBanner from '../components/ProductBanner';
+import { FaSpinner } from 'react-icons/fa';
 
 const IndexProd = () => {
   const [products, setProducts] = useState([]);
@@ -21,6 +22,10 @@ const IndexProd = () => {
   });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -72,14 +77,16 @@ const IndexProd = () => {
     
 
 
-<Banner className="-mt-2" />  
+    <Banner className="-mt-2" />  
       <Categories changeFilters={handleFiltersChange} filters={filters} />
-      <Header changeFilters={handleFiltersChange} filters={filters}/>
+      <Header changeFilters={handleFiltersChange} filters={filters} />
 
       {/* Lista de Productos */}
       <div className="container mx-auto p-6">
         {loading ? (
-          <p>Cargando productos...</p>
+          <div className="flex justify-center items-center">
+            <FaSpinner className="animate-spin text-4xl" />
+          </div>
         ) : (
           <Products products={filteredProducts} setProducts={setProducts} />
         )}

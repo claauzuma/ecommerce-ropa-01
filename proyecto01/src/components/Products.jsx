@@ -10,6 +10,8 @@ const Products = ({ products }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate(); 
 
+  
+
   const handleClick = async (id) => {
     const hoy = new Date();
     const fechaHoy = hoy.toISOString().split('T')[0];
