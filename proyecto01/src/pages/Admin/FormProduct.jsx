@@ -237,7 +237,7 @@ const FormProduct = () => {
       
       
       else {
-        await axios.post(`${ApiUrls}/api/productos`, formDataToSend, {
+        await axios.post(ApiUrls.productos, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         console.log("LA DATA A agregar ES:");
