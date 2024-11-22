@@ -47,7 +47,9 @@ const Products = ({ products }) => {
           return (
             <li
               key={product._id}
-              className={`product-item border rounded-lg shadow-lg overflow-hidden border-gold ${isOffer ? 'offer-product' : ''}`}
+              className={`product-item rounded-lg shadow-lg overflow-hidden ${isOffer ? 'offer-product' : ''} m-0`}
+
+
             >
               {/* Etiqueta de oferta */}
               {isOffer && <div className="offer-tag">¡Oferta!</div>}

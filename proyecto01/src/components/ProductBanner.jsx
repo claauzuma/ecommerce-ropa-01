@@ -69,19 +69,26 @@ const ProductBanner = () => {
     <div
       className="relative text-white h-64 flex items-center justify-center pb-16"
       style={{
-        backgroundColor: "#000000", // Fondo completamente negro
-        paddingTop: `${navHeight}px`,
+        backgroundColor: "#000000",
+        paddingTop: `${navHeight - 40}px`,  // Reduce 10px de la altura del NavBar
       }}
+      
     >
       <div className="text-center max-w-xl mx-auto space-y-1">
 
 
         <h2 className="text-2xl font-bold">{products[currentIndex].nombre}</h2>
         <img
-          src={products[currentIndex].image}
-          alt={products[currentIndex].nombre}
-          className="mx-auto w-full object-contain"
-        />
+  src={products[currentIndex].image}
+  alt={products[currentIndex].nombre}
+  className="mx-auto w-full object-contain"
+  style={{
+    maxHeight: "200px", // Altura máxima deseada
+    maxWidth: "200px", // Ancho máximo deseado
+    objectFit: "contain", // Ajusta la imagen manteniendo la relación de aspecto
+  }}
+/>
+
         <button
           className="mt-2 bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-all"
           onClick={() => navigate(`/product/${products[currentIndex].id}`)} // Navegar a la página específica
