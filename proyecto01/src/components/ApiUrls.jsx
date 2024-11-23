@@ -3,7 +3,7 @@
 
 const urlLocal = 'http://localhost:8080';
 const urlServidor = 'https://ecommerce-ropa-nodejs-production.up.railway.app';
-let url = urlLocal;
+let url = urlServidor;
 
 const ApiUrls = {
   estadisticas: `${url}/api/estadisticas/`,
