@@ -1,17 +1,36 @@
-/* ProductBanner.css */
+/* Estilo base del contenedor */
+.product-banner {
+  margin-top: var(--nav-height, 80px) !important; /* Usa la variable de altura del NavBar */
+  position: relative;
+  background-color: #000000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 256px; /* h-64 */
+  padding-bottom: 4rem; /* pb-16 */
+}
+
+/* Animación de fade-in */
 .fade-in {
+  opacity: 0;
+  animation: fadeIn ease-in-out 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
-    animation: fadeIn ease-in-out 1s forwards;
+    transform: scale(0.95);
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
+}
+
+/* Imagen responsiva */
+.product-banner img {
+  max-height: 200px;
+  max-width: 200px;
+  object-fit: contain;
+}

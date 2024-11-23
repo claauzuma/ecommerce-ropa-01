@@ -70,6 +70,14 @@ const NavBarAdmin = () => {
           isOpen ? 'top-16' : '-top-48 md:top-0'
         }`}
       >
+     <li>
+          <a
+            href="/admin/resumen-financiero"
+            className="block text-yellow-400 hover:text-yellow-300 transition-colors duration-300 p-2"
+          >
+          Resumen
+          </a>
+        </li>
         <li>
           <a
             href="/admin/index-product"

@@ -68,14 +68,6 @@ const IndexProd = () => {
   return (
     <>
     <ProductBanner/>
-    <br /> 
-    <br />
-    <br />
-    <br />
-
-
-    
-
 
     <Banner className="-mt-2" />  
       <Categories changeFilters={handleFiltersChange} filters={filters} />
