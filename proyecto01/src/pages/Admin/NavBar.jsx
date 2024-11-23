@@ -70,14 +70,8 @@ const NavBarAdmin = () => {
           isOpen ? 'top-16' : '-top-48 md:top-0'
         }`}
       >
-     <li>
-          <a
-            href="/admin/resumen-financiero"
-            className="block text-yellow-400 hover:text-yellow-300 transition-colors duration-300 p-2"
-          >
-          Resumen
-          </a>
-        </li>
+
+
         <li>
           <a
             href="/admin/index-product"
@@ -108,7 +102,20 @@ const NavBarAdmin = () => {
               isStatsOpen ? 'show' : ''
             } bg-black text-yellow-400`}
           >
+
+
+
+<li>
+        <a
+         href="/admin/resumen-financiero"
+          className="dropdown-item text-yellow-500 hover:text-yellow-300 transition-colors duration-300"
+        >
+          Resumen financiero
+        </a>
+      </li>
+
             <li>
+        
               <a
                 href="/admin/estadisticas/vision-general"
                 className="dropdown-item text-yellow-500 hover:text-yellow-300 transition-colors duration-300"
@@ -134,12 +141,24 @@ const NavBarAdmin = () => {
             </li>
           </ul>
         </li>
+
+        <li>
+          <a
+            href="/admin/comentarios"
+            className="block text-yellow-400 hover:text-yellow-300 transition-colors duration-300 p-2"
+          >
+            Comentarios
+          </a>
+        </li>
+
   
         <li>
           <button
             onClick={handleLogout}
             className="block text-yellow-400 hover:text-red-400 transition-colors duration-300 p-2"
           >
+
+
             Cerrar sesión
           </button>
         </li>

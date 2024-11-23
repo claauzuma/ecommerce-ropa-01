@@ -10,15 +10,15 @@ const ProductBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [navHeight, setNavHeight] = useState(80); // Valor predeterminado de 80px
+  const [navHeight, setNavHeight] = useState(80); 
   const navigate = useNavigate();
 
-  // Obtener altura del NavBar dinámicamente
+ 
   useEffect(() => {
     const navBar = document.querySelector("nav");
     if (navBar) {
       const navHeight = navBar.offsetHeight;
-      const reducedHeight = navHeight - 130; // Resta 20px para reducir el espacio
+      const reducedHeight = navHeight - 110; 
       setNavHeight(reducedHeight);
       document.documentElement.style.setProperty('--nav-height', `${reducedHeight}px`);
     }
