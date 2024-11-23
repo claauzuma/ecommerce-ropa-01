@@ -3,6 +3,7 @@ import axios from "axios";
 import ApiUrls from "./ApiUrls";
 import './ProductBanner.css'
 import { useNavigate } from "react-router-dom";
+import { FaSpinner } from 'react-icons/fa';
 
 const ProductBanner = () => {
   const [products, setProducts] = useState([]);
@@ -59,7 +60,11 @@ const ProductBanner = () => {
   }, [products]);
 
   if (loading) {
-    return <div className="text-center text-white">Cargando productos...</div>;
+    return (
+      <div className="flex justify-center items-center">
+      <FaSpinner className="animate-spin text-4xl" />
+    </div>
+    );
   }
 
   if (error) {
@@ -71,7 +76,7 @@ const ProductBanner = () => {
       className="relative text-white h-64 flex items-center justify-center pb-16"
       style={{
         backgroundColor: "#000000",
-        paddingTop: `${navHeight - 40}px`,  // Reduce 10px de la altura del NavBar
+        paddingTop: `${navHeight - 40}px`, 
       }}
       
     >
@@ -80,7 +85,7 @@ const ProductBanner = () => {
 
         <h2 className="text-2xl font-bold">{products[currentIndex].nombre}</h2>
         <img
-  key={products[currentIndex].id} // Fuerza la re-renderización de la animación
+  key={products[currentIndex].id} 
   src={products[currentIndex].image}
   alt={products[currentIndex].nombre}
   className="mx-auto w-full object-contain fade-in" // Clase para animación

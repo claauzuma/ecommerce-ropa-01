@@ -65,7 +65,7 @@ const NavBar = () => {
             <MdShoppingCart
               size={40}
               className={`${
-                getCartItemsCount() > 0 ? 'text-white animate-bounce-slow' : 'text-gray-500'
+                getCartItemsCount() > 0 ? 'text-gold animate-bounce-slow' : 'text-gold'
               } transition duration-300 ease-in-out`}
             />
             {getCartItemsCount() > 0 && (

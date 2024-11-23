@@ -22,24 +22,25 @@ const LoginForm = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+    
       const data = await response.json();
-
+    
       if (response.ok) {
         const token = data.token;
         console.log("Logeamos bien");
-
+    
         const decodedToken = jwtDecode(token);
         const { email, rol } = decodedToken;
         console.log("El mail del token es " + email);
         console.log("El rol del token es " + rol);
-
+    
         const usuario = { email, rol };
         setUser(usuario);
         localStorage.setItem("token", token);
         navigate("/admin/index-product");
       } else {
-        setError(data.message);
+        // Si la respuesta no es OK, asumimos que las credenciales son incorrectas
+        setError(data.message || "Credenciales incorrectas"); 
       }
     } catch (err) {
       setError("Error en el servidor");

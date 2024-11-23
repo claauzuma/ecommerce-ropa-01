@@ -57,7 +57,7 @@ const App = () => {
     
 
         {/* Icono de WhatsApp en la esquina inferior derecha */}
-        <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
+        <a href="https://wa.me/+5491158641032" target="_blank" rel="noopener noreferrer">
           <div className="fixed bottom-4 right-4 bg-green-500 p-3 rounded-full shadow-lg">
             <FaWhatsapp size={40} color="white" />
           </div>

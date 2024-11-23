@@ -158,7 +158,8 @@ body {
 
 .product-detail p {
   font-size: 1.25rem;
-  color: #1E90FF; /* Texto azul oscuro */
+  color: #FFD700; /* Dorado */
+
 }
 
 /* Botón expandir imagen */
@@ -168,6 +169,7 @@ body {
   font-weight: bold;
   padding: 0.5rem 1rem;
   border: none;
+
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;

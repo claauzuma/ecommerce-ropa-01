@@ -35,7 +35,7 @@ const Products = ({ products }) => {
           let precioOriginal = Math.round(product.beforePrice);
           const precioConDescuento = Math.round(product.price);
           if(precioOriginal == precioConDescuento) {
-            precioOriginal = precioConDescuento * 1.15
+            precioOriginal = Math.round(precioConDescuento * 1.15)
           }
 
           let descuento = Math.round((precioOriginal * 100 / precioConDescuento) - 100);
@@ -101,7 +101,7 @@ const Products = ({ products }) => {
   
                 {/* Logo de WhatsApp */}
                 <a
-                  href={`https://wa.me/1234567890?text=Hola, estoy interesado en el producto ${product.nombre}`}
+                  href={`https://wa.me/+5491158641032?text=Hola, estoy interesado en el producto ${product.nombre}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="ml-2"

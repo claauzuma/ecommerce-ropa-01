@@ -5,7 +5,6 @@ const Comments = ({ comments, onAddComment }) => {
   const [newComment, setNewComment] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [showComments, setShowComments] = useState(false);
 
   const handleAddComment = () => {
     if (!newComment || !name || !email) {
@@ -20,7 +19,10 @@ const Comments = ({ comments, onAddComment }) => {
       email,
     };
 
+    // Llamamos a la función onAddComment para actualizar el estado de los comentarios
     onAddComment(commentData);
+
+    // Limpiamos los campos después de agregar el comentario
     setNewComment('');
     setName('');
     setEmail('');
@@ -28,29 +30,23 @@ const Comments = ({ comments, onAddComment }) => {
 
   return (
     <div className="mt-6">
-      <button
-        className="text-blue-900 font-semibold"
-        onClick={() => setShowComments(!showComments)}
-      >
-        {showComments ? 'Ocultar comentarios' : 'Ver comentarios'}
-      </button>
-
-      {showComments && (
-        <div className="comments-section mt-4">
-          {comments.length > 0 ? (
-            comments.map((comment, index) => (
-              <div key={index} className="comment p-2 border-b border-gray-200">
-                <p className="font-semibold">{comment.date}</p>
-                <p>{comment.text}</p>
-                <p className="text-sm text-gray-600">Por: {comment.name} - {comment.email}</p>
+      <div className="comments-section mt-4" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+        {comments.length > 0 ? (
+          comments.slice(0, 5).map((comment, index) => (
+            <div key={index} className="comment mb-6 p-6 border rounded-lg shadow-md bg-black text-[#FFD700] hover:bg-gray-800 transition duration-300">
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-lg font-semibold text-[#FFD700]">{comment.nombre}</p>
+                <p className="text-sm text-[#FFD700]">{comment.fecha} - {comment.hora}</p>
               </div>
-            ))
-          ) : (
-            <p>No hay comentarios aún.</p>
-          )}
-        </div>
-      )}
+              <p className="text-[#FFD700] mb-4">{comment.comentario}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-[#FFD700]">No hay comentarios aún.</p>
+        )}
+      </div>
 
+      {/* Mostrar el formulario para agregar un comentario */}
       <div className="mt-4">
         <input
           className="border border-gray-300 p-2 w-full mb-2"
@@ -85,9 +81,10 @@ const Comments = ({ comments, onAddComment }) => {
 Comments.propTypes = {
   comments: PropTypes.arrayOf(
     PropTypes.shape({
-      text: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      comentario: PropTypes.string.isRequired,
+      fecha: PropTypes.string.isRequired,
+      hora: PropTypes.string.isRequired,
+      nombre: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
     })
   ).isRequired,

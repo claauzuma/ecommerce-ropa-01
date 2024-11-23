@@ -32,28 +32,42 @@ const ProductDetail = () => {
   useEffect(() => {
     console.log(comments)
   }, [comments]);  
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(`${ApiUrls.productos}/${productId}`);
         if (!response.ok) throw new Error('Error al obtener el producto');
         const data = await response.json();
-        console.log("Vemos la data " ,data)
-        console.log("Vemos los comentaroos ", data.comentarios)
+        console.log("Vemos la data ", data);
+        console.log("Vemos los comentarios ", data.comentarios);
+  
+        // Función para convertir la fecha y hora en un objeto Date
+        const parseDateTime = (dateTime) => {
+          return new Date(dateTime); // JavaScript automáticamente convierte 'YYYY-MM-DD HH:MM:SS'
+        };
+  
+        // Ordenar los comentarios por fecha y hora
+        const sortedComments = data.comentarios
+          ? data.comentarios.sort((a, b) => {
+              const dateTimeA = parseDateTime(a.fecha + ' ' + a.hora); // Combina fecha y hora
+              const dateTimeB = parseDateTime(b.fecha + ' ' + b.hora); // Combina fecha y hora
+              return dateTimeB - dateTimeA; // Ordena de más reciente a más antiguo
+            })
+          : [];
+  
         setProduct(data);
         setTallesDisponibles(data.talles);
-        setComments(data.comentarios || []);  // Suponiendo que el producto tiene un array de comentarios
+        setComments(sortedComments);  // Establecemos los comentarios ordenados
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchProduct();
   }, [productId]);
-
+  
   // Función para mostrar/ocultar comentarios
   const toggleComments = () => {
     setShowComments((prev) => !prev);
@@ -264,50 +278,50 @@ const ProductDetail = () => {
           className="text-blue-900 font-semibold"
           onClick={toggleComments}
         >
-          {showComments ? 'Ocultar comentarios' : 'Ver comentarios'}
+          {showComments ? 'Ocultar comentarios'   : `Ver comentarios (${comments.length})`}
         </button>
-
         {showComments && (
-          <div className="comments-section mt-4">
-{comments.length > 0 ? (
-  comments.map((comment, index) => (
-    <div key={index} className="comment mb-6 p-6 border rounded-lg shadow-md bg-white hover:bg-gray-50 transition duration-300">
-      <div className="flex justify-between items-center mb-2">
-        <p className="text-lg font-semibold text-gray-800">{comment.nombre}</p>
-        <p className="text-sm text-gray-500">{comment.fecha} - {comment.hora}</p>
-      </div>
-      <p className="text-gray-700 mb-4">{comment.comentario}</p>
-    </div>
-  ))
-) : (
-  <p className="text-center text-gray-500">No hay comentarios aún.</p>
+  <div className="comments-section mt-4" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+    {comments.length > 0 ? (
+      comments.map((comment, index) => (
+        <div key={index} className="comment mb-6 p-6 border rounded-lg shadow-md bg-black text-yellow-400 hover:bg-gray-800 transition duration-300">
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-lg font-semibold">{comment.nombre}</p>
+            <p className="text-sm text-yellow-300">{comment.fecha} - {comment.hora}</p>
+          </div>
+          <p className="text-yellow-200 mb-4">{comment.comentario}</p>
+        </div>
+      ))
+    ) : (
+      <p className="text-center text-yellow-300">No hay comentarios aún.</p>
+    )}
+  </div>
 )}
 
-          </div>
-        )}
 
-        <div className="comment-form mt-6">
-          <h3 className="text-lg font-semibold">Deja tu comentario</h3>
-          <textarea
-            placeholder="Escribe tu comentario"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="w-full p-2 mt-2 border rounded-lg"
-          />
-          <input
-            type="text"
-            placeholder="Tu nombre"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            className="w-full p-2 mt-2 border rounded-lg"
-          />
-          <input
-            type="email"
-            placeholder="Tu email"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            className="w-full p-2 mt-2 border rounded-lg"
-          />
+
+<div className="comment-form mt-6">
+  <h3 className="text-lg font-semibold mb-4">Deja tu comentario</h3>
+  <textarea
+    placeholder="Escribe tu comentario"
+    value={newComment}
+    onChange={(e) => setNewComment(e.target.value)}
+    className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+  />
+  <input
+    type="text"
+    placeholder="Tu nombre"
+    value={newName}
+    onChange={(e) => setNewName(e.target.value)}
+    className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+  />
+  <input
+    type="email"
+    placeholder="Tu email"
+    value={newEmail}
+    onChange={(e) => setNewEmail(e.target.value)}
+    className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+  />
           <button
             onClick={handleAddComment}
             className="mt-2 bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg"

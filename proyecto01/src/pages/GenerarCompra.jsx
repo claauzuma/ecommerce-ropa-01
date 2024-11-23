@@ -51,7 +51,7 @@ const GenerarCompra = () => {
 
   const mandarWhatsapp = () => {
     const numeroWhatsApp = '1158641032';
-    const mensaje = encodeURIComponent(`Hola Miralla Burger! Quiero hacer un pedido, este es el detalle:
+    const mensaje = encodeURIComponent(`Hola Blessed Store! Quiero hacer un pedido, este es el detalle:
 
 Orden Nº PED-00002586
 ${new Date().toLocaleTimeString()} ${new Date().toLocaleDateString()}
