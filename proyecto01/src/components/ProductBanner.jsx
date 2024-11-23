@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ApiUrls from "./ApiUrls";
+import './ProductBanner.css'
 import { useNavigate } from "react-router-dom";
 
 const ProductBanner = () => {
@@ -79,15 +80,13 @@ const ProductBanner = () => {
 
         <h2 className="text-2xl font-bold">{products[currentIndex].nombre}</h2>
         <img
+  key={products[currentIndex].id} // Fuerza la re-renderización de la animación
   src={products[currentIndex].image}
   alt={products[currentIndex].nombre}
-  className="mx-auto w-full object-contain"
-  style={{
-    maxHeight: "200px", // Altura máxima deseada
-    maxWidth: "200px", // Ancho máximo deseado
-    objectFit: "contain", // Ajusta la imagen manteniendo la relación de aspecto
-  }}
+  className="mx-auto w-full object-contain fade-in" // Clase para animación
+  style={{ maxHeight: "200px", maxWidth: "200px", objectFit: "contain" }}
 />
+
 
         <button
           className="mt-2 bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-all"

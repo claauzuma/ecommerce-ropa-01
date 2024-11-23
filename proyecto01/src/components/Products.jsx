@@ -82,13 +82,13 @@ const Products = ({ products }) => {
                 <h2 className="product-title text-xl font-semibold">{product.nombre}</h2>
               </div>
   
-              {/* Precio con descuento */}
-              <div className="px-2 py-1 text-center">
-                <p className="text-gold font-semibold text-lg">
-                  <span className="line-through text-gray-500">${precioOriginal}</span>
-                  <span className="ml-2 text-gold">${precioConDescuento}</span>
-                </p>
-              </div>
+<div className="px-2 py-1 text-center">
+  <p className="text-gold font-semibold text-lg">
+    <span className="line-through text-gray-500">${precioOriginal}</span>
+    <span className="ml-2 text-gold" style={{ fontSize: '1.4rem' }}>${precioConDescuento}</span>
+  </p>
+</div>
+
   
               {/* Botón de detalle y logo de WhatsApp */}
               <div className="px-2 py-1 flex justify-between items-center">

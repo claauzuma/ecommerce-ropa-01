@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate
-import Carrito from '../components/Cart'; // Importa el componente Carrito
+import { useNavigate } from 'react-router-dom';
+import Carrito from '../components/Cart';
 import logo from '../assets/logo.png';
 import { MdShoppingCart, MdLogin } from 'react-icons/md';
 import './NavBar.css';
@@ -9,7 +9,7 @@ import './NavBar.css';
 const NavBar = () => {
   const cartRef = useRef(null);
   const { isCartVisible, setIsCartVisible, token, getCartItemsCount } = useCart();
-  const navigate = useNavigate(); // Crear la instancia de navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("isCartVisible", isCartVisible);
@@ -40,7 +40,7 @@ const NavBar = () => {
             src={logo}
             alt="Logo"
             className="h-full object-contain"
-            style={{ maxHeight: '140px' }} // Mantén el tamaño del logo
+            style={{ maxHeight: '140px' }}
           />
         </a>
 
@@ -50,9 +50,9 @@ const NavBar = () => {
           </span>
         </div>
 
-        <div className="space-x-4 flex items-center">
+        <div className="space-x-4 flex flex-col sm:flex-row items-center">
           <button
-            onClick={() => navigate('/loginpage')} // Usar navigate en lugar de href
+            onClick={() => navigate('/loginpage')}
             className="text-white hover:text-gold transition duration-300 ease-in-out"
           >
             <MdLogin size={24} />
@@ -62,7 +62,12 @@ const NavBar = () => {
             onClick={() => setIsCartVisible(true)}
             className="relative flex items-center justify-center"
           >
-            <MdShoppingCart size={40} className="text-white" />  {/* Aumenté el tamaño del icono */}
+            <MdShoppingCart
+              size={40}
+              className={`${
+                getCartItemsCount() > 0 ? 'text-white animate-bounce-slow' : 'text-gray-500'
+              } transition duration-300 ease-in-out`}
+            />
             {getCartItemsCount() > 0 && (
               <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
                 {getCartItemsCount()}

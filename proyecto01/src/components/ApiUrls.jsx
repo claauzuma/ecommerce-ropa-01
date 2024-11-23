@@ -11,6 +11,7 @@ const ApiUrls = {
   login: `${url}/api/usuarios/login`, // Aquí agregamos la URL de login
   productos: `${url}/api/productos`, // URL de productos
   pedidos: `${url}/api/pedidos`, // URL para pedidos
+  comentariosProducto: (productId) => `${url}/api/productos/comentario/${productId}`, // URL dinámica para comentarios de un producto
 };
 
 export default ApiUrls;

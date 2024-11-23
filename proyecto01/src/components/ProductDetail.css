@@ -4,6 +4,26 @@ body {
   color: #fff; /* Texto blanco */
 }
 
+.sold-count {
+  font-size: 14px;
+  color: #707070; /* Gris claro */
+  font-weight: bold;
+  display: block; /* Aseguramos que se apile debajo */
+  margin-top: 10px; /* Espaciado entre la imagen y el texto */
+  text-align: center; /* Centrado horizontal */
+}
+
+.sold-count span {
+  color: #0071e3; /* Azul similar a MercadoLibre */
+}
+
+.sold-count::before {
+  content: '📦'; /* Ícono de caja */
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+
 /* Modal de imagen */
 .modal-overlay {
   position: fixed;

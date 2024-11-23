@@ -21,7 +21,7 @@ const ProductDetail = () => {
   const [newComment, setNewComment] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [newName, setNewName] = useState('');
-const [newEmail, setNewEmail] = useState('');
+  const [newEmail, setNewEmail] = useState('');
 
   const navigate = useNavigate();
 
@@ -30,14 +30,20 @@ const [newEmail, setNewEmail] = useState('');
   }, []);  
 
   useEffect(() => {
+    console.log(comments)
+  }, [comments]);  
+
+  useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(`${ApiUrls.productos}/${productId}`);
         if (!response.ok) throw new Error('Error al obtener el producto');
         const data = await response.json();
+        console.log("Vemos la data " ,data)
+        console.log("Vemos los comentaroos ", data.comentarios)
         setProduct(data);
         setTallesDisponibles(data.talles);
-        setComments(data.comments || []);  // Suponiendo que el producto tiene un array de comentarios
+        setComments(data.comentarios || []);  // Suponiendo que el producto tiene un array de comentarios
       } catch (error) {
         setError(error.message);
       } finally {
@@ -47,6 +53,11 @@ const [newEmail, setNewEmail] = useState('');
 
     fetchProduct();
   }, [productId]);
+
+  // Función para mostrar/ocultar comentarios
+  const toggleComments = () => {
+    setShowComments((prev) => !prev);
+  };
 
   const colorTranslations = {
     "rojo": "red",
@@ -95,27 +106,52 @@ const [newEmail, setNewEmail] = useState('');
     navigate('/');
   };
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (!newComment || !newName || !newEmail) {
       alert('Por favor, completa todos los campos.');
       return;
     }
-    
-    const newCommentObj = { 
-      name: newName,
-      email: newEmail,
-      text: newComment,
-      date: new Date().toLocaleString(),
-    };
-    
-    setComments([...comments, newCommentObj]);
-    setNewComment('');
-    setNewName('');
-    setNewEmail('');
-  };
 
-  const toggleComments = () => {
-    setShowComments(!showComments);
+    const currentDate = new Date();
+    const fecha = currentDate.toISOString().split('T')[0]; // Fecha en formato YYYY-MM-DD
+    const hora = currentDate.toTimeString().split(' ')[0]; // Hora en formato HH:MM:SS
+
+    const comentarioData = {
+      fecha,
+      hora,
+      nombre: newName,
+      email: newEmail,
+      comentario: newComment,
+      estado : "pendiente"
+    };
+
+    try {
+      const response = await fetch(ApiUrls.comentariosProducto(productId), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(comentarioData), // Convertir el objeto a JSON
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al agregar el comentario');
+      }
+
+      // Si todo salió bien, puedes manejar la respuesta
+      const data = await response.json();
+      console.log('Comentario agregado:', data);
+      alert('Comentario agregado exitosamente!');
+
+      // Actualizar el estado de comentarios con el nuevo comentario
+      setComments((prevComments) => [...prevComments, comentarioData]);
+      setNewComment('');
+      setNewName('');
+      setNewEmail('');
+    } catch (error) {
+      console.error('Error al agregar comentario:', error);
+      alert('Hubo un problema al agregar el comentario.');
+    }
   };
 
   if (loading) return <p>Cargando detalles del producto...</p>;
@@ -129,7 +165,7 @@ const [newEmail, setNewEmail] = useState('');
           &#8592;
         </button>
 
-        <div onClick={openModal} className="mb-0"> {/* Eliminar margen inferior de la imagen */}
+        <div onClick={openModal} className="mb-0">
           {product.images[currentImageIndex].includes('.mp4') ? (
             <video
               src={product.images[currentImageIndex]}
@@ -198,7 +234,6 @@ const [newEmail, setNewEmail] = useState('');
       {/* Colores */}
       {selectedTalle && coloresDisponibles.length > 0 && (
         <div className="mt-0">
-          <p className="text-lg font-semibold">Selecciona un color:</p>
           <div className="flex justify-center gap-4 mt-2">
             {coloresDisponibles.map((color, index) => {
               return (
@@ -234,47 +269,52 @@ const [newEmail, setNewEmail] = useState('');
 
         {showComments && (
           <div className="comments-section mt-4">
-            {comments.length > 0 ? (
-              comments.map((comment, index) => (
-                <div key={index} className="comment p-2 border-b border-gray-200">
-                  <p className="font-semibold">{comment.date}</p>
-                  <p>{comment.text}</p>
-                </div>
-              ))
-            ) : (
-              <p>No hay comentarios aún.</p>
-            )}
+{comments.length > 0 ? (
+  comments.map((comment, index) => (
+    <div key={index} className="comment mb-6 p-6 border rounded-lg shadow-md bg-white hover:bg-gray-50 transition duration-300">
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-lg font-semibold text-gray-800">{comment.nombre}</p>
+        <p className="text-sm text-gray-500">{comment.fecha} - {comment.hora}</p>
+      </div>
+      <p className="text-gray-700 mb-4">{comment.comentario}</p>
+    </div>
+  ))
+) : (
+  <p className="text-center text-gray-500">No hay comentarios aún.</p>
+)}
+
           </div>
         )}
 
-<div className="mt-4">
-  <input
-    className="border border-gray-300 p-2 w-full mb-2"
-    type="text"
-    placeholder="Nombre"
-    value={newName}
-    onChange={(e) => setNewName(e.target.value)}
-  />
-  <input
-    className="border border-gray-300 p-2 w-full mb-2"
-    type="email"
-    placeholder="Email"
-    value={newEmail}
-    onChange={(e) => setNewEmail(e.target.value)}
-  />
-  <textarea
-    className="border border-gray-300 p-2 w-full"
-    placeholder="Escribe tu comentario..."
-    value={newComment}
-    onChange={(e) => setNewComment(e.target.value)}
-  />
-  <button
-    className="mt-2 bg-blue-900 text-white py-2 px-4 rounded-lg"
-    onClick={handleAddComment}
-  >
-    Agregar comentario
-  </button>
-</div>
+        <div className="comment-form mt-6">
+          <h3 className="text-lg font-semibold">Deja tu comentario</h3>
+          <textarea
+            placeholder="Escribe tu comentario"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="w-full p-2 mt-2 border rounded-lg"
+          />
+          <input
+            type="text"
+            placeholder="Tu nombre"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            className="w-full p-2 mt-2 border rounded-lg"
+          />
+          <input
+            type="email"
+            placeholder="Tu email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+            className="w-full p-2 mt-2 border rounded-lg"
+          />
+          <button
+            onClick={handleAddComment}
+            className="mt-2 bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg"
+          >
+            Agregar comentario
+          </button>
+        </div>
       </div>
     </div>
   );
